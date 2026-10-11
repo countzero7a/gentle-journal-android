@@ -9,9 +9,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,8 +24,11 @@ import com.gentlejournal.data.entity.EntryWithTags
 import com.gentlejournal.ui.components.JournalCard
 import com.gentlejournal.ui.theme.LocalJournalColors
 import com.gentlejournal.ui.util.resolveEmotionLabel
-import java.text.SimpleDateFormat
-import java.util.*
+import android.text.format.DateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ChartsScreen(
@@ -32,6 +37,10 @@ fun ChartsScreen(
 ) {
     val colors = LocalJournalColors.current
     val context = LocalContext.current
+    val locale = LocalConfiguration.current.locales.get(0)
+    val zone = ZoneId.systemDefault()
+    val dayLabelFormat = remember(locale) { DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "dMMM"), locale) }
+    fun dayOf(timestamp: Long): LocalDate = Instant.ofEpochMilli(timestamp).atZone(zone).toLocalDate()
 
     if (entries.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -58,11 +67,12 @@ fun ChartsScreen(
     // Daily mood timeline (last 30 days)
     val last30 = System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000
     val recentEntries = entries.filter { it.entry.timestamp >= last30 }
-    val dailyMoods = mutableMapOf<String, MutableList<String>>()
+    // Keyed by date so the order stays right across the new year
+    val dailyMoods = mutableMapOf<LocalDate, MutableList<String>>()
     recentEntries.forEach { e ->
-        val dayKey = SimpleDateFormat("MM-dd", Locale.getDefault()).format(Date(e.entry.timestamp))
+        val day = dayOf(e.entry.timestamp)
         e.emotions.forEach { emo ->
-            dailyMoods.getOrPut(dayKey) { mutableListOf() }.add(emo.emoji)
+            dailyMoods.getOrPut(day) { mutableListOf() }.add(emo.emoji)
         }
     }
     val sortedDays = dailyMoods.keys.sorted()
@@ -145,9 +155,9 @@ fun ChartsScreen(
                         modifier = Modifier.padding(vertical = 3.dp)
                     ) {
                         Text(
-                            text = day,
+                            text = day.format(dayLabelFormat),
                             style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted),
-                            modifier = Modifier.width(48.dp)
+                            modifier = Modifier.width(60.dp)
                         )
                         moods.take(6).forEach { emoji ->
                             Text(
@@ -180,9 +190,7 @@ fun ChartsScreen(
             val totalEntries = entries.size
             val totalEmotions = emotionCounts.values.sumOf { it.second }
             val uniqueEmotions = emotionCounts.size
-            val daysWithEntries = entries.map { e ->
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(e.entry.timestamp))
-            }.toSet().size
+            val daysWithEntries = entries.map { dayOf(it.entry.timestamp) }.toSet().size
 
             StatRow(stringResource(R.string.charts_total_entries), "$totalEntries")
             StatRow(stringResource(R.string.charts_days_journaled), "$daysWithEntries")

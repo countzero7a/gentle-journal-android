@@ -10,8 +10,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,9 +27,11 @@ import com.gentlejournal.domain.model.TrendDirection
 import com.gentlejournal.ui.components.EmptyState
 import com.gentlejournal.ui.components.JournalCard
 import com.gentlejournal.ui.theme.LocalJournalColors
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import android.text.format.DateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun InsightsScreen(
@@ -39,15 +43,17 @@ fun InsightsScreen(
     modifier: Modifier = Modifier
 ) {
     val colors = LocalJournalColors.current
+    val locale = LocalConfiguration.current.locales.get(0)
+    val zone = ZoneId.systemDefault()
+    val today = LocalDate.now(zone)
+    val headerFormat = remember(locale) { DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "EEEMMMd"), locale) }
 
     // Past insights for the selected period, each text once (newest first), excluding the current ones
     val currentTexts = insights.map { it.text }.toSet()
     val pastInsights = savedInsights
         .filter { it.periodDays == currentPeriod && it.text !in currentTexts }
         .distinctBy { it.text }
-        .groupBy {
-            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(it.generatedAt))
-        }
+        .groupBy { Instant.ofEpochMilli(it.generatedAt).atZone(zone).toLocalDate() }
         .toSortedMap(compareByDescending { it })
 
     LazyColumn(
@@ -138,12 +144,13 @@ fun InsightsScreen(
                 )
             }
 
-            pastInsights.forEach { (dateKey, dayInsights) ->
-                item(key = "past_date_$dateKey") {
-                    val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateKey) ?: Date()
-                    val isToday = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()) == dateKey
-                    val displayDate = if (isToday) stringResource(R.string.timeline_today)
-                        else SimpleDateFormat("EEE, MMM d", Locale.getDefault()).format(date)
+            pastInsights.forEach { (date, dayInsights) ->
+                item(key = "past_date_$date") {
+                    val displayDate = when (date) {
+                        today -> stringResource(R.string.timeline_today)
+                        today.minusDays(1) -> stringResource(R.string.timeline_yesterday)
+                        else -> date.format(headerFormat)
+                    }
                     Text(
                         text = displayDate,
                         style = MaterialTheme.typography.labelMedium.copy(

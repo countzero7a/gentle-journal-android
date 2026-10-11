@@ -16,14 +16,16 @@ import com.gentlejournal.domain.model.ExportFormat
 import com.gentlejournal.ui.components.JournalCard
 import com.gentlejournal.ui.components.SectionLabel
 import com.gentlejournal.ui.theme.LocalJournalColors
-import java.text.SimpleDateFormat
-import java.util.*
+import android.text.format.DateFormat
+import androidx.compose.ui.platform.LocalContext
+import java.util.Date
 
 @Composable
 fun ExportScreen(entryCount: Int, oldestTimestamp: Long?, newestTimestamp: Long?, onExport: (ExportFormat) -> Unit, modifier: Modifier = Modifier) {
     val colors = LocalJournalColors.current
     var selectedFormat by remember { mutableStateOf(ExportFormat.JSON) }
-    val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+    val context = LocalContext.current
+    val dateFormat = remember(context) { DateFormat.getMediumDateFormat(context) }
 
     Column(modifier = modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 12.dp)) {
         Text(text = stringResource(R.string.export_description), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted, lineHeight = 22.sp), modifier = Modifier.padding(bottom = 20.dp))

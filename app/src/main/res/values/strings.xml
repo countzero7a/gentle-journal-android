@@ -15,6 +15,7 @@
     <string name="timeline_empty_title">Your journal is empty</string>
     <string name="timeline_empty_message">Tap the + button to create your first entry.\nNo pressure — write as much or as little as you\'d like.</string>
     <string name="timeline_today">today</string>
+    <string name="timeline_yesterday">yesterday</string>
     <string name="timeline_subtitle_one">%d entry \u00B7 Private &amp; on-device</string>
     <string name="timeline_subtitle_many">%d entries \u00B7 Private &amp; on-device</string>
     <string name="timeline_export">Export \u2197</string>
