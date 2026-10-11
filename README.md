@@ -91,6 +91,16 @@ com.gentlejournal/
 Minimum SDK: 26 (Android 8.0)
 Target SDK: 34 (Android 14)
 
+## Install on your phone
+
+Every push to `main` is built by GitHub Actions (`.github/workflows/build.yml`) and published as a signed APK:
+
+**https://github.com/countzero7a/gentle-journal-android/releases/latest/download/gentle-journal.apk**
+
+Open that link on the phone, then open the downloaded file. Android asks once to allow installs from your browser or file manager. Later builds install as updates and keep your journal.
+
+Release signing uses a key stored in the repository secrets `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS` and `KEY_PASSWORD`. Keep an offline backup of that key: an app signed with a different key can't update this one, and uninstalling deletes the journal.
+
 ## Design Principles
 
 1. **Explainability first** — All insights trace to specific entries
