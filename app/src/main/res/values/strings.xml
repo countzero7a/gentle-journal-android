@@ -84,6 +84,7 @@
     <string name="settings_reminder_desc">A gentle daily nudge. No pressure, no streaks.</string>
     <string name="settings_reminder_enabled">Remind me to check in</string>
     <string name="settings_reminder_time">Reminder time</string>
+    <string name="reminder_permission_denied">Notifications are off for this app, so reminders can\'t appear. You can allow them in your phone\'s settings.</string>
 
     <!-- Export -->
     <string name="export_description">Export your journal data in the format you prefer. Your data belongs to you.</string>

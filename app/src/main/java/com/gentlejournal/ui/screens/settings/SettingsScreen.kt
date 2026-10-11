@@ -1,5 +1,8 @@
 package com.gentlejournal.ui.screens.settings
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gentlejournal.R
+import com.gentlejournal.data.ReminderManager
 import com.gentlejournal.data.entity.ActionEntity
 import com.gentlejournal.data.entity.EmotionEntity
 import com.gentlejournal.domain.model.AppFont
@@ -268,9 +272,20 @@ fun SettingsScreen(
             Text(text = stringResource(R.string.settings_reminder_desc), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
             Spacer(modifier = Modifier.height(12.dp))
 
-            var localEnabled by remember { mutableStateOf(reminderEnabled) }
-            var localHour by remember { mutableIntStateOf(reminderHour) }
-            var localMinute by remember { mutableIntStateOf(reminderMinute) }
+            // Keyed on the stored values so the controls follow them once preferences load
+            var localEnabled by remember(reminderEnabled) { mutableStateOf(reminderEnabled) }
+            var localHour by remember(reminderHour) { mutableIntStateOf(reminderHour) }
+            var localMinute by remember(reminderMinute) { mutableIntStateOf(reminderMinute) }
+            var permissionDenied by remember { mutableStateOf(false) }
+            val notificationPermission = rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { granted ->
+                permissionDenied = !granted
+                if (granted) {
+                    localEnabled = true
+                    onReminderChange(true, localHour, localMinute)
+                }
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -280,11 +295,25 @@ fun SettingsScreen(
                 Text(text = stringResource(R.string.settings_reminder_enabled), style = MaterialTheme.typography.bodyMedium)
                 Switch(
                     checked = localEnabled,
-                    onCheckedChange = {
-                        localEnabled = it
-                        onReminderChange(it, localHour, localMinute)
+                    onCheckedChange = { enabled ->
+                        if (enabled && ReminderManager.needsNotificationPermission(context)) {
+                            notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        } else {
+                            permissionDenied = false
+                            localEnabled = enabled
+                            onReminderChange(enabled, localHour, localMinute)
+                        }
                     },
                     colors = SwitchDefaults.colors(checkedTrackColor = colors.Accent)
+                )
+            }
+
+            // Also shown if notifications were turned off in system settings after enabling
+            if (permissionDenied || (localEnabled && ReminderManager.needsNotificationPermission(context))) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = stringResource(R.string.reminder_permission_denied),
+                    style = MaterialTheme.typography.bodySmall.copy(color = colors.Danger, lineHeight = 18.sp)
                 )
             }
 
