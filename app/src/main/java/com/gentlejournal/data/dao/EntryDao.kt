@@ -14,6 +14,13 @@ interface EntryDao {
     fun getAllEntriesWithTags(): Flow<List<EntryWithTags>>
 
     @Transaction
+    @Query("SELECT * FROM entries ORDER BY timestamp DESC")
+    suspend fun getAllEntriesWithTagsOnce(): List<EntryWithTags>
+
+    @Query("SELECT * FROM entries")
+    suspend fun getAllEntriesOnce(): List<EntryEntity>
+
+    @Transaction
     @Query("SELECT * FROM entries WHERE id = :entryId")
     suspend fun getEntryWithTags(entryId: String): EntryWithTags?
 

@@ -92,6 +92,24 @@
     <string name="export_range">From %1$s to %2$s</string>
     <string name="export_button">Export %s</string>
     <string name="export_journal">Export journal</string>
+    <string name="export_subject">Journal export \u2014 %s</string>
+
+    <!-- Import -->
+    <string name="import_read_error">Couldn\'t open that file.</string>
+    <string name="import_no_entries">No entries found in that file.</string>
+    <string name="import_failed">This doesn\'t look like a journal export from this app, or the file is damaged.</string>
+    <plurals name="import_imported">
+        <item quantity="one">Imported %d entry</item>
+        <item quantity="other">Imported %d entries</item>
+    </plurals>
+    <plurals name="import_duplicates">
+        <item quantity="one">%d was already in your journal</item>
+        <item quantity="other">%d were already in your journal</item>
+    </plurals>
+    <plurals name="import_errors">
+        <item quantity="one">%d couldn\'t be read</item>
+        <item quantity="other">%d couldn\'t be read</item>
+    </plurals>
 
     <!-- Settings -->
     <string name="settings_theme">Theme</string>
@@ -109,7 +127,7 @@
     <string name="settings_delete_yes">Yes, delete all</string>
     <string name="settings_delete_all">Delete All Data</string>
     <string name="settings_import">Import Data</string>
-    <string name="settings_import_desc">Restore entries from a previous JSON export.</string>
+    <string name="settings_import_desc">Restore entries from a JSON export. Entries already in your journal are skipped.</string>
     <string name="settings_support">Support this project</string>
     <string name="settings_support_text">This app is a free, ad-free personal innovation project created for learning and experimentation. If you find it useful, you may optionally show your appreciation with a voluntary donation.</string>
     <string name="settings_donate">Buy me a coffee</string>

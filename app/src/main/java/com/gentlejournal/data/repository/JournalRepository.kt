@@ -3,6 +3,7 @@ package com.gentlejournal.data.repository
 import androidx.room.withTransaction
 import com.gentlejournal.data.JournalDatabase
 import com.gentlejournal.data.entity.*
+import com.gentlejournal.domain.usecase.ImportPlan
 import kotlinx.coroutines.flow.Flow
 
 class JournalRepository(private val db: JournalDatabase) {
@@ -16,6 +17,8 @@ class JournalRepository(private val db: JournalDatabase) {
     val entryCount: Flow<Int> = entryDao.getEntryCount()
 
     suspend fun getEntry(id: String): EntryWithTags? = entryDao.getEntryWithTags(id)
+
+    suspend fun getAllEntriesOnce(): List<EntryWithTags> = entryDao.getAllEntriesWithTagsOnce()
 
     suspend fun getEntriesSince(timestampMillis: Long): List<EntryWithTags> =
         entryDao.getEntriesSince(timestampMillis)
@@ -58,10 +61,27 @@ class JournalRepository(private val db: JournalDatabase) {
         db.engagementDao().deleteAll()
     }
 
+    /**
+     * Reads the current tags and entries, lets [planner] decide what to add,
+     * and writes the result, all in one transaction.
+     */
+    suspend fun importEntries(
+        planner: (List<EmotionEntity>, List<ActionEntity>, List<EntryEntity>) -> ImportPlan
+    ): ImportPlan = db.withTransaction {
+        val plan = planner(tagDao.getEmotionsOnce(), tagDao.getActionsOnce(), entryDao.getAllEntriesOnce())
+        tagDao.insertEmotions(plan.newEmotions)
+        tagDao.insertActions(plan.newActions)
+        plan.entries.forEach { saveEntry(it.entry, it.emotionIds, it.actionIds) }
+        plan
+    }
+
     // ── Tags ────────────────────────────────────────────────────────
 
     val allEmotions: Flow<List<EmotionEntity>> = tagDao.getAllEmotions()
     val allActions: Flow<List<ActionEntity>> = tagDao.getAllActions()
+
+    suspend fun getEmotionsOnce(): List<EmotionEntity> = tagDao.getEmotionsOnce()
+    suspend fun getActionsOnce(): List<ActionEntity> = tagDao.getActionsOnce()
 
     suspend fun addEmotion(emotion: EmotionEntity) = tagDao.insertEmotion(emotion)
     suspend fun addAction(action: ActionEntity) = tagDao.insertAction(action)

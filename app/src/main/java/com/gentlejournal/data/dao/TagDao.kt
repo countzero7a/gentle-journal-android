@@ -13,6 +13,9 @@ interface TagDao {
     @Query("SELECT * FROM emotions ORDER BY sort_order ASC, label ASC")
     fun getAllEmotions(): Flow<List<EmotionEntity>>
 
+    @Query("SELECT * FROM emotions ORDER BY sort_order ASC, label ASC")
+    suspend fun getEmotionsOnce(): List<EmotionEntity>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertEmotion(emotion: EmotionEntity)
 
@@ -29,6 +32,9 @@ interface TagDao {
 
     @Query("SELECT * FROM actions ORDER BY sort_order ASC, label ASC")
     fun getAllActions(): Flow<List<ActionEntity>>
+
+    @Query("SELECT * FROM actions ORDER BY sort_order ASC, label ASC")
+    suspend fun getActionsOnce(): List<ActionEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAction(action: ActionEntity)

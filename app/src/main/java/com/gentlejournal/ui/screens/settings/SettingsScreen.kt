@@ -31,6 +31,8 @@ import com.gentlejournal.domain.model.AppFont
 import com.gentlejournal.domain.model.AppFontSize
 import com.gentlejournal.domain.model.AppTheme
 import com.gentlejournal.domain.model.AppLanguage
+import com.gentlejournal.ui.ImportStatus
+import com.gentlejournal.ui.message
 import com.gentlejournal.ui.components.JournalCard
 import com.gentlejournal.ui.components.TagChip
 import com.gentlejournal.ui.theme.*
@@ -55,7 +57,7 @@ fun SettingsScreen(
     onWidgetToggle: (Boolean) -> Unit,
     onDeleteAllData: () -> Unit,
     onImportData: () -> Unit,
-    importStatus: String?,
+    importStatus: ImportStatus?,
     onClearImportStatus: () -> Unit,
     reminderEnabled: Boolean,
     reminderHour: Int,
@@ -71,7 +73,7 @@ fun SettingsScreen(
     // Show import status snackbar
     LaunchedEffect(importStatus) {
         if (importStatus != null) {
-            kotlinx.coroutines.delay(3000)
+            kotlinx.coroutines.delay(5000)
             onClearImportStatus()
         }
     }
@@ -383,7 +385,7 @@ fun SettingsScreen(
             // Import status
             if (importStatus != null) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = importStatus, style = MaterialTheme.typography.bodySmall.copy(color = colors.Accent, fontWeight = FontWeight.SemiBold))
+                Text(text = importStatus.message(context.resources), style = MaterialTheme.typography.bodySmall.copy(color = colors.Accent, fontWeight = FontWeight.SemiBold))
             }
 
             Spacer(modifier = Modifier.height(16.dp))

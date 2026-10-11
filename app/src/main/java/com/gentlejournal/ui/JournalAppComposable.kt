@@ -76,9 +76,10 @@ fun JournalApp(
     val reminderHour by viewModel.reminderHour.collectAsStateWithLifecycle()
     val reminderMinute by viewModel.reminderMinute.collectAsStateWithLifecycle()
 
-    // Import file picker
+    // Import file picker. Many file managers don't label .json files as
+    // application/json, so plain text and generic binary are offered too.
     val importLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         uri?.let { viewModel.importData(it) }
     }
@@ -212,7 +213,7 @@ fun JournalApp(
                     widgetEnabled = widgetEnabled,
                     onWidgetToggle = viewModel::setWidgetEnabled,
                     onDeleteAllData = viewModel::deleteAllEntries,
-                    onImportData = { importLauncher.launch("application/json") },
+                    onImportData = { importLauncher.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
                     importStatus = importStatus,
                     onClearImportStatus = viewModel::clearImportStatus,
                     reminderEnabled = reminderEnabled,
@@ -232,7 +233,7 @@ fun JournalApp(
                     oldestTimestamp = entries.lastOrNull()?.entry?.timestamp,
                     newestTimestamp = entries.firstOrNull()?.entry?.timestamp,
                     onExport = { format ->
-                        viewModel.exportData(format)?.let { intent ->
+                        viewModel.exportData(format) { intent ->
                             context.startActivity(Intent.createChooser(intent, context.getString(R.string.export_journal)))
                         }
                     }

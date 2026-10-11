@@ -37,10 +37,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.gentlejournal.R
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.time.LocalDate
 import java.util.UUID
 
 class JournalViewModel(application: Application) : AndroidViewModel(application) {
@@ -251,8 +250,8 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     // ── Import state ────────────────────────────────────────────────
 
-    private val _importStatus = MutableStateFlow<String?>(null)
-    val importStatus: StateFlow<String?> = _importStatus
+    private val _importStatus = MutableStateFlow<ImportStatus?>(null)
+    val importStatus: StateFlow<ImportStatus?> = _importStatus
 
     fun clearImportStatus() { _importStatus.value = null }
 
@@ -413,28 +412,46 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     // ── Export ───────────────────────────────────────────────────────
 
-    fun exportData(format: ExportFormat): Intent? {
-        val allEntries = entries.value
+    /** Builds the export file off the main thread, then hands the share intent to [onReady]. */
+    fun exportData(format: ExportFormat, onReady: (Intent) -> Unit) {
+        viewModelScope.launch {
+            val intent = try {
+                withContext(Dispatchers.IO) { writeExport(format) }
+            } catch (e: Exception) {
+                null
+            }
+            intent?.let(onReady)
+        }
+    }
+
+    private suspend fun writeExport(format: ExportFormat): Intent? {
+        val allEntries = repository.getAllEntriesOnce()
         if (allEntries.isEmpty()) return null
 
-        val content = exportUseCase(allEntries, format)
-        val dateStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val app = getApplication<Application>()
+        val context = localizedContext()
+        val content = exportUseCase(
+            entries = allEntries,
+            emotions = repository.getEmotionsOnce(),
+            actions = repository.getActionsOnce(),
+            format = format,
+            emotionLabel = { resolveEmotionLabel(context, it.id, it.label) },
+            actionLabel = { resolveActionLabel(context, it.id, it.label) }
+        )
+        val dateStr = LocalDate.now().toString()
         val fileName = "journal-export-$dateStr.${format.extension}"
 
-        return try {
-            val app = getApplication<Application>()
-            val exportDir = File(app.cacheDir, "exports").apply { mkdirs() }
-            val file = File(exportDir, fileName).apply { writeText(content) }
-            val uri = FileProvider.getUriForFile(app, "${app.packageName}.fileprovider", file)
+        // Only the newest export is kept; older plain-text copies are removed first
+        ExportFiles.clear(app)
+        val exportDir = ExportFiles.dir(app).apply { mkdirs() }
+        val file = File(exportDir, fileName).apply { writeText(content) }
+        val uri = FileProvider.getUriForFile(app, "${app.packageName}.fileprovider", file)
 
-            Intent(Intent.ACTION_SEND).apply {
-                type = format.mimeType
-                putExtra(Intent.EXTRA_STREAM, uri)
-                putExtra(Intent.EXTRA_SUBJECT, "Gentle Journal Export — $dateStr")
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-        } catch (e: Exception) {
-            null
+        return Intent(Intent.ACTION_SEND).apply {
+            type = format.mimeType
+            putExtra(Intent.EXTRA_STREAM, uri)
+            putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.export_subject, dateStr))
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
     }
 
@@ -442,45 +459,35 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     fun importData(uri: Uri) {
         viewModelScope.launch {
-            try {
-                val app = getApplication<Application>()
-                val inputStream = app.contentResolver.openInputStream(uri)
-                val jsonText = inputStream?.bufferedReader()?.use { it.readText() } ?: run {
-                    _importStatus.value = "Could not read file"
-                    return@launch
-                }
-
-                val result = importUseCase(jsonText)
-                if (result.entries.isEmpty()) {
-                    _importStatus.value = "No entries found in file"
-                    return@launch
-                }
-
-                // Match emotion/action labels to existing tags
-                val currentEmotions = emotions.value
-                val currentActions = actions.value
-
-                var importedCount = 0
-                result.entries.forEach { imported ->
-                    val emotionIds = imported.emotionLabels.mapNotNull { label ->
-                        currentEmotions.find { it.label.equals(label, ignoreCase = true) }?.id
-                    }
-                    val actionIds = imported.actionLabels.mapNotNull { label ->
-                        currentActions.find { it.label.equals(label, ignoreCase = true) }?.id
-                    }
-
-                    repository.saveEntry(imported.entry, emotionIds, actionIds)
-                    importedCount++
-                }
-
-                val msg = StringBuilder("Imported $importedCount entries")
-                if (result.errorCount > 0) {
-                    msg.append(" (${result.errorCount} skipped)")
-                }
-                _importStatus.value = msg.toString()
+            _importStatus.value = try {
+                withContext(Dispatchers.IO) { runImport(uri) }
             } catch (e: Exception) {
-                _importStatus.value = "Import failed: ${e.message}"
+                ImportStatus.Failed
             }
         }
+    }
+
+    private suspend fun runImport(uri: Uri): ImportStatus {
+        val app = getApplication<Application>()
+        val jsonText = app.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+            ?: return ImportStatus.ReadError
+
+        val parsed = importUseCase.parse(jsonText)
+        if (parsed.entries.isEmpty()) {
+            return if (parsed.errorCount > 0) ImportStatus.Failed else ImportStatus.NoEntries
+        }
+
+        val context = localizedContext()
+        val plan = repository.importEntries { emotions, actions, entries ->
+            importUseCase.plan(
+                parsed = parsed,
+                existingEmotions = emotions,
+                existingActions = actions,
+                existingEntries = entries,
+                emotionLabel = { resolveEmotionLabel(context, it.id, it.label) },
+                actionLabel = { resolveActionLabel(context, it.id, it.label) }
+            )
+        }
+        return ImportStatus.Done(plan.entries.size, plan.duplicateCount, plan.errorCount)
     }
 }
