@@ -1,14 +1,15 @@
 package com.gentlejournal.data.repository
 
-import com.gentlejournal.data.dao.EntryDao
-import com.gentlejournal.data.dao.TagDao
+import androidx.room.withTransaction
+import com.gentlejournal.data.JournalDatabase
 import com.gentlejournal.data.entity.*
 import kotlinx.coroutines.flow.Flow
 
-class JournalRepository(
-    private val entryDao: EntryDao,
-    private val tagDao: TagDao
-) {
+class JournalRepository(private val db: JournalDatabase) {
+
+    private val entryDao = db.entryDao()
+    private val tagDao = db.tagDao()
+
     // ── Entries ──────────────────────────────────────────────────────
 
     val allEntries: Flow<List<EntryWithTags>> = entryDao.getAllEntriesWithTags()
@@ -23,39 +24,39 @@ class JournalRepository(
         entry: EntryEntity,
         emotionIds: List<String>,
         actionIds: List<String>
-    ) {
+    ) = db.withTransaction {
         entryDao.insertEntry(entry)
-        // Replace emotion relations
-        entryDao.deleteEmotionsForEntry(entry.id)
-        emotionIds.forEach { eid ->
-            entryDao.insertEntryEmotion(EntryEmotionCrossRef(entry.id, eid))
-        }
-        // Replace action relations
-        entryDao.deleteActionsForEntry(entry.id)
-        actionIds.forEach { aid ->
-            entryDao.insertEntryAction(EntryActionCrossRef(entry.id, aid))
-        }
+        replaceTags(entry.id, emotionIds, actionIds)
     }
 
     suspend fun updateEntry(
         entry: EntryEntity,
         emotionIds: List<String>,
         actionIds: List<String>
-    ) {
+    ) = db.withTransaction {
         entryDao.updateEntry(entry)
-        entryDao.deleteEmotionsForEntry(entry.id)
+        replaceTags(entry.id, emotionIds, actionIds)
+    }
+
+    private suspend fun replaceTags(entryId: String, emotionIds: List<String>, actionIds: List<String>) {
+        entryDao.deleteEmotionsForEntry(entryId)
         emotionIds.forEach { eid ->
-            entryDao.insertEntryEmotion(EntryEmotionCrossRef(entry.id, eid))
+            entryDao.insertEntryEmotion(EntryEmotionCrossRef(entryId, eid))
         }
-        entryDao.deleteActionsForEntry(entry.id)
+        entryDao.deleteActionsForEntry(entryId)
         actionIds.forEach { aid ->
-            entryDao.insertEntryAction(EntryActionCrossRef(entry.id, aid))
+            entryDao.insertEntryAction(EntryActionCrossRef(entryId, aid))
         }
     }
 
     suspend fun deleteEntry(id: String) = entryDao.deleteEntry(id)
 
-    suspend fun deleteAllEntries() = entryDao.deleteAllEntries()
+    /** Deletes every entry and the insights derived from them. Tags are kept. */
+    suspend fun deleteAllEntries() = db.withTransaction {
+        entryDao.deleteAllEntries()
+        db.insightDao().deleteAllInsights()
+        db.engagementDao().deleteAll()
+    }
 
     // ── Tags ────────────────────────────────────────────────────────
 

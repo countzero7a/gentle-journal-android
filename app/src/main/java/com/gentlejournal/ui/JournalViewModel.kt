@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.gentlejournal.data.ExportFiles
 import com.gentlejournal.data.JournalDatabase
 import com.gentlejournal.data.ThemePreferences
 import com.gentlejournal.data.entity.ActionEntity
@@ -27,6 +28,7 @@ import com.gentlejournal.domain.usecase.ImportEntriesUseCase
 import com.gentlejournal.ui.util.LocaleHelper
 import com.gentlejournal.ui.util.resolveEmotionLabel
 import com.gentlejournal.ui.util.resolveActionLabel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +36,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -43,7 +46,7 @@ import java.util.UUID
 class JournalViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = JournalDatabase.getInstance(application)
-    private val repository = JournalRepository(db.entryDao(), db.tagDao())
+    private val repository = JournalRepository(db)
     private val insightDao = db.insightDao()
     private val engagementDao = db.engagementDao()
     private val insightsUseCase = GenerateInsightsUseCase()
@@ -242,6 +245,10 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
     private val _editingEntryId = MutableStateFlow<String?>(null)
     val editingEntryId: StateFlow<String?> = _editingEntryId
 
+    // Guards against a double tap saving the same entry twice
+    private val _isSaving = MutableStateFlow(false)
+    val isSaving: StateFlow<Boolean> = _isSaving
+
     // ── Import state ────────────────────────────────────────────────
 
     private val _importStatus = MutableStateFlow<String?>(null)
@@ -318,7 +325,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
         val actionIds = _formActionIds.value
         if (emotionIds.isEmpty() && text.isBlank()) return
 
-        viewModelScope.launch {
+        runSaving {
             val entry = EntryEntity(
                 id = UUID.randomUUID().toString(),
                 timestamp = System.currentTimeMillis(),
@@ -332,25 +339,44 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     fun updateExistingEntry(onComplete: () -> Unit) {
         val entryId = _editingEntryId.value ?: return
-        viewModelScope.launch {
-            val existing = repository.getEntry(entryId) ?: return@launch
-            val updated = existing.entry.copy(text = _formText.value.trim())
-            repository.updateEntry(updated, _formEmotionIds.value, _formActionIds.value)
+        val text = _formText.value.trim()
+        val emotionIds = _formEmotionIds.value
+        val actionIds = _formActionIds.value
+        if (emotionIds.isEmpty() && text.isBlank()) return
+
+        runSaving {
+            val existing = repository.getEntry(entryId) ?: return@runSaving
+            repository.updateEntry(existing.entry.copy(text = text), emotionIds, actionIds)
             resetForm()
             onComplete()
         }
     }
 
     fun deleteEntry(entryId: String, onComplete: () -> Unit) {
-        viewModelScope.launch {
+        runSaving {
             repository.deleteEntry(entryId)
             resetForm()
             onComplete()
         }
     }
 
+    private fun runSaving(block: suspend () -> Unit) {
+        if (_isSaving.value) return
+        _isSaving.value = true
+        viewModelScope.launch {
+            try {
+                block()
+            } finally {
+                _isSaving.value = false
+            }
+        }
+    }
+
     fun deleteAllEntries() {
-        viewModelScope.launch { repository.deleteAllEntries() }
+        viewModelScope.launch {
+            repository.deleteAllEntries()
+            withContext(Dispatchers.IO) { ExportFiles.clear(getApplication()) }
+        }
     }
 
     // ── Custom tags ─────────────────────────────────────────────────

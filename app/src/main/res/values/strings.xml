@@ -36,6 +36,8 @@
     <string name="entry_cancel">Cancel</string>
     <string name="entry_label_hint">Label</string>
     <string name="entry_more_specific">More specific?</string>
+    <string name="entry_delete_confirm_title">Delete this entry?</string>
+    <string name="entry_delete_confirm_message">It will be removed from your journal. This can\'t be undone.</string>
 
     <!-- Insights -->
     <string name="insights_header">Patterns noticed from your recent entries. These are observations, not judgments.</string>

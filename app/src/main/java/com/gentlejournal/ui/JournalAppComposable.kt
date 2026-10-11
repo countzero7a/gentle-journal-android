@@ -69,6 +69,7 @@ fun JournalApp(
     val formText by viewModel.formText.collectAsStateWithLifecycle()
     val formEmotionIds by viewModel.formEmotionIds.collectAsStateWithLifecycle()
     val formActionIds by viewModel.formActionIds.collectAsStateWithLifecycle()
+    val isSaving by viewModel.isSaving.collectAsStateWithLifecycle()
     val importStatus by viewModel.importStatus.collectAsStateWithLifecycle()
     val widgetEnabled by viewModel.widgetEnabled.collectAsStateWithLifecycle()
     val reminderEnabled by viewModel.reminderEnabled.collectAsStateWithLifecycle()
@@ -149,7 +150,8 @@ fun JournalApp(
                     onAddCustomAction = viewModel::addCustomAction,
                     onSave = {
                         viewModel.saveNewEntry { navController.popBackStack() }
-                    }
+                    },
+                    isSaving = isSaving
                 )
             }
 
@@ -175,7 +177,8 @@ fun JournalApp(
                     },
                     onDelete = {
                         viewModel.deleteEntry(entryId) { navController.popBackStack() }
-                    }
+                    },
+                    isSaving = isSaving
                 )
             }
 

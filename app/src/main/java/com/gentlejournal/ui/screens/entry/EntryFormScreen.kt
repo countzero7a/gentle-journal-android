@@ -34,12 +34,13 @@ fun EntryFormScreen(
     emotions: List<EmotionEntity>, actions: List<ActionEntity>,
     onToggleEmotion: (String) -> Unit, onToggleAction: (String) -> Unit,
     onAddCustomEmotion: (String, String) -> Unit, onAddCustomAction: (String, String) -> Unit,
-    onSave: () -> Unit, onDelete: (() -> Unit)? = null, modifier: Modifier = Modifier
+    onSave: () -> Unit, onDelete: (() -> Unit)? = null, isSaving: Boolean = false, modifier: Modifier = Modifier
 ) {
     val colors = LocalJournalColors.current
     val context = LocalContext.current
     var showNewEmotion by remember { mutableStateOf(false) }
     var showNewAction by remember { mutableStateOf(false) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
     var customLabel by remember { mutableStateOf("") }
     var customEmoji by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
@@ -112,16 +113,33 @@ fun EntryFormScreen(
         }
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(onClick = onSave, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = colors.Accent), contentPadding = PaddingValues(vertical = 14.dp)) {
+        Button(onClick = onSave, enabled = !isSaving, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = colors.Accent), contentPadding = PaddingValues(vertical = 14.dp)) {
             Text(text = if (isEdit) stringResource(R.string.entry_update) else stringResource(R.string.entry_save), style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold, color = colors.White))
         }
         if (isEdit && onDelete != null) {
             Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = onDelete, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = colors.Danger), contentPadding = PaddingValues(vertical = 14.dp)) {
+            Button(onClick = { showDeleteConfirm = true }, enabled = !isSaving, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = colors.Danger), contentPadding = PaddingValues(vertical = 14.dp)) {
                 Text(text = stringResource(R.string.entry_delete), style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold, color = colors.White))
             }
         }
         Spacer(modifier = Modifier.height(32.dp))
+    }
+
+    if (showDeleteConfirm && onDelete != null) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirm = false },
+            title = { Text(stringResource(R.string.entry_delete_confirm_title)) },
+            text = { Text(stringResource(R.string.entry_delete_confirm_message)) },
+            confirmButton = {
+                TextButton(onClick = { showDeleteConfirm = false; onDelete() }) {
+                    Text(stringResource(R.string.entry_delete), color = colors.Danger)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirm = false }) { Text(stringResource(R.string.entry_cancel)) }
+            },
+            containerColor = colors.Surface
+        )
     }
 }
 
