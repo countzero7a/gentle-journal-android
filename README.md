@@ -1,53 +1,48 @@
 # 🌿 Gentle Journal
 
-A private, offline-first journaling Android app that helps you notice patterns between emotions, thoughts, actions, and time — without diagnosis, judgment, or surveillance.
+A private, offline-first journaling Android app that helps you notice patterns between emotions, thoughts, actions, and time — without diagnosis, judgment, or surveillance. On the device it is called *Moments* (translated per language).
 
 ## Architecture
 
 ```
 com.gentlejournal/
 ├── data/                          # Data layer (Room + Repository)
-│   ├── entity/                    # Room entities & relations
-│   │   ├── EntryEntity.kt        # Journal entry
-│   │   ├── EmotionEntity.kt      # Emotion tag (user-customizable)
-│   │   ├── ActionEntity.kt       # Action tag (user-customizable)
-│   │   ├── EntryEmotionCrossRef.kt  # Many-to-many join
-│   │   ├── EntryActionCrossRef.kt   # Many-to-many join
-│   │   └── EntryWithTags.kt      # Embedded relation
-│   ├── dao/
-│   │   ├── EntryDao.kt           # Entry CRUD + relations
-│   │   └── TagDao.kt             # Emotion/Action tag CRUD
+│   ├── entity/                    # Room entities & relations (entries, tags, insights)
+│   ├── dao/                       # EntryDao, TagDao, InsightDao, EngagementDao
 │   ├── repository/
-│   │   └── JournalRepository.kt  # Single source of truth
-│   └── JournalDatabase.kt        # Room DB with default tag seeding
+│   │   └── JournalRepository.kt  # Transactions for saving, importing, deleting
+│   ├── JournalDatabase.kt        # Room DB (SQLCipher) with default tag seeding
+│   ├── DatabaseKeyManager.kt     # Random DB key, kept in Keystore-backed storage
+│   ├── ThemePreferences.kt       # DataStore: theme, language, font, reminder
+│   ├── ReminderManager.kt        # Daily reminder + reschedule after reboot
+│   └── ExportFiles.kt            # Short-lived export files in the cache
 │
-├── domain/                        # Business logic
-│   ├── model/
-│   │   ├── Insight.kt            # Insight data class + types
-│   │   └── ExportFormat.kt       # JSON / CSV / Markdown enum
+├── domain/                        # Business logic (plain Kotlin, unit-tested)
+│   ├── model/                     # Insight, ExportFormat + backup format, settings enums
 │   └── usecase/
 │       ├── GenerateInsightsUseCase.kt  # On-device pattern detection
-│       └── ExportEntriesUseCase.kt     # Data export formatter
+│       ├── InsightStrings.kt           # Insight sentences, supplied by the app
+│       ├── ExportEntriesUseCase.kt     # JSON backup / CSV / Markdown
+│       ├── ImportEntriesUseCase.kt     # Reads backups and old exports, plans the import
+│       ├── EmotionSelection.kt         # Entry-form emotion rules
+│       └── StopWords.kt                # Per-language keyword filtering
 │
 ├── ui/                            # Presentation layer (Compose)
-│   ├── theme/
-│   │   ├── Color.kt              # Warm organic palette
-│   │   ├── Type.kt               # Serif typography
-│   │   └── Theme.kt              # Material3 theme
-│   ├── components/
-│   │   └── Components.kt         # TagChip, JournalCard, EmptyState, etc.
-│   ├── screens/
-│   │   ├── timeline/             # Chronological entry list
-│   │   ├── entry/                # New & Edit entry form
-│   │   ├── insights/             # Weekly pattern display
-│   │   ├── settings/             # About, tags, data, donation
-│   │   └── export_screen/        # Format selector + export
-│   ├── JournalViewModel.kt       # State orchestration
-│   ├── JournalAppComposable.kt   # Navigation + scaffold
-│   └── Navigation.kt             # Route definitions
+│   ├── theme/                     # Palettes (Meadow, Moonlight, Ocean, Ember), type, theme
+│   ├── components/                # TagChip, JournalCard, EmptyState, TagEditDialog
+│   ├── screens/                   # timeline, entry, insights, charts, settings, export
+│   ├── util/                      # LocaleHelper, tag label resolver, resource-backed strings
+│   ├── widget/                    # Home-screen mood widget
+│   ├── JournalViewModel.kt        # State orchestration
+│   ├── JournalAppComposable.kt    # Navigation + scaffold
+│   └── Navigation.kt              # Route definitions
 │
 ├── GentleJournalApp.kt           # Application class
-└── MainActivity.kt               # Entry point
+└── MainActivity.kt               # Entry point, applies the in-app language
+
+app/schemas/                       # Exported Room schemas (commit one per DB version)
+app/src/test/                      # JVM unit tests
+tools/check_translations.py        # Translation completeness check (also run in CI)
 ```
 
 ## TDD Feature Mapping
@@ -55,45 +50,70 @@ com.gentlejournal/
 | TDD Requirement | Implementation |
 |---|---|
 | Short text entries, optional | `EntryFormScreen` — textarea with placeholder |
-| 1–2 emotion tags per entry | `toggleFormEmotion()` enforces max 2 |
-| User-customizable tags | `addCustomEmotion()` / `addCustomAction()` |
+| 1–2 emotion tags per entry | `EmotionSelection.toggle()` enforces max 2; a sub-emotion replaces its parent |
+| User-customizable tags | Add from the entry form; rename, re-emoji or delete in Settings |
 | Action tags (including "nothing") | Default seeded actions include "Nothing 💤" |
 | Chronological timeline with emoji | `TimelineScreen` grouped by date |
-| Weekly surfaced patterns | `GenerateInsightsUseCase` — 4 pattern types |
-| Edit / delete entries | Edit screen via `loadEntryForEditing()` |
-| Local storage, no account | Room DB, no network permissions |
-| Export CSV / JSON / Markdown | `ExportEntriesUseCase` + FileProvider share |
+| Weekly surfaced patterns | `GenerateInsightsUseCase` — summary, frequency, trends, sequences, correlations, time of day, weekdays, keywords |
+| Edit / delete entries | Edit screen via `loadEntryForEditing()`; delete asks for confirmation |
+| Local storage, no account | Room DB encrypted with SQLCipher, no network permission |
+| Export CSV / JSON / Markdown | `ExportEntriesUseCase` + FileProvider share; JSON doubles as a restorable backup |
 | Optional donations, no paywalls | Settings screen donation card |
 | No streaks / guilt / failure states | No streak counters anywhere |
 | Explainable insights | Each insight has a typed label |
-| Emotionally safe UX | Gentle language throughout |
+| Emotionally safe UX | Gentle language throughout, in 13 languages |
+
+## Backup format
+
+The JSON export is a versioned backup that import reads back exactly:
+
+```json
+{
+  "format": "gentle-journal",
+  "version": 2,
+  "exportedAt": "2026-10-11T10:30:00+03:00",
+  "emotions": [{ "id": "e_happy", "label": "Happy", "emoji": "😊", "parentId": null, "isDefault": true, "sortOrder": 0 }],
+  "actions":  [{ "id": "a_nature", "label": "Nature", "emoji": "🌿", "isDefault": true, "sortOrder": 4 }],
+  "entries":  [{ "id": "…", "timestampMillis": 1760167800000, "timestamp": "2026-10-11T10:30:00+03:00",
+                 "text": "…", "emotionIds": ["e_happy"], "actionIds": ["a_nature"] }]
+}
+```
+
+Import also accepts the older export (a plain array with `yyyy-MM-dd HH:mm` timestamps and tag labels). Tags are matched by id, then by stored or translated name; unknown ones are recreated as custom tags. Entries already in the journal (same id, or same minute and text) are skipped, so importing a file twice is safe.
+
+## Permissions
+
+- **POST_NOTIFICATIONS** — only for the optional daily reminder; asked for when the reminder is turned on.
+- **RECEIVE_BOOT_COMPLETED** — to reschedule that reminder after a reboot.
+- No internet permission: nothing ever leaves the device unless you share an export.
 
 ## Tech Stack
 
 - **Kotlin** 1.9.22
 - **Jetpack Compose** (Material 3 + BOM 2024.01)
-- **Room** 2.6.1 (SQLite, on-device only)
+- **Room** 2.6.1 on **SQLCipher** (encrypted, on-device only)
+- **DataStore** for preferences
 - **Navigation Compose** for routing
 - **ViewModel** + StateFlow for reactive state
+- **kotlinx.serialization** JSON (JsonElement API) for backups
 - **KSP** for Room annotation processing
-- **No network permissions** — fully offline
 
 ## Build & Run
 
 ```bash
-# Open in Android Studio Hedgehog+ (2023.1+)
-# Sync Gradle, then:
 ./gradlew assembleDebug
-
-# Or run directly on device/emulator from Android Studio
+./gradlew testReleaseUnitTest
+python3 tools/check_translations.py
 ```
 
 Minimum SDK: 26 (Android 8.0)
 Target SDK: 34 (Android 14)
 
+**Database changes:** never bump the Room version without adding a `Migration` and committing the new schema from `app/schemas/`. Only the pre-release versions 1 and 2 are still allowed to be wiped.
+
 ## Install on your phone
 
-Every push to `main` is built by GitHub Actions (`.github/workflows/build.yml`) and published as a signed APK:
+Every push is built and tested by GitHub Actions (`.github/workflows/build.yml`). Pushes to `main` publish a signed APK:
 
 **https://github.com/countzero7a/gentle-journal-android/releases/latest/download/gentle-journal.apk**
 
