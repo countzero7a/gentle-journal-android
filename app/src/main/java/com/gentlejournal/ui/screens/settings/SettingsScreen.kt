@@ -41,6 +41,9 @@ import com.gentlejournal.ui.components.JournalCard
 import com.gentlejournal.ui.components.TagEditDialog
 import com.gentlejournal.ui.components.TagChip
 import com.gentlejournal.ui.theme.*
+import com.gentlejournal.ui.util.label
+import com.gentlejournal.ui.util.localizedName
+import com.gentlejournal.ui.util.nativeLabel
 import com.gentlejournal.ui.util.resolveActionLabel
 import com.gentlejournal.ui.util.resolveEmotionLabel
 
@@ -120,7 +123,7 @@ fun SettingsScreen(
                                 }
                             }
                             Text(
-                                text = "${theme.emoji}  ${theme.displayName}",
+                                text = "${theme.emoji}  ${theme.label()}",
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                                     color = colors.Text
@@ -151,7 +154,7 @@ fun SettingsScreen(
                     Row(modifier = Modifier.padding(14.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                             Text(text = currentLanguage.emoji, fontSize = 20.sp)
-                            Text(text = currentLanguage.nativeName, style = MaterialTheme.typography.bodyMedium.copy(color = colors.Text))
+                            Text(text = currentLanguage.nativeLabel(), style = MaterialTheme.typography.bodyMedium.copy(color = colors.Text))
                         }
                         Text(text = "\u25BE", style = MaterialTheme.typography.bodyLarge.copy(color = colors.TextMuted))
                     }
@@ -163,9 +166,10 @@ fun SettingsScreen(
                                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                                     Text(text = language.emoji, fontSize = 18.sp)
                                     Column {
-                                        Text(text = language.nativeName, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = if (language == currentLanguage) FontWeight.SemiBold else FontWeight.Normal))
-                                        if (language != AppLanguage.SYSTEM && language.nativeName != language.displayName) {
-                                            Text(text = language.displayName, style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
+                                        Text(text = language.nativeLabel(), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = if (language == currentLanguage) FontWeight.SemiBold else FontWeight.Normal))
+                                        // Also the language's name in the current app language, when it differs
+                                        language.localizedName()?.takeIf { it != language.nativeName }?.let { name ->
+                                            Text(text = name, style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
                                         }
                                     }
                                 }
@@ -195,14 +199,14 @@ fun SettingsScreen(
                     shape = RoundedCornerShape(12.dp), color = colors.SurfaceAlt, border = BorderStroke(1.dp, colors.Border)
                 ) {
                     Row(modifier = Modifier.padding(12.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(text = currentFont.displayName, style = MaterialTheme.typography.bodyMedium)
+                        Text(text = currentFont.label(), style = MaterialTheme.typography.bodyMedium)
                         Text(text = "\u25BE", style = MaterialTheme.typography.bodyLarge.copy(color = colors.TextMuted))
                     }
                 }
                 DropdownMenu(expanded = fontExpanded, onDismissRequest = { fontExpanded = false }) {
                     AppFont.entries.forEach { font ->
                         DropdownMenuItem(
-                            text = { Text(text = font.displayName, fontWeight = if (font == currentFont) FontWeight.SemiBold else FontWeight.Normal) },
+                            text = { Text(text = font.label(), fontWeight = if (font == currentFont) FontWeight.SemiBold else FontWeight.Normal) },
                             onClick = { onFontChange(font); fontExpanded = false },
                             trailingIcon = { if (font == currentFont) Icon(Icons.Default.Check, contentDescription = null, tint = colors.Accent, modifier = Modifier.size(18.dp)) }
                         )
@@ -225,7 +229,7 @@ fun SettingsScreen(
                         border = BorderStroke(if (isSelected) 2.dp else 1.dp, if (isSelected) colors.Accent else colors.Border)
                     ) {
                         Text(
-                            text = size.displayName,
+                            text = size.label(),
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                                 color = if (isSelected) colors.AccentDark else colors.TextMuted,

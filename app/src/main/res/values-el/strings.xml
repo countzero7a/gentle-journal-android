@@ -54,7 +54,7 @@
     <string name="settings_font">Γραμματοσειρά</string>
     <string name="settings_font_size">Μέγεθος</string>
     <string name="settings_import">Εισαγωγή δεδομένων</string>
-    <string name="settings_import_desc">Επαναφορά εγγραφών από προηγούμενη εξαγωγή JSON.</string>
+    <string name="settings_import_desc">Επαναφορά εγγραφών από εξαγωγή JSON. Όσες υπάρχουν ήδη στο ημερολόγιο παραλείπονται.</string>
     <string name="settings_about_text">Ένας ιδιωτικός σύντροφος ημερολογίου για αυτοπαρατήρηση. Χωρίς λογαριασμούς, χωρίς cloud, χωρίς παρακολούθηση.</string>
     <string name="settings_your_data">Τα δεδομένα σου</string>
     <string name="settings_entries_stored">%d εγγραφές αποθηκευμένες τοπικά.</string>
@@ -119,5 +119,90 @@
     <string name="widget_no_entries">Καμία καταχώρηση σήμερα</string>
     <string name="settings_widget">Widget αρχικής οθόνης</string>
     <string name="settings_widget_desc">Εμφάνισε τη σημερινή διάθεση στην αρχική οθόνη.</string>
-    <string name="settings_widget_hint">Μετά την ενεργοποίηση, πάτα παρατεταμένα στην αρχική οθόνη και πρόσθεσε το widget.</string>
+    <string name="settings_widget_hint">Πάτα παρατεταμένα στην αρχική οθόνη, άνοιξε τα Widget και διάλεξε τις Στιγμές.</string>
+    <string name="timeline_today">σήμερα</string>
+    <string name="timeline_yesterday">χθες</string>
+    <string name="tag_label_taken">Υπάρχει ήδη ετικέτα με αυτό το όνομα.</string>
+    <string name="tag_edit_title">Επεξεργασία ετικέτας</string>
+    <string name="tag_save">Αποθήκευση</string>
+    <string name="tag_delete">Διαγραφή ετικέτας</string>
+    <string name="tag_delete_title">Διαγραφή της ετικέτας «%1$s»;</string>
+    <string name="tag_delete_message">Οι εγγραφές με αυτή την ετικέτα κρατούν όλα τα υπόλοιπα· αφαιρείται μόνο η ετικέτα. Δεν μπορεί να αναιρεθεί.</string>
+    <string name="entry_delete_confirm_title">Διαγραφή αυτής της εγγραφής;</string>
+    <string name="entry_delete_confirm_message">Θα αφαιρεθεί από το ημερολόγιό σου. Δεν μπορεί να αναιρεθεί.</string>
+    <string name="time_morning">Το πρωί</string>
+    <string name="time_afternoon">Το απόγευμα</string>
+    <string name="time_evening">Το βράδυ</string>
+    <string name="time_night">Τη νύχτα</string>
+    <string name="insight_keep_journaling">Συνέχισε να γράφεις — τα μοτίβα φαίνονται μετά από λίγες ακόμη εγγραφές.</string>
+    <string name="insight_period_week">αυτή την εβδομάδα</string>
+    <string name="insight_period_two_weeks">αυτές τις δύο εβδομάδες</string>
+    <string name="insight_period_month">αυτόν τον μήνα</string>
+    <string name="insight_period_other">αυτή την περίοδο</string>
+    <plurals name="insight_summary_days">
+        <item quantity="one">Έγραψες %1$d μέρα %2$s.</item>
+        <item quantity="other">Έγραψες %1$d μέρες %2$s.</item>
+    </plurals>
+    <string name="insight_summary_top_emotion">Ένιωσες πιο συχνά «%1$s».</string>
+    <string name="insight_summary_correlation">Ένιωθες συχνά «%1$s» μαζί με «%2$s».</string>
+    <plurals name="insight_pattern">
+        <item quantity="one">Ένιωσες «%1$s» %2$d φορά %3$s.</item>
+        <item quantity="other">Ένιωσες «%1$s» %2$d φορές %3$s.</item>
+    </plurals>
+    <string name="insight_trend_up">Ένιωσες «%1$s» πιο συχνά αυτή την περίοδο (%2$d έναντι %3$d).</string>
+    <string name="insight_trend_down">Ένιωσες «%1$s» πιο σπάνια αυτή την περίοδο (%2$d έναντι %3$d).</string>
+    <plurals name="insight_sequence">
+        <item quantity="one">Μετά από μέρες με «%1$s», την επόμενη μέρα νιώθεις συχνά «%2$s» (%3$d φορά).</item>
+        <item quantity="other">Μετά από μέρες με «%1$s», την επόμενη μέρα νιώθεις συχνά «%2$s» (%3$d φορές).</item>
+    </plurals>
+    <string name="insight_correlation">Όταν σημειώνεις «%1$s», νιώθεις συχνά «%2$s».</string>
+    <string name="insight_time_of_day">%1$s νιώθεις συχνά «%2$s».</string>
+    <plurals name="insight_day_of_week">
+        <item quantity="one">%1$s: νιώθεις συχνά «%2$s» (%3$d φορά).</item>
+        <item quantity="other">%1$s: νιώθεις συχνά «%2$s» (%3$d φορές).</item>
+    </plurals>
+    <plurals name="insight_keyword">
+        <item quantity="one">Όταν γράφεις για «%1$s», νιώθεις συχνά «%2$s» (%3$d εγγραφή).</item>
+        <item quantity="other">Όταν γράφεις για «%1$s», νιώθεις συχνά «%2$s» (%3$d εγγραφές).</item>
+    </plurals>
+    <plurals name="insight_frequency">
+        <item quantity="one">Έγραψες τις %1$d από την τελευταία %2$d μέρα. Χωρίς πίεση — κάθε ρυθμός είναι εντάξει.</item>
+        <item quantity="other">Έγραψες τις %1$d από τις τελευταίες %2$d μέρες. Χωρίς πίεση — κάθε ρυθμός είναι εντάξει.</item>
+    </plurals>
+    <string name="reminder_channel_name">Καθημερινή στιγμή</string>
+    <string name="reminder_channel_desc">Προαιρετική, ήπια υπενθύμιση για το ημερολόγιο</string>
+    <string name="reminder_permission_denied">Οι ειδοποιήσεις είναι απενεργοποιημένες για αυτή την εφαρμογή, οπότε οι υπενθυμίσεις δεν μπορούν να εμφανιστούν. Μπορείς να τις επιτρέψεις από τις ρυθμίσεις του τηλεφώνου.</string>
+    <string name="export_range">Από %1$s έως %2$s</string>
+    <string name="export_subject">Εξαγωγή ημερολογίου — %s</string>
+    <string name="import_read_error">Δεν ήταν δυνατό να ανοίξει το αρχείο.</string>
+    <string name="import_no_entries">Δεν βρέθηκαν εγγραφές στο αρχείο.</string>
+    <string name="import_failed">Δεν μοιάζει με εξαγωγή ημερολογίου από αυτή την εφαρμογή, ή το αρχείο είναι κατεστραμμένο.</string>
+    <plurals name="import_imported">
+        <item quantity="one">Εισήχθη %d εγγραφή</item>
+        <item quantity="other">Εισήχθησαν %d εγγραφές</item>
+    </plurals>
+    <plurals name="import_duplicates">
+        <item quantity="one">%d υπήρχε ήδη στο ημερολόγιο</item>
+        <item quantity="other">%d υπήρχαν ήδη στο ημερολόγιο</item>
+    </plurals>
+    <plurals name="import_errors">
+        <item quantity="one">%d δεν μπόρεσε να διαβαστεί</item>
+        <item quantity="other">%d δεν μπόρεσαν να διαβαστούν</item>
+    </plurals>
+    <string name="settings_tags_edit_hint">Οι ετικέτες που δημιούργησες είναι τονισμένες. Πάτησε μία για να τη μετονομάσεις ή να τη διαγράψεις.</string>
+    <string name="settings_footer">v3.1 · Φτιαγμένο με φροντίδα · Καμία συλλογή δεδομένων</string>
+    <string name="settings_back">Πίσω</string>
+    <string name="theme_system">Όπως το σύστημα</string>
+    <string name="theme_meadow">Λιβάδι</string>
+    <string name="theme_moonlight">Σεληνόφως</string>
+    <string name="theme_ocean">Ωκεανός</string>
+    <string name="theme_ember">Θράκα</string>
+    <string name="font_default">Προεπιλογή συστήματος</string>
+    <string name="font_serif">Με πατούρες</string>
+    <string name="font_monospace">Σταθερού πλάτους</string>
+    <string name="font_size_small">Μικρό</string>
+    <string name="font_size_medium">Μεσαίο</string>
+    <string name="font_size_large">Μεγάλο</string>
+    <string name="font_size_extra_large">Πολύ μεγάλο</string>
+    <string name="language_system">Προεπιλογή συστήματος</string>
 </resources>

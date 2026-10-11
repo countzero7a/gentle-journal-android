@@ -66,7 +66,7 @@
     <string name="settings_delete_yes">Ja, alles l&#x00F6;schen</string>
     <string name="settings_delete_all">Alle Daten l&#x00F6;schen</string>
     <string name="settings_import">Daten importieren</string>
-    <string name="settings_import_desc">Eintr&#x00E4;ge aus einem fr&#x00FC;heren JSON-Export wiederherstellen.</string>
+    <string name="settings_import_desc">Einträge aus einem JSON-Export wiederherstellen. Einträge, die schon in deinem Tagebuch sind, werden übersprungen.</string>
     <string name="settings_support">Dieses Projekt unterst&#x00FC;tzen</string>
     <string name="settings_support_text">Diese App ist ein kostenloses, werbefreies Innovationsprojekt. Wenn sie hilfreich ist, erw&#x00E4;ge eine freiwillige Spende.</string>
     <string name="settings_donate">Kauf mir einen Kaffee</string>
@@ -112,16 +112,97 @@
     <string name="action_meditated">Meditiert</string>
     <string name="nav_charts">Diagramme</string>
     <string name="charts_title">Deine Muster</string>
-    <string name="charts_frequency">Emotionshaeufigkeit</string>
-    <string name="charts_timeline">Taegliche Stimmung</string>
+    <string name="charts_frequency">Häufigkeit der Emotionen</string>
+    <string name="charts_timeline">Tägliche Stimmung</string>
     <string name="charts_stats">Statistik</string>
-    <string name="charts_total_entries">Eintraege gesamt</string>
-    <string name="charts_days_journaled">Tage mit Eintraegen</string>
+    <string name="charts_total_entries">Einträge gesamt</string>
+    <string name="charts_days_journaled">Tage mit Einträgen</string>
     <string name="charts_unique_emotions">Verschiedene Emotionen</string>
     <string name="charts_total_tags">Emotions-Tags gesamt</string>
     <string name="charts_empty">Noch nicht genug Daten. Schreib weiter!</string>
-    <string name="widget_no_entries">Keine Eintraege heute</string>
+    <string name="widget_no_entries">Heute keine Einträge</string>
     <string name="settings_widget">Startbildschirm-Widget</string>
     <string name="settings_widget_desc">Zeige die heutige Stimmung auf dem Startbildschirm.</string>
-    <string name="settings_widget_hint">Nach der Aktivierung halte den Startbildschirm gedrueckt und fuege das Widget hinzu.</string>
+    <string name="settings_widget_hint">Halte den Startbildschirm gedrückt, öffne „Widgets“ und wähle Momente.</string>
+    <string name="timeline_yesterday">gestern</string>
+    <string name="tag_label_taken">Es gibt schon einen Tag mit diesem Namen.</string>
+    <string name="tag_edit_title">Tag bearbeiten</string>
+    <string name="tag_save">Speichern</string>
+    <string name="tag_delete">Tag löschen</string>
+    <string name="tag_delete_title">„%1$s“ löschen?</string>
+    <string name="tag_delete_message">Einträge mit diesem Tag behalten alles andere; nur der Tag wird entfernt. Das kann nicht rückgängig gemacht werden.</string>
+    <string name="entry_delete_confirm_title">Diesen Eintrag löschen?</string>
+    <string name="entry_delete_confirm_message">Er wird aus deinem Tagebuch entfernt. Das kann nicht rückgängig gemacht werden.</string>
+    <string name="time_morning">Morgens</string>
+    <string name="time_afternoon">Nachmittags</string>
+    <string name="time_evening">Abends</string>
+    <string name="time_night">Nachts</string>
+    <string name="insight_keep_journaling">Schreib einfach weiter — nach ein paar weiteren Einträgen zeigen sich Muster.</string>
+    <string name="insight_period_week">diese Woche</string>
+    <string name="insight_period_two_weeks">in diesen zwei Wochen</string>
+    <string name="insight_period_month">diesen Monat</string>
+    <string name="insight_period_other">in diesem Zeitraum</string>
+    <plurals name="insight_summary_days">
+        <item quantity="one">Du hast %2$s an %1$d Tag geschrieben.</item>
+        <item quantity="other">Du hast %2$s an %1$d Tagen geschrieben.</item>
+    </plurals>
+    <string name="insight_summary_top_emotion">Am häufigsten hast du dich „%1$s“ gefühlt.</string>
+    <string name="insight_summary_correlation">Du hast dich oft „%1$s“ gefühlt, zusammen mit „%2$s“.</string>
+    <plurals name="insight_pattern">
+        <item quantity="one">Du hast dich %3$s %2$d-mal „%1$s“ gefühlt.</item>
+        <item quantity="other">Du hast dich %3$s %2$d-mal „%1$s“ gefühlt.</item>
+    </plurals>
+    <string name="insight_trend_up">Du hast dich in diesem Zeitraum öfter „%1$s“ gefühlt (%2$d statt %3$d).</string>
+    <string name="insight_trend_down">Du hast dich in diesem Zeitraum seltener „%1$s“ gefühlt (%2$d statt %3$d).</string>
+    <plurals name="insight_sequence">
+        <item quantity="one">Nach Tagen mit „%1$s“ fühlst du dich am nächsten Tag oft „%2$s“ (%3$d-mal).</item>
+        <item quantity="other">Nach Tagen mit „%1$s“ fühlst du dich am nächsten Tag oft „%2$s“ (%3$d-mal).</item>
+    </plurals>
+    <string name="insight_correlation">Wenn du „%1$s“ notierst, fühlst du dich oft „%2$s“.</string>
+    <string name="insight_time_of_day">%1$s fühlst du dich oft „%2$s“.</string>
+    <plurals name="insight_day_of_week">
+        <item quantity="one">%1$s: Du fühlst dich oft „%2$s“ (%3$d-mal).</item>
+        <item quantity="other">%1$s: Du fühlst dich oft „%2$s“ (%3$d-mal).</item>
+    </plurals>
+    <plurals name="insight_keyword">
+        <item quantity="one">Wenn du über „%1$s“ schreibst, fühlst du dich oft „%2$s“ (%3$d Eintrag).</item>
+        <item quantity="other">Wenn du über „%1$s“ schreibst, fühlst du dich oft „%2$s“ (%3$d Einträge).</item>
+    </plurals>
+    <plurals name="insight_frequency">
+        <item quantity="one">Du hast an %1$d des letzten %2$d Tages geschrieben. Kein Druck — jedes Tempo ist in Ordnung.</item>
+        <item quantity="other">Du hast an %1$d der letzten %2$d Tage geschrieben. Kein Druck — jedes Tempo ist in Ordnung.</item>
+    </plurals>
+    <string name="reminder_permission_denied">Benachrichtigungen sind für diese App ausgeschaltet, daher können keine Erinnerungen erscheinen. Du kannst sie in den Einstellungen deines Telefons erlauben.</string>
+    <string name="export_range">Von %1$s bis %2$s</string>
+    <string name="export_subject">Tagebuch-Export — %s</string>
+    <string name="import_read_error">Die Datei konnte nicht geöffnet werden.</string>
+    <string name="import_no_entries">In der Datei wurden keine Einträge gefunden.</string>
+    <string name="import_failed">Das sieht nicht nach einem Tagebuch-Export dieser App aus, oder die Datei ist beschädigt.</string>
+    <plurals name="import_imported">
+        <item quantity="one">%d Eintrag importiert</item>
+        <item quantity="other">%d Einträge importiert</item>
+    </plurals>
+    <plurals name="import_duplicates">
+        <item quantity="one">%d war schon in deinem Tagebuch</item>
+        <item quantity="other">%d waren schon in deinem Tagebuch</item>
+    </plurals>
+    <plurals name="import_errors">
+        <item quantity="one">%d konnte nicht gelesen werden</item>
+        <item quantity="other">%d konnten nicht gelesen werden</item>
+    </plurals>
+    <string name="settings_tags_edit_hint">Tags, die du selbst erstellt hast, sind hervorgehoben. Tippe auf einen, um ihn umzubenennen oder zu löschen.</string>
+    <string name="settings_footer">v3.1 · Mit Sorgfalt gemacht · Keine Datensammlung</string>
+    <string name="theme_system">System folgen</string>
+    <string name="theme_meadow">Wiese</string>
+    <string name="theme_moonlight">Mondlicht</string>
+    <string name="theme_ocean">Ozean</string>
+    <string name="theme_ember">Glut</string>
+    <string name="font_default">Systemstandard</string>
+    <string name="font_serif">Serifen</string>
+    <string name="font_monospace">Monospace</string>
+    <string name="font_size_small">Klein</string>
+    <string name="font_size_medium">Mittel</string>
+    <string name="font_size_large">Groß</string>
+    <string name="font_size_extra_large">Sehr groß</string>
+    <string name="language_system">Systemstandard</string>
 </resources>

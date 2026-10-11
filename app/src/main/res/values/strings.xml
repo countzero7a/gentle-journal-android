@@ -64,10 +64,10 @@
     <string name="insights_sequence">Day-to-day pattern</string>
     <string name="insights_seasonal">Calendar pattern</string>
     <string name="insights_keyword">Text pattern</string>
-    <string name="time_morning">morning</string>
-    <string name="time_afternoon">afternoon</string>
-    <string name="time_evening">evening</string>
-    <string name="time_night">night</string>
+    <string name="time_morning">In the morning</string>
+    <string name="time_afternoon">In the afternoon</string>
+    <string name="time_evening">In the evening</string>
+    <string name="time_night">At night</string>
 
     <!-- Insight sentences. Labels arrive already translated; keep the quotes around them. -->
     <string name="insight_keep_journaling">Keep journaling — patterns emerge with a few more entries.</string>
@@ -80,7 +80,7 @@
         <item quantity="other">You journaled on %1$d days %2$s.</item>
     </plurals>
     <string name="insight_summary_top_emotion">You felt \'%1$s\' most often.</string>
-    <string name="insight_summary_correlation">You often felt %1$s after %2$s.</string>
+    <string name="insight_summary_correlation">You often felt \'%1$s\' alongside \'%2$s\'.</string>
     <plurals name="insight_pattern">
         <item quantity="one">You\'ve felt \'%1$s\' %2$d time %3$s.</item>
         <item quantity="other">You\'ve felt \'%1$s\' %2$d times %3$s.</item>
@@ -91,8 +91,8 @@
         <item quantity="one">After days with \'%1$s\', you often feel \'%2$s\' the next day (%3$d time).</item>
         <item quantity="other">After days with \'%1$s\', you often feel \'%2$s\' the next day (%3$d times).</item>
     </plurals>
-    <string name="insight_correlation">When you \'%1$s\', you often feel \'%2$s\'.</string>
-    <string name="insight_time_of_day">In the %1$s, you tend to feel \'%2$s\'.</string>
+    <string name="insight_correlation">When you note \'%1$s\', you often feel \'%2$s\'.</string>
+    <string name="insight_time_of_day">%1$s, you tend to feel \'%2$s\'.</string>
     <plurals name="insight_day_of_week">
         <item quantity="one">On %1$s you often feel \'%2$s\' (%3$d time).</item>
         <item quantity="other">On %1$s you often feel \'%2$s\' (%3$d times).</item>
@@ -191,6 +191,16 @@
     <string name="theme_moonlight">Moonlight</string>
     <string name="theme_ocean">Ocean</string>
     <string name="theme_ember">Ember</string>
+
+    <!-- Fonts and sizes -->
+    <string name="font_default">System default</string>
+    <string name="font_serif">Serif</string>
+    <string name="font_monospace">Monospace</string>
+    <string name="font_size_small">Small</string>
+    <string name="font_size_medium">Medium</string>
+    <string name="font_size_large">Large</string>
+    <string name="font_size_extra_large">Extra large</string>
+    <string name="language_system">System default</string>
 
     <!-- Default emotions -->
     <string name="emotion_happy">Happy</string>

@@ -1,14 +1,15 @@
 package com.gentlejournal.domain.model
 
-enum class AppFont(val displayName: String, val familyName: String) {
-    DEFAULT("System Default", "sans-serif"),
-    SERIF("Serif", "serif"),
-    MONOSPACE("Monospace", "monospace");
+// Display names come from string resources (ui/util/EnumLabels.kt)
+enum class AppFont(val familyName: String) {
+    DEFAULT("sans-serif"),
+    SERIF("serif"),
+    MONOSPACE("monospace");
 }
 
-enum class AppFontSize(val displayName: String, val scaleFactor: Float) {
-    SMALL("Small", 0.85f),
-    MEDIUM("Medium", 1.0f),
-    LARGE("Large", 1.2f),
-    EXTRA_LARGE("Extra Large", 1.4f);
+enum class AppFontSize(val scaleFactor: Float) {
+    SMALL(0.85f),
+    MEDIUM(1.0f),
+    LARGE(1.2f),
+    EXTRA_LARGE(1.4f);
 }
