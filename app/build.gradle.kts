@@ -70,6 +70,11 @@ android {
     }
 }
 
+ksp {
+    // Exported schemas are committed so future migrations can be written and tested
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
     // Compose BOM
     val composeBom = platform("androidx.compose:compose-bom:2024.01.00")

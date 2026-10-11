@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
         InsightEngagementEntity::class
     ],
     version = 3,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class JournalDatabase : RoomDatabase() {
 
@@ -56,7 +56,10 @@ abstract class JournalDatabase : RoomDatabase() {
             )
                 .openHelperFactory(DatabaseKeyManager.getFactory(context))
                 .addCallback(SeedCallback(context.applicationContext))
-                .fallbackToDestructiveMigration()
+                // Only pre-release schemas (v1, v2) may be wiped. From v3 on, every
+                // version bump needs a Migration passed to addMigrations(), and the
+                // exported schema in app/schemas/ must be committed alongside it.
+                .fallbackToDestructiveMigrationFrom(1, 2)
                 .build()
         }
     }
