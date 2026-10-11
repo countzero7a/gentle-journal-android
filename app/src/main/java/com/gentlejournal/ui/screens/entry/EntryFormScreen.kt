@@ -1,5 +1,6 @@
 package com.gentlejournal.ui.screens.entry
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -49,7 +50,7 @@ fun EntryFormScreen(
 
     Column(modifier = modifier.fillMaxSize().imePadding().verticalScroll(scrollState).padding(horizontal = 16.dp, vertical = 12.dp)) {
         SectionLabel(text = stringResource(R.string.entry_on_your_mind), hint = stringResource(R.string.entry_optional))
-        Surface(shape = RoundedCornerShape(12.dp), color = colors.SurfaceAlt, border = ButtonDefaults.outlinedButtonBorder.copy(brush = SolidColor(colors.Border))) {
+        Surface(shape = RoundedCornerShape(12.dp), color = colors.SurfaceAlt, border = BorderStroke(1.dp, colors.Border)) {
             Box(modifier = Modifier.padding(14.dp)) {
                 if (text.isEmpty()) {
                     Text(text = stringResource(R.string.entry_placeholder), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted))
@@ -148,7 +149,7 @@ fun EntryFormScreen(
 @Composable
 private fun CustomTagCard(title: String, emoji: String, label: String, labelTaken: Boolean, onEmojiChange: (String) -> Unit, onLabelChange: (String) -> Unit, onAdd: () -> Unit, onCancel: () -> Unit) {
     val colors = LocalJournalColors.current
-    Surface(shape = RoundedCornerShape(16.dp), color = colors.WarmLight, border = ButtonDefaults.outlinedButtonBorder.copy(brush = SolidColor(colors.Warm))) {
+    Surface(shape = RoundedCornerShape(16.dp), color = colors.WarmLight, border = BorderStroke(1.dp, colors.Warm)) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = title, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold))
             Spacer(modifier = Modifier.height(8.dp))

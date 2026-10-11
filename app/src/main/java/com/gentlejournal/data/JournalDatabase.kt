@@ -59,7 +59,7 @@ abstract class JournalDatabase : RoomDatabase() {
                 // Only pre-release schemas (v1, v2) may be wiped. From v3 on, every
                 // version bump needs a Migration passed to addMigrations(), and the
                 // exported schema in app/schemas/ must be committed alongside it.
-                .fallbackToDestructiveMigrationFrom(1, 2)
+                .fallbackToDestructiveMigrationFrom(dropAllTables = true, 1, 2)
                 .build()
         }
     }

@@ -52,6 +52,19 @@ jobs:
         # gradle.properties is tuned for a 4 GB laptop; CI runners have more room
         run: ./gradlew testReleaseUnitTest assembleRelease -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
 
+      # Temporary: produce the official wrapper files for the Gradle version in use
+      - name: Regenerate Gradle wrapper
+        run: ./gradlew wrapper --gradle-version 9.8.1 --gradle-distribution-sha256-sum dce76f55f8e251a3a1f130eb120f30b3d271de2b76c9b0729d316b5a1b6dc01f
+
+      - name: Upload Gradle wrapper
+        uses: actions/upload-artifact@v7
+        with:
+          name: gradle-wrapper
+          path: |
+            gradle/wrapper/
+            gradlew
+            gradlew.bat
+
       - name: Upload Room schema
         uses: actions/upload-artifact@v7
         with:
