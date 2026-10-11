@@ -22,6 +22,9 @@ interface TagDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertEmotions(emotions: List<EmotionEntity>)
 
+    @Update
+    suspend fun updateEmotion(emotion: EmotionEntity)
+
     @Delete
     suspend fun deleteEmotion(emotion: EmotionEntity)
 
@@ -41,6 +44,9 @@ interface TagDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertActions(actions: List<ActionEntity>)
+
+    @Update
+    suspend fun updateAction(action: ActionEntity)
 
     @Delete
     suspend fun deleteAction(action: ActionEntity)

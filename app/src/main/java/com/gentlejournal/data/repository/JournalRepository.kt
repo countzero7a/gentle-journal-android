@@ -86,6 +86,9 @@ class JournalRepository(private val db: JournalDatabase) {
     suspend fun addEmotion(emotion: EmotionEntity) = tagDao.insertEmotion(emotion)
     suspend fun addAction(action: ActionEntity) = tagDao.insertAction(action)
 
+    suspend fun updateEmotion(emotion: EmotionEntity) = tagDao.updateEmotion(emotion)
+    suspend fun updateAction(action: ActionEntity) = tagDao.updateAction(action)
+
     suspend fun removeEmotion(emotion: EmotionEntity) = tagDao.deleteEmotion(emotion)
     suspend fun removeAction(action: ActionEntity) = tagDao.deleteAction(action)
 }

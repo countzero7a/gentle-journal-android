@@ -33,7 +33,7 @@ fun EntryFormScreen(
     selectedEmotionIds: List<String>, selectedActionIds: List<String>,
     emotions: List<EmotionEntity>, actions: List<ActionEntity>,
     onToggleEmotion: (String) -> Unit, onToggleAction: (String) -> Unit,
-    onAddCustomEmotion: (String, String) -> Unit, onAddCustomAction: (String, String) -> Unit,
+    onAddCustomEmotion: (String, String) -> Boolean, onAddCustomAction: (String, String) -> Boolean,
     onSave: () -> Unit, onDelete: (() -> Unit)? = null, isSaving: Boolean = false, modifier: Modifier = Modifier
 ) {
     val colors = LocalJournalColors.current
@@ -43,6 +43,7 @@ fun EntryFormScreen(
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var customLabel by remember { mutableStateOf("") }
     var customEmoji by remember { mutableStateOf("") }
+    var customLabelTaken by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -74,7 +75,7 @@ fun EntryFormScreen(
             topEmotions.forEach { emo ->
                 TagChip(emoji = emo.emoji, label = resolveEmotionLabel(context, emo.id, emo.label), selected = selectedEmotionIds.contains(emo.id), onClick = { onToggleEmotion(emo.id) })
             }
-            AddCustomChip(onClick = { showNewEmotion = true; customLabel = ""; customEmoji = "" })
+            AddCustomChip(onClick = { showNewEmotion = true; customLabel = ""; customEmoji = ""; customLabelTaken = false })
         }
 
         // Sub-emotions (expand when parent is selected)
@@ -94,8 +95,8 @@ fun EntryFormScreen(
         }
         if (showNewEmotion) {
             Spacer(modifier = Modifier.height(12.dp))
-            CustomTagCard(title = stringResource(R.string.entry_new_emotion_tag), emoji = customEmoji, label = customLabel, onEmojiChange = { customEmoji = it }, onLabelChange = { customLabel = it },
-                onAdd = { onAddCustomEmotion(customLabel, customEmoji.ifBlank { "\uD83D\uDCAD" }); showNewEmotion = false }, onCancel = { showNewEmotion = false })
+            CustomTagCard(title = stringResource(R.string.entry_new_emotion_tag), emoji = customEmoji, label = customLabel, onEmojiChange = { customEmoji = it }, labelTaken = customLabelTaken, onLabelChange = { customLabel = it; customLabelTaken = false },
+                onAdd = { if (onAddCustomEmotion(customLabel, customEmoji.ifBlank { "\uD83D\uDCAD" })) showNewEmotion = false else customLabelTaken = true }, onCancel = { showNewEmotion = false })
         }
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -104,12 +105,12 @@ fun EntryFormScreen(
             actions.forEach { action ->
                 TagChip(emoji = action.emoji, label = resolveActionLabel(context, action.id, action.label), selected = selectedActionIds.contains(action.id), onClick = { onToggleAction(action.id) })
             }
-            AddCustomChip(onClick = { showNewAction = true; customLabel = ""; customEmoji = "" })
+            AddCustomChip(onClick = { showNewAction = true; customLabel = ""; customEmoji = ""; customLabelTaken = false })
         }
         if (showNewAction) {
             Spacer(modifier = Modifier.height(12.dp))
-            CustomTagCard(title = stringResource(R.string.entry_new_action_tag), emoji = customEmoji, label = customLabel, onEmojiChange = { customEmoji = it }, onLabelChange = { customLabel = it },
-                onAdd = { onAddCustomAction(customLabel, customEmoji.ifBlank { "\u2728" }); showNewAction = false }, onCancel = { showNewAction = false })
+            CustomTagCard(title = stringResource(R.string.entry_new_action_tag), emoji = customEmoji, label = customLabel, onEmojiChange = { customEmoji = it }, labelTaken = customLabelTaken, onLabelChange = { customLabel = it; customLabelTaken = false },
+                onAdd = { if (onAddCustomAction(customLabel, customEmoji.ifBlank { "\u2728" })) showNewAction = false else customLabelTaken = true }, onCancel = { showNewAction = false })
         }
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -144,7 +145,7 @@ fun EntryFormScreen(
 }
 
 @Composable
-private fun CustomTagCard(title: String, emoji: String, label: String, onEmojiChange: (String) -> Unit, onLabelChange: (String) -> Unit, onAdd: () -> Unit, onCancel: () -> Unit) {
+private fun CustomTagCard(title: String, emoji: String, label: String, labelTaken: Boolean, onEmojiChange: (String) -> Unit, onLabelChange: (String) -> Unit, onAdd: () -> Unit, onCancel: () -> Unit) {
     val colors = LocalJournalColors.current
     Surface(shape = RoundedCornerShape(16.dp), color = colors.WarmLight, border = ButtonDefaults.outlinedButtonBorder.copy(brush = SolidColor(colors.Warm))) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -154,9 +155,13 @@ private fun CustomTagCard(title: String, emoji: String, label: String, onEmojiCh
                 OutlinedTextField(value = emoji, onValueChange = { if (it.length <= 2) onEmojiChange(it) }, modifier = Modifier.width(64.dp), placeholder = { Text("\uD83D\uDE0A") }, singleLine = true, shape = RoundedCornerShape(12.dp))
                 OutlinedTextField(value = label, onValueChange = onLabelChange, modifier = Modifier.weight(1f), placeholder = { Text(stringResource(R.string.entry_label_hint)) }, singleLine = true, shape = RoundedCornerShape(12.dp))
             }
+            if (labelTaken) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(text = stringResource(R.string.tag_label_taken), style = MaterialTheme.typography.bodySmall.copy(color = colors.Danger))
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = onAdd, shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = colors.Accent), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) { Text(stringResource(R.string.entry_add)) }
+                Button(onClick = onAdd, enabled = label.isNotBlank(), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.buttonColors(containerColor = colors.Accent), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) { Text(stringResource(R.string.entry_add)) }
                 OutlinedButton(onClick = onCancel, shape = RoundedCornerShape(12.dp), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) { Text(stringResource(R.string.entry_cancel)) }
             }
         }

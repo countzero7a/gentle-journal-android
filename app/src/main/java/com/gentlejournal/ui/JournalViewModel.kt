@@ -406,8 +406,11 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     // ── Custom tags ─────────────────────────────────────────────────
 
-    fun addCustomEmotion(label: String, emoji: String) {
-        if (label.isBlank()) return
+    // Add and rename return false, without saving, when the name is blank or already used
+    // by another tag (compared with both the stored and the translated name).
+
+    fun addCustomEmotion(label: String, emoji: String): Boolean {
+        if (label.isBlank() || emotionLabelTaken(label, exceptId = null)) return false
         viewModelScope.launch {
             repository.addEmotion(
                 EmotionEntity(
@@ -419,10 +422,11 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
                 )
             )
         }
+        return true
     }
 
-    fun addCustomAction(label: String, emoji: String) {
-        if (label.isBlank()) return
+    fun addCustomAction(label: String, emoji: String): Boolean {
+        if (label.isBlank() || actionLabelTaken(label, exceptId = null)) return false
         viewModelScope.launch {
             repository.addAction(
                 ActionEntity(
@@ -434,7 +438,57 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
                 )
             )
         }
+        return true
     }
+
+    fun updateCustomEmotion(emotion: EmotionEntity, label: String, emoji: String): Boolean {
+        if (emotion.isDefault || label.isBlank() || emotionLabelTaken(label, exceptId = emotion.id)) return false
+        viewModelScope.launch {
+            repository.updateEmotion(emotion.copy(label = label.trim(), emoji = emoji.ifBlank { emotion.emoji }))
+        }
+        return true
+    }
+
+    fun updateCustomAction(action: ActionEntity, label: String, emoji: String): Boolean {
+        if (action.isDefault || label.isBlank() || actionLabelTaken(label, exceptId = action.id)) return false
+        viewModelScope.launch {
+            repository.updateAction(action.copy(label = label.trim(), emoji = emoji.ifBlank { action.emoji }))
+        }
+        return true
+    }
+
+    /** Entries keep their text; only their link to this tag is removed (cascade). */
+    fun deleteCustomEmotion(emotion: EmotionEntity) {
+        if (emotion.isDefault) return
+        _formEmotionIds.value = _formEmotionIds.value - emotion.id
+        viewModelScope.launch {
+            repository.removeEmotion(emotion)
+            MoodWidgetProvider.updateAll(getApplication())
+        }
+    }
+
+    fun deleteCustomAction(action: ActionEntity) {
+        if (action.isDefault) return
+        _formActionIds.value = _formActionIds.value - action.id
+        viewModelScope.launch { repository.removeAction(action) }
+    }
+
+    private fun emotionLabelTaken(label: String, exceptId: String?): Boolean {
+        val context = localizedContext()
+        return emotions.value.any {
+            it.id != exceptId && sameLabel(label, it.label, resolveEmotionLabel(context, it.id, it.label))
+        }
+    }
+
+    private fun actionLabelTaken(label: String, exceptId: String?): Boolean {
+        val context = localizedContext()
+        return actions.value.any {
+            it.id != exceptId && sameLabel(label, it.label, resolveActionLabel(context, it.id, it.label))
+        }
+    }
+
+    private fun sameLabel(label: String, vararg existing: String): Boolean =
+        existing.any { it.trim().equals(label.trim(), ignoreCase = true) }
 
     // ── Export ───────────────────────────────────────────────────────
 

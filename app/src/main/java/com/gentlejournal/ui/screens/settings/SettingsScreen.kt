@@ -38,6 +38,7 @@ import com.gentlejournal.domain.model.AppLanguage
 import com.gentlejournal.ui.ImportStatus
 import com.gentlejournal.ui.message
 import com.gentlejournal.ui.components.JournalCard
+import com.gentlejournal.ui.components.TagEditDialog
 import com.gentlejournal.ui.components.TagChip
 import com.gentlejournal.ui.theme.*
 import com.gentlejournal.ui.util.resolveActionLabel
@@ -66,11 +67,17 @@ fun SettingsScreen(
     reminderMinute: Int,
     onReminderChange: (Boolean, Int, Int) -> Unit,
     onDonate: () -> Unit,
+    onEditEmotion: (EmotionEntity, String, String) -> Boolean = { _, _, _ -> false },
+    onDeleteEmotion: (EmotionEntity) -> Unit = {},
+    onEditAction: (ActionEntity, String, String) -> Boolean = { _, _, _ -> false },
+    onDeleteAction: (ActionEntity) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val colors = LocalJournalColors.current
     val context = LocalContext.current
     var showDeleteConfirm by remember { mutableStateOf(false) }
+    var editingEmotion by remember { mutableStateOf<EmotionEntity?>(null) }
+    var editingAction by remember { mutableStateOf<ActionEntity?>(null) }
 
     // Show import status snackbar
     LaunchedEffect(importStatus) {
@@ -354,10 +361,13 @@ fun SettingsScreen(
         // Emotion tags
         JournalCard {
             Text(text = stringResource(R.string.settings_emotion_tags, emotions.size), style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = stringResource(R.string.settings_tags_edit_hint), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
             Spacer(modifier = Modifier.height(10.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 emotions.forEach { emo ->
-                    TagChip(emoji = emo.emoji, label = resolveEmotionLabel(context, emo.id, emo.label), selected = false, onClick = {}, small = true)
+                    // Only tags the user created can be edited
+                    TagChip(emoji = emo.emoji, label = resolveEmotionLabel(context, emo.id, emo.label), selected = !emo.isDefault, onClick = { if (!emo.isDefault) editingEmotion = emo }, small = true)
                 }
             }
         }
@@ -370,7 +380,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(10.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 actions.forEach { action ->
-                    TagChip(emoji = action.emoji, label = resolveActionLabel(context, action.id, action.label), selected = false, onClick = {}, small = true)
+                    TagChip(emoji = action.emoji, label = resolveActionLabel(context, action.id, action.label), selected = !action.isDefault, onClick = { if (!action.isDefault) editingAction = action }, small = true)
                 }
             }
         }
@@ -441,5 +451,28 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(20.dp))
         Text(text = stringResource(R.string.settings_footer), style = MaterialTheme.typography.bodySmall, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(32.dp))
+    }
+
+    editingEmotion?.let { emotion ->
+        key(emotion.id) {
+            TagEditDialog(
+                initialLabel = emotion.label,
+                initialEmoji = emotion.emoji,
+                onSave = { label, emoji -> onEditEmotion(emotion, label, emoji) },
+                onDelete = { onDeleteEmotion(emotion); editingEmotion = null },
+                onDismiss = { editingEmotion = null }
+            )
+        }
+    }
+    editingAction?.let { action ->
+        key(action.id) {
+            TagEditDialog(
+                initialLabel = action.label,
+                initialEmoji = action.emoji,
+                onSave = { label, emoji -> onEditAction(action, label, emoji) },
+                onDelete = { onDeleteAction(action); editingAction = null },
+                onDismiss = { editingAction = null }
+            )
+        }
     }
 }

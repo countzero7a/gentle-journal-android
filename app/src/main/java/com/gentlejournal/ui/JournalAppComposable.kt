@@ -217,6 +217,10 @@ fun JournalApp(
                     reminderHour = reminderHour,
                     reminderMinute = reminderMinute,
                     onReminderChange = viewModel::setReminder,
+                    onEditEmotion = viewModel::updateCustomEmotion,
+                    onDeleteEmotion = viewModel::deleteCustomEmotion,
+                    onEditAction = viewModel::updateCustomAction,
+                    onDeleteAction = viewModel::deleteCustomAction,
                     onDonate = {
                         val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://ko-fi.com"))
                         context.startActivity(intent)

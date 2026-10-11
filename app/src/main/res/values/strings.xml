@@ -37,6 +37,12 @@
     <string name="entry_cancel">Cancel</string>
     <string name="entry_label_hint">Label</string>
     <string name="entry_more_specific">More specific?</string>
+    <string name="tag_label_taken">A tag with this name already exists.</string>
+    <string name="tag_edit_title">Edit tag</string>
+    <string name="tag_save">Save</string>
+    <string name="tag_delete">Delete tag</string>
+    <string name="tag_delete_title">Delete \u201C%1$s\u201D?</string>
+    <string name="tag_delete_message">Entries that use this tag keep everything else; only the tag is removed from them. This can\'t be undone.</string>
     <string name="entry_delete_confirm_title">Delete this entry?</string>
     <string name="entry_delete_confirm_message">It will be removed from your journal. This can\'t be undone.</string>
 
@@ -160,6 +166,7 @@
     <string name="settings_about_text">A private journaling companion for self-observation. No accounts, no cloud, no tracking. Your data stays on your device.</string>
     <string name="settings_emotion_tags">Emotion Tags (%d)</string>
     <string name="settings_action_tags">Action Tags (%d)</string>
+    <string name="settings_tags_edit_hint">Tags you created are highlighted. Tap one to rename or delete it.</string>
     <string name="settings_your_data">Your Data</string>
     <string name="settings_entries_stored">%d entries stored locally on this device.</string>
     <string name="settings_delete_confirm">Are you sure? This cannot be undone.</string>
