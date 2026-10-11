@@ -1,6 +1,7 @@
 package com.gentlejournal.ui
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
@@ -23,6 +24,7 @@ import com.gentlejournal.domain.model.Insight
 import com.gentlejournal.domain.usecase.ExportEntriesUseCase
 import com.gentlejournal.domain.usecase.GenerateInsightsUseCase
 import com.gentlejournal.domain.usecase.ImportEntriesUseCase
+import com.gentlejournal.ui.util.LocaleHelper
 import com.gentlejournal.ui.util.resolveEmotionLabel
 import com.gentlejournal.ui.util.resolveActionLabel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -160,13 +162,16 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     // ── v3.0: Label resolver ────────────────────────────────────────
 
-    private fun createLabelResolver(): (String, String) -> String {
-        val app = getApplication<Application>()
+    // The Application context ignores the in-app language, so resolve through a localized one
+    private fun localizedContext(language: AppLanguage = appLanguage.value): Context =
+        LocaleHelper.localizedContext(getApplication(), language)
+
+    private fun createLabelResolver(context: Context): (String, String) -> String {
         return { id: String, fallbackLabel: String ->
             if (id.startsWith("e_")) {
-                resolveEmotionLabel(app, id, fallbackLabel)
+                resolveEmotionLabel(context, id, fallbackLabel)
             } else if (id.startsWith("a_")) {
-                resolveActionLabel(app, id, fallbackLabel)
+                resolveActionLabel(context, id, fallbackLabel)
             } else {
                 fallbackLabel
             }
@@ -191,8 +196,8 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
     val insights: StateFlow<List<Insight>> = combine(
         entries, _insightPeriod, appLanguage, engagementWeights
     ) { allEntries, period, language, weights ->
-        val langCode = language.code.split("-").first().lowercase()
-        val labelResolver = createLabelResolver()
+        val langCode = LocaleHelper.localeFor(language).language
+        val labelResolver = createLabelResolver(localizedContext(language))
         val generated = insightsUseCase(
             allEntries = allEntries,
             periodDays = period,
