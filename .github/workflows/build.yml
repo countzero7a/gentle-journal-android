@@ -1,10 +1,10 @@
 name: Build APK
 
-# Every push to main builds a signed release APK and publishes it as the
-# "latest-build" GitHub Release, so it can be downloaded straight to a phone.
+# Every push builds and tests a signed release APK. Pushes to main also publish it
+# as the "latest-build" GitHub Release, so it can be downloaded straight to a phone.
 on:
   push:
-    branches: [main]
+    branches: ['**']
   workflow_dispatch:
 
 permissions:
@@ -40,14 +40,21 @@ jobs:
           fi
           echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
 
-      - name: Build signed release APK
+      - name: Test and build signed release APK
         env:
           SIGNING_KEYSTORE_PATH: ${{ runner.temp }}/release.jks
           SIGNING_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         # gradle.properties is tuned for a 4 GB laptop; CI runners have more room
-        run: ./gradlew assembleRelease -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
+        run: ./gradlew testReleaseUnitTest assembleRelease -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
+
+      - name: Upload Room schema
+        uses: actions/upload-artifact@v7
+        with:
+          name: room-schema
+          path: app/schemas
+          if-no-files-found: ignore
 
       - name: Verify signature
         run: |
