@@ -16,6 +16,9 @@ interface InsightDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInsights(insights: List<InsightEntity>)
 
+    @Query("DELETE FROM insights WHERE period_days = :periodDays AND generated_at >= :since")
+    suspend fun deleteInsightsSince(periodDays: Int, since: Long)
+
     @Query("DELETE FROM insights WHERE period_days = :periodDays AND generated_at < :olderThan")
     suspend fun deleteOldInsights(periodDays: Int, olderThan: Long)
 

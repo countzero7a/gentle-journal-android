@@ -4,7 +4,10 @@ import com.gentlejournal.data.entity.EntryWithTags
 import com.gentlejournal.domain.model.Insight
 import com.gentlejournal.domain.model.InsightType
 import com.gentlejournal.domain.model.TrendDirection
-import java.util.Calendar
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 /**
  * On-device insight engine v3.0.
@@ -20,51 +23,55 @@ class GenerateInsightsUseCase {
 
     operator fun invoke(
         allEntries: List<EntryWithTags>,
+        strings: InsightStrings,
         periodDays: Int = 7,
         languageCode: String = "en",
         weights: Map<String, Float> = emptyMap(),
-        labelResolver: ((String, String) -> String)? = null
+        labelResolver: ((String, String) -> String)? = null,
+        now: Instant = Instant.now(),
+        zone: ZoneId = ZoneId.systemDefault()
     ): List<Insight> {
-        val now = System.currentTimeMillis()
+        val nowMs = now.toEpochMilli()
         val periodMs = periodDays.toLong() * 24 * 60 * 60 * 1000
-        val current = allEntries.filter { it.entry.timestamp >= now - periodMs }
+        val current = allEntries.filter { it.entry.timestamp >= nowMs - periodMs }
         val prior = allEntries.filter {
-            it.entry.timestamp >= now - 2 * periodMs && it.entry.timestamp < now - periodMs
+            it.entry.timestamp >= nowMs - 2 * periodMs && it.entry.timestamp < nowMs - periodMs
         }
         val r: (String, String) -> String = labelResolver ?: { _, label -> label }
+        val ctx = Ctx(strings, periodDays, zone, r)
 
         if (current.size < 3) return listOf(
-            Insight(InsightType.INFO, "Keep journaling — patterns emerge with a few more entries.", "🌱", periodDays = periodDays)
+            Insight(InsightType.INFO, strings.keepJournaling(), "🌱", periodDays = periodDays)
         )
 
         val insights = mutableListOf<Insight>()
 
         // v1.2: Summary
-        generateSummary(current, periodDays, r)?.let { insights.add(it) }
+        generateSummary(current, ctx)?.let { insights.add(it) }
 
         // v1.0: Emotion frequency
-        emotionFrequency(current, periodDays, r)?.let { insights.add(it) }
+        emotionFrequency(current, ctx)?.let { insights.add(it) }
 
         // v1.1: Trends
-        insights.addAll(emotionTrends(current, prior, periodDays, r))
+        insights.addAll(emotionTrends(current, prior, ctx))
 
         // v2.0: Sequence detection
-        insights.addAll(sequenceDetection(current, periodDays, r))
+        insights.addAll(sequenceDetection(current, ctx))
 
         // v1.0: Correlations
-        insights.addAll(actionEmotionCorrelations(current, periodDays, r))
+        insights.addAll(actionEmotionCorrelations(current, ctx))
 
         // v1.0: Time-of-day
-        insights.addAll(timeOfDayPatterns(current, periodDays, r))
+        insights.addAll(timeOfDayPatterns(current, ctx))
 
-        // v2.1: Seasonal (day-of-week, month)
-        insights.addAll(seasonalPatterns(allEntries, periodDays, r))
+        // v2.1: Seasonal (day-of-week)
+        insights.addAll(seasonalPatterns(allEntries, ctx))
 
         // v2.0: Keywords (now multilingual)
-        insights.addAll(keywordInsights(current, periodDays, languageCode, r))
+        insights.addAll(keywordInsights(current, languageCode, ctx))
 
         // v1.0: Frequency
-        insights.add(journalingFrequency(current, periodDays))
+        insights.add(journalingFrequency(current, ctx))
 
         // v3.0: ML ranking - sort middle insights by engagement weight
         if (weights.isNotEmpty()) {
@@ -78,42 +85,49 @@ class GenerateInsightsUseCase {
         return insights.take(10)
     }
 
+    private class Ctx(
+        val strings: InsightStrings,
+        val periodDays: Int,
+        val zone: ZoneId,
+        val r: (String, String) -> String
+    ) {
+        val period: String get() = strings.periodPhrase(periodDays)
+        fun dateTime(e: EntryWithTags): ZonedDateTime = Instant.ofEpochMilli(e.entry.timestamp).atZone(zone)
+        fun date(e: EntryWithTags): LocalDate = dateTime(e).toLocalDate()
+    }
+
     // ── v1.2: Summary ─────────────────────────────────────────────────
 
-    private fun generateSummary(entries: List<EntryWithTags>, periodDays: Int, r: (String, String) -> String): Insight? {
+    private fun generateSummary(entries: List<EntryWithTags>, c: Ctx): Insight? {
         if (entries.size < 3) return null
-        val periodLabel = when (periodDays) { 7 -> "this week"; 14 -> "these two weeks"; 30 -> "this month"; else -> "this period" }
         val parts = mutableListOf<String>()
 
-        val uniqueDays = entries.map { e ->
-            val cal = Calendar.getInstance().apply { timeInMillis = e.entry.timestamp }
-            "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.DAY_OF_YEAR)}"
-        }.toSet()
-        parts.add("You journaled on ${uniqueDays.size} days $periodLabel.")
+        val uniqueDays = entries.map { c.date(it) }.toSet()
+        parts.add(c.strings.summaryDays(uniqueDays.size, c.period))
 
         val emotionCounts = mutableMapOf<String, Int>()
         entries.forEach { e -> e.emotions.forEach { emo ->
-            val label = r(emo.id, emo.label)
+            val label = c.r(emo.id, emo.label)
             emotionCounts[label] = (emotionCounts[label] ?: 0) + 1
         } }
         val topEmotion = emotionCounts.maxByOrNull { it.value }
         if (topEmotion != null && topEmotion.value >= 2) {
-            parts.add("You felt '${topEmotion.key.lowercase()}' most often.")
+            parts.add(c.strings.summaryTopEmotion(topEmotion.key.lowercase()))
         }
 
-        val bestCorr = findStrongestCorrelation(entries, r)
-        if (bestCorr != null) parts.add("You often felt ${bestCorr.second.lowercase()} after ${bestCorr.first.lowercase()}.")
+        val bestCorr = findStrongestCorrelation(entries, c)
+        if (bestCorr != null) parts.add(c.strings.summaryCorrelation(bestCorr.second.lowercase(), bestCorr.first.lowercase()))
 
-        return if (parts.size >= 2) Insight(InsightType.SUMMARY, parts.joinToString(" "), "📝", periodDays = periodDays) else null
+        return if (parts.size >= 2) Insight(InsightType.SUMMARY, parts.joinToString(" "), "📝", periodDays = c.periodDays) else null
     }
 
-    private fun findStrongestCorrelation(entries: List<EntryWithTags>, r: (String, String) -> String): Pair<String, String>? {
+    private fun findStrongestCorrelation(entries: List<EntryWithTags>, c: Ctx): Pair<String, String>? {
         val map = mutableMapOf<String, MutableMap<String, Int>>()
         entries.forEach { e ->
             e.actions.forEach { act ->
-                val al = r(act.id, act.label)
+                val al = c.r(act.id, act.label)
                 val m = map.getOrPut(al) { mutableMapOf() }
-                e.emotions.forEach { emo -> val el = r(emo.id, emo.label); m[el] = (m[el] ?: 0) + 1 }
+                e.emotions.forEach { emo -> val el = c.r(emo.id, emo.label); m[el] = (m[el] ?: 0) + 1 }
             }
         }
         var ba: String? = null; var be: String? = null; var bc = 1
@@ -123,62 +137,59 @@ class GenerateInsightsUseCase {
 
     // ── v1.0: Emotion frequency ───────────────────────────────────────
 
-    private fun emotionFrequency(entries: List<EntryWithTags>, periodDays: Int, r: (String, String) -> String): Insight? {
+    private fun emotionFrequency(entries: List<EntryWithTags>, c: Ctx): Insight? {
         val counts = mutableMapOf<String, Int>()
         entries.forEach { e -> e.emotions.forEach { emo ->
-            val label = r(emo.id, emo.label)
+            val label = c.r(emo.id, emo.label)
             counts[label] = (counts[label] ?: 0) + 1
         } }
         val top = counts.maxByOrNull { it.value } ?: return null
         if (top.value < 2) return null
-        val label = when (periodDays) { 7 -> "this week"; 14 -> "these two weeks"; 30 -> "this month"; else -> "this period" }
-        return Insight(InsightType.PATTERN, "You've felt '${top.key}' ${top.value} times $label.", "🔁", periodDays = periodDays)
+        return Insight(InsightType.PATTERN, c.strings.pattern(top.key, top.value, c.period), "🔁", periodDays = c.periodDays)
     }
 
     // ── v1.1: Trend direction ─────────────────────────────────────────
 
-    private fun emotionTrends(current: List<EntryWithTags>, prior: List<EntryWithTags>, periodDays: Int, r: (String, String) -> String): List<Insight> {
+    private fun emotionTrends(current: List<EntryWithTags>, prior: List<EntryWithTags>, c: Ctx): List<Insight> {
         if (prior.size < 3) return emptyList()
-        val cc = mutableMapOf<String, Int>(); current.forEach { e -> e.emotions.forEach { emo -> val l = r(emo.id, emo.label); cc[l] = (cc[l] ?: 0) + 1 } }
-        val pc = mutableMapOf<String, Int>(); prior.forEach { e -> e.emotions.forEach { emo -> val l = r(emo.id, emo.label); pc[l] = (pc[l] ?: 0) + 1 } }
+        val cc = mutableMapOf<String, Int>(); current.forEach { e -> e.emotions.forEach { emo -> val l = c.r(emo.id, emo.label); cc[l] = (cc[l] ?: 0) + 1 } }
+        val pc = mutableMapOf<String, Int>(); prior.forEach { e -> e.emotions.forEach { emo -> val l = c.r(emo.id, emo.label); pc[l] = (pc[l] ?: 0) + 1 } }
         return (cc.keys + pc.keys).mapNotNull { emotion ->
-            val c = cc[emotion] ?: 0; val p = pc[emotion] ?: 0
-            if (c < 2 && p < 2) return@mapNotNull null
-            val diff = c - p; if (kotlin.math.abs(diff) < 2) return@mapNotNull null
-            if (diff >= 2) Insight(InsightType.TREND, "You've felt '${emotion.lowercase()}' more often this period ($c vs $p).", "⬆️", trend = TrendDirection.RISING, periodDays = periodDays)
-            else Insight(InsightType.TREND, "You've felt '${emotion.lowercase()}' less often this period ($c vs $p).", "⬇️", trend = TrendDirection.FALLING, periodDays = periodDays)
+            val cur = cc[emotion] ?: 0; val p = pc[emotion] ?: 0
+            if (cur < 2 && p < 2) return@mapNotNull null
+            val diff = cur - p; if (kotlin.math.abs(diff) < 2) return@mapNotNull null
+            if (diff >= 2) Insight(InsightType.TREND, c.strings.trendUp(emotion.lowercase(), cur, p), "⬆️", trend = TrendDirection.RISING, periodDays = c.periodDays)
+            else Insight(InsightType.TREND, c.strings.trendDown(emotion.lowercase(), cur, p), "⬇️", trend = TrendDirection.FALLING, periodDays = c.periodDays)
         }.take(2)
     }
 
     // ── v2.0: Sequence detection ──────────────────────────────────────
 
-    private fun sequenceDetection(entries: List<EntryWithTags>, periodDays: Int, r: (String, String) -> String): List<Insight> {
+    private fun sequenceDetection(entries: List<EntryWithTags>, c: Ctx): List<Insight> {
         if (entries.size < 4) return emptyList()
 
-        val dayMap = mutableMapOf<String, MutableList<EntryWithTags>>()
-        entries.forEach { e ->
-            val cal = Calendar.getInstance().apply { timeInMillis = e.entry.timestamp }
-            val key = "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.DAY_OF_YEAR)}"
-            dayMap.getOrPut(key) { mutableListOf() }.add(e)
-        }
-
+        val dayMap = entries.groupBy { c.date(it) }
         val sortedDays = dayMap.keys.sorted()
         if (sortedDays.size < 2) return emptyList()
 
         val transitions = mutableMapOf<String, MutableMap<String, Int>>()
 
         for (i in 0 until sortedDays.size - 1) {
-            val day1Entries = dayMap[sortedDays[i]] ?: continue
-            val day2Entries = dayMap[sortedDays[i + 1]] ?: continue
+            val day1 = sortedDays[i]
+            val day2 = sortedDays[i + 1]
+            // Only days that really follow each other count as "the next day"
+            if (day2 != day1.plusDays(1)) continue
+            val day1Entries = dayMap[day1] ?: continue
+            val day2Entries = dayMap[day2] ?: continue
 
             val day1States = mutableSetOf<String>()
             day1Entries.forEach { e ->
-                e.emotions.forEach { day1States.add(r(it.id, it.label).lowercase()) }
-                e.actions.forEach { day1States.add(r(it.id, it.label).lowercase()) }
+                e.emotions.forEach { day1States.add(c.r(it.id, it.label).lowercase()) }
+                e.actions.forEach { day1States.add(c.r(it.id, it.label).lowercase()) }
             }
 
             val day2Emotions = mutableSetOf<String>()
-            day2Entries.forEach { e -> e.emotions.forEach { day2Emotions.add(r(it.id, it.label).lowercase()) } }
+            day2Entries.forEach { e -> e.emotions.forEach { day2Emotions.add(c.r(it.id, it.label).lowercase()) } }
 
             day1States.forEach { state ->
                 val map = transitions.getOrPut(state) { mutableMapOf() }
@@ -189,83 +200,68 @@ class GenerateInsightsUseCase {
         return transitions.mapNotNull { (state, outcomes) ->
             val top = outcomes.maxByOrNull { it.value } ?: return@mapNotNull null
             if (top.value < 3 || state == top.key) return@mapNotNull null
-            Insight(InsightType.SEQUENCE, "After days with '${state}', you often feel '${top.key}' the next day (${top.value} times).", "➡️", periodDays = periodDays)
+            Insight(InsightType.SEQUENCE, c.strings.sequence(state, top.key, top.value), "➡️", periodDays = c.periodDays)
         }.take(2)
     }
 
     // ── v1.0: Action-emotion correlation ──────────────────────────────
 
-    private fun actionEmotionCorrelations(entries: List<EntryWithTags>, periodDays: Int, r: (String, String) -> String): List<Insight> {
+    private fun actionEmotionCorrelations(entries: List<EntryWithTags>, c: Ctx): List<Insight> {
         val map = mutableMapOf<String, MutableMap<String, Int>>()
         entries.forEach { e ->
             e.actions.forEach { act ->
-                val al = r(act.id, act.label)
+                val al = c.r(act.id, act.label)
                 val m = map.getOrPut(al) { mutableMapOf() }
-                e.emotions.forEach { emo -> val el = r(emo.id, emo.label); m[el] = (m[el] ?: 0) + 1 }
+                e.emotions.forEach { emo -> val el = c.r(emo.id, emo.label); m[el] = (m[el] ?: 0) + 1 }
             }
         }
         return map.mapNotNull { (action, emos) ->
             val top = emos.maxByOrNull { it.value } ?: return@mapNotNull null
             if (top.value < 2) return@mapNotNull null
-            Insight(InsightType.CORRELATION, "When you '${action.lowercase()}', you often feel '${top.key.lowercase()}'.", "🔗", periodDays = periodDays)
+            Insight(InsightType.CORRELATION, c.strings.correlation(action.lowercase(), top.key.lowercase()), "🔗", periodDays = c.periodDays)
         }
     }
 
     // ── v1.0: Time-of-day ─────────────────────────────────────────────
 
-    private fun timeOfDayPatterns(entries: List<EntryWithTags>, periodDays: Int, r: (String, String) -> String): List<Insight> {
-        val buckets = mutableMapOf<String, MutableList<String>>()
+    private fun timeOfDayPatterns(entries: List<EntryWithTags>, c: Ctx): List<Insight> {
+        val buckets = mutableMapOf<DayPart, MutableList<String>>()
         entries.forEach { e ->
-            val h = Calendar.getInstance().apply { timeInMillis = e.entry.timestamp }.get(Calendar.HOUR_OF_DAY)
-            val p = when { h < 6 -> "night"; h < 12 -> "morning"; h < 18 -> "afternoon"; else -> "evening" }
-            e.emotions.forEach { emo -> buckets.getOrPut(p) { mutableListOf() }.add(r(emo.id, emo.label)) }
+            val h = c.dateTime(e).hour
+            val p = when { h < 6 -> DayPart.NIGHT; h < 12 -> DayPart.MORNING; h < 18 -> DayPart.AFTERNOON; else -> DayPart.EVENING }
+            e.emotions.forEach { emo -> buckets.getOrPut(p) { mutableListOf() }.add(c.r(emo.id, emo.label)) }
         }
-        return buckets.mapNotNull { (period, emos) ->
+        return buckets.mapNotNull { (part, emos) ->
             if (emos.size < 2) return@mapNotNull null
             val freq = emos.groupingBy { it }.eachCount()
             val top = freq.maxByOrNull { it.value } ?: return@mapNotNull null
             if (top.value < 2) return@mapNotNull null
-            Insight(InsightType.TIME_BASED, "In the $period, you tend to feel '${top.key.lowercase()}'.", "🕐", periodDays = periodDays)
+            Insight(InsightType.TIME_BASED, c.strings.timeOfDay(part, top.key.lowercase()), "🕐", periodDays = c.periodDays)
         }
     }
 
     // ── v2.1: Seasonal patterns ───────────────────────────────────────
 
-    private fun seasonalPatterns(allEntries: List<EntryWithTags>, periodDays: Int, r: (String, String) -> String): List<Insight> {
+    private fun seasonalPatterns(allEntries: List<EntryWithTags>, c: Ctx): List<Insight> {
         if (allEntries.size < 10) return emptyList()
 
-        val insights = mutableListOf<Insight>()
+        val dowEmotions = allEntries.groupBy { c.dateTime(it).dayOfWeek }
+            .mapValues { (_, dayEntries) -> dayEntries.flatMap { e -> e.emotions.map { c.r(it.id, it.label) } } }
 
-        val dowEmotions = mutableMapOf<Int, MutableList<String>>()
-        allEntries.forEach { e ->
-            val dow = Calendar.getInstance().apply { timeInMillis = e.entry.timestamp }.get(Calendar.DAY_OF_WEEK)
-            e.emotions.forEach { emo -> dowEmotions.getOrPut(dow) { mutableListOf() }.add(r(emo.id, emo.label)) }
-        }
-
-        val dayNames = mapOf(
-            Calendar.MONDAY to "Mondays", Calendar.TUESDAY to "Tuesdays",
-            Calendar.WEDNESDAY to "Wednesdays", Calendar.THURSDAY to "Thursdays",
-            Calendar.FRIDAY to "Fridays", Calendar.SATURDAY to "Saturdays",
-            Calendar.SUNDAY to "Sundays"
-        )
-
-        dowEmotions.forEach { (dow, emos) ->
-            if (emos.size < 5) return@forEach
+        return dowEmotions.entries.sortedBy { it.key }.mapNotNull { (dow, emos) ->
+            if (emos.size < 5) return@mapNotNull null
             val freq = emos.groupingBy { it }.eachCount()
-            val top = freq.maxByOrNull { it.value } ?: return@forEach
+            val top = freq.maxByOrNull { it.value } ?: return@mapNotNull null
             val ratio = top.value.toFloat() / emos.size
             if (ratio > 0.5f && top.value >= 3) {
-                val dayName = dayNames[dow] ?: return@forEach
-                insights.add(Insight(InsightType.SEASONAL, "On $dayName, you often feel '${top.key.lowercase()}' (${top.value} times).", "📅", periodDays = periodDays))
-            }
-        }
-
-        return insights.take(2)
+                Insight(InsightType.SEASONAL, c.strings.dayOfWeek(dow, top.key.lowercase(), top.value), "📅", periodDays = c.periodDays)
+            } else null
+        }.take(2)
     }
 
     // ── v2.0/v3.0: Keyword extraction (TF-IDF, multilingual) ──────────
 
-    private fun keywordInsights(entries: List<EntryWithTags>, periodDays: Int, languageCode: String, r: (String, String) -> String): List<Insight> {
+    private fun keywordInsights(entries: List<EntryWithTags>, languageCode: String, c: Ctx): List<Insight> {
         val textEntries = entries.filter { it.entry.text.isNotBlank() && it.emotions.isNotEmpty() }
         if (textEntries.size < 5) return emptyList()
 
@@ -274,7 +270,7 @@ class GenerateInsightsUseCase {
         val emotionTexts = mutableMapOf<String, MutableList<String>>()
         textEntries.forEach { e ->
             e.emotions.forEach { emo ->
-                emotionTexts.getOrPut(r(emo.id, emo.label)) { mutableListOf() }.add(e.entry.text)
+                emotionTexts.getOrPut(c.r(emo.id, emo.label)) { mutableListOf() }.add(e.entry.text)
             }
         }
 
@@ -309,7 +305,7 @@ class GenerateInsightsUseCase {
             val topKeyword = scored.firstOrNull()
             if (topKeyword != null && topKeyword.second > 0.2f) {
                 val wordCount = emotionWords[topKeyword.first] ?: 0
-                insights.add(Insight(InsightType.KEYWORD, "When you write about '${topKeyword.first}', you often feel '${emotion.lowercase()}' ($wordCount entries).", "🔍", periodDays = periodDays))
+                insights.add(Insight(InsightType.KEYWORD, c.strings.keyword(topKeyword.first, emotion.lowercase(), wordCount), "🔍", periodDays = c.periodDays))
             }
         }
 
@@ -325,11 +321,8 @@ class GenerateInsightsUseCase {
 
     // ── v1.0: Journaling frequency ────────────────────────────────────
 
-    private fun journalingFrequency(entries: List<EntryWithTags>, periodDays: Int): Insight {
-        val uniqueDays = entries.map { e ->
-            val cal = Calendar.getInstance().apply { timeInMillis = e.entry.timestamp }
-            "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.DAY_OF_YEAR)}"
-        }.toSet()
-        return Insight(InsightType.INFO, "You journaled on ${uniqueDays.size} of the last $periodDays days. No pressure — any pace is fine.", "📝", periodDays = periodDays)
+    private fun journalingFrequency(entries: List<EntryWithTags>, c: Ctx): Insight {
+        val uniqueDays = entries.map { c.date(it) }.toSet()
+        return Insight(InsightType.INFO, c.strings.frequency(uniqueDays.size, c.periodDays), "📝", periodDays = c.periodDays)
     }
 }

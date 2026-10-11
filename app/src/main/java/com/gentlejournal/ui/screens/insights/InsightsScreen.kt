@@ -40,10 +40,11 @@ fun InsightsScreen(
 ) {
     val colors = LocalJournalColors.current
 
-    // Group past insights by date, excluding current batch
+    // Past insights for the selected period, each text once (newest first), excluding the current ones
     val currentTexts = insights.map { it.text }.toSet()
     val pastInsights = savedInsights
-        .filter { it.text !in currentTexts }
+        .filter { it.periodDays == currentPeriod && it.text !in currentTexts }
+        .distinctBy { it.text }
         .groupBy {
             SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(it.generatedAt))
         }

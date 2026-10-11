@@ -62,6 +62,43 @@
     <string name="time_evening">evening</string>
     <string name="time_night">night</string>
 
+    <!-- Insight sentences. Labels arrive already translated; keep the quotes around them. -->
+    <string name="insight_keep_journaling">Keep journaling — patterns emerge with a few more entries.</string>
+    <string name="insight_period_week">this week</string>
+    <string name="insight_period_two_weeks">these two weeks</string>
+    <string name="insight_period_month">this month</string>
+    <string name="insight_period_other">this period</string>
+    <plurals name="insight_summary_days">
+        <item quantity="one">You journaled on %1$d day %2$s.</item>
+        <item quantity="other">You journaled on %1$d days %2$s.</item>
+    </plurals>
+    <string name="insight_summary_top_emotion">You felt \'%1$s\' most often.</string>
+    <string name="insight_summary_correlation">You often felt %1$s after %2$s.</string>
+    <plurals name="insight_pattern">
+        <item quantity="one">You\'ve felt \'%1$s\' %2$d time %3$s.</item>
+        <item quantity="other">You\'ve felt \'%1$s\' %2$d times %3$s.</item>
+    </plurals>
+    <string name="insight_trend_up">You\'ve felt \'%1$s\' more often this period (%2$d vs %3$d).</string>
+    <string name="insight_trend_down">You\'ve felt \'%1$s\' less often this period (%2$d vs %3$d).</string>
+    <plurals name="insight_sequence">
+        <item quantity="one">After days with \'%1$s\', you often feel \'%2$s\' the next day (%3$d time).</item>
+        <item quantity="other">After days with \'%1$s\', you often feel \'%2$s\' the next day (%3$d times).</item>
+    </plurals>
+    <string name="insight_correlation">When you \'%1$s\', you often feel \'%2$s\'.</string>
+    <string name="insight_time_of_day">In the %1$s, you tend to feel \'%2$s\'.</string>
+    <plurals name="insight_day_of_week">
+        <item quantity="one">On %1$s you often feel \'%2$s\' (%3$d time).</item>
+        <item quantity="other">On %1$s you often feel \'%2$s\' (%3$d times).</item>
+    </plurals>
+    <plurals name="insight_keyword">
+        <item quantity="one">When you write about \'%1$s\', you often feel \'%2$s\' (%3$d entry).</item>
+        <item quantity="other">When you write about \'%1$s\', you often feel \'%2$s\' (%3$d entries).</item>
+    </plurals>
+    <plurals name="insight_frequency">
+        <item quantity="one">You journaled on %1$d of the last %2$d day. No pressure — any pace is fine.</item>
+        <item quantity="other">You journaled on %1$d of the last %2$d days. No pressure — any pace is fine.</item>
+    </plurals>
+
     <!-- Charts -->
     <string name="charts_title">Your Patterns</string>
     <string name="charts_frequency">Emotion Frequency</string>

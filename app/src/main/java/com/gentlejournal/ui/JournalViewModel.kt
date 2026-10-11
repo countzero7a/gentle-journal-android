@@ -25,7 +25,10 @@ import com.gentlejournal.domain.model.Insight
 import com.gentlejournal.domain.usecase.ExportEntriesUseCase
 import com.gentlejournal.domain.usecase.GenerateInsightsUseCase
 import com.gentlejournal.domain.usecase.ImportEntriesUseCase
+import com.gentlejournal.domain.model.InsightType
 import com.gentlejournal.ui.util.LocaleHelper
+import com.gentlejournal.ui.util.ResourceInsightStrings
+import androidx.room.withTransaction
 import com.gentlejournal.ui.util.resolveEmotionLabel
 import com.gentlejournal.ui.util.resolveActionLabel
 import kotlinx.coroutines.Dispatchers
@@ -33,13 +36,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.gentlejournal.R
 import java.io.File
 import java.time.LocalDate
+import java.time.ZoneId
 import java.util.UUID
 
 class JournalViewModel(application: Application) : AndroidViewModel(application) {
@@ -131,17 +135,27 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     // ── v3.0: Engagement tracking ───────────────────────────────────
 
-    private val engagementWeights: StateFlow<Map<String, Float>> =
+    // Eager, so the latest weights are at hand whenever insights are generated
+    private val engagement: StateFlow<List<InsightEngagementEntity>> =
         engagementDao.getAllEngagement()
-            .map { list -> list.associate { it.insightType to it.weight } }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyMap())
+            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    /** A tap lifts a type's weight above 1.0; the lift fades with a 14-day half-life. */
+    private fun decayedWeight(e: InsightEngagementEntity, nowMs: Long): Float {
+        val ageDays = (nowMs - e.lastUpdated).coerceAtLeast(0) / DAY_MS.toDouble()
+        val decay = Math.pow(0.5, ageDays / ENGAGEMENT_HALF_LIFE_DAYS).toFloat()
+        return 1f + (e.weight - 1f) * decay
+    }
+
+    private fun currentWeights(nowMs: Long): Map<String, Float> =
+        engagement.value.associate { it.insightType to decayedWeight(it, nowMs) }
 
     fun recordInsightEngagement(insightType: String) {
         viewModelScope.launch {
             val existing = engagementDao.getEngagement(insightType)
             if (existing != null) {
                 // Exponential moving average: 0.8 * old + 0.2 * boost
-                val newWeight = existing.weight * 0.8f + 1.5f * 0.2f
+                val newWeight = decayedWeight(existing, System.currentTimeMillis()) * 0.8f + 1.5f * 0.2f
                 engagementDao.upsertEngagement(
                     existing.copy(
                         weight = newWeight,
@@ -194,30 +208,41 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
         insightDao.getAllInsights()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // Live insights -- recalculated reactively on entries, period, language, or engagement change
+    // Live insights, recalculated off the main thread when entries, period or language change.
+    // Engagement weights are read as a snapshot, so tapping an insight doesn't reorder the
+    // list under the user's finger; the new ranking applies on the next recalculation.
     val insights: StateFlow<List<Insight>> = combine(
-        entries, _insightPeriod, appLanguage, engagementWeights
-    ) { allEntries, period, language, weights ->
-        val langCode = LocaleHelper.localeFor(language).language
-        val labelResolver = createLabelResolver(localizedContext(language))
+        entries, _insightPeriod, appLanguage
+    ) { allEntries, period, language ->
+        val context = localizedContext(language)
+        val locale = LocaleHelper.localeFor(language)
         val generated = insightsUseCase(
             allEntries = allEntries,
+            strings = ResourceInsightStrings(context, locale),
             periodDays = period,
-            languageCode = langCode,
-            weights = weights,
-            labelResolver = labelResolver
+            languageCode = locale.language,
+            weights = currentWeights(System.currentTimeMillis()),
+            labelResolver = createLabelResolver(context)
         )
         persistInsights(generated, period)
         generated
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    }
+        .flowOn(Dispatchers.Default)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    // Texts of the last batch written per period, so identical recalculations write nothing
+    private val lastPersisted = mutableMapOf<Int, Set<String>>()
+
+    /** Keeps one batch per period per day, for [HISTORY_DAYS] days, as "Past Insights". */
     private suspend fun persistInsights(insights: List<Insight>, periodDays: Int) {
-        if (insights.isEmpty()) return
+        // Only real observations go into history, not the "keep journaling" notes
+        val observations = insights.filter { it.type != InsightType.INFO }
+        val texts = observations.map { it.text }.toSet()
+        if (observations.isEmpty() || lastPersisted[periodDays] == texts) return
+
         val now = System.currentTimeMillis()
-        // Clean old insights for this period (keep last 24h)
-        insightDao.deleteOldInsights(periodDays, now - 24 * 60 * 60 * 1000)
-        // Save current batch
-        val entities = insights.map { insight ->
+        val startOfToday = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val entities = observations.map { insight ->
             com.gentlejournal.data.entity.InsightEntity(
                 type = insight.type.name,
                 text = insight.text,
@@ -227,7 +252,12 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
                 periodLabel = when (periodDays) { 7 -> "week"; 14 -> "two_weeks"; 30 -> "month"; else -> "custom" }
             )
         }
-        insightDao.insertInsights(entities)
+        db.withTransaction {
+            insightDao.deleteInsightsSince(periodDays, startOfToday)
+            insightDao.deleteOldInsights(periodDays, now - HISTORY_DAYS * DAY_MS)
+            insightDao.insertInsights(entities)
+        }
+        lastPersisted[periodDays] = texts
     }
 
     // ── Entry form state ────────────────────────────────────────────
@@ -489,5 +519,11 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
             )
         }
         return ImportStatus.Done(plan.entries.size, plan.duplicateCount, plan.errorCount)
+    }
+
+    private companion object {
+        const val DAY_MS = 86_400_000L
+        const val HISTORY_DAYS = 30
+        const val ENGAGEMENT_HALF_LIFE_DAYS = 14.0
     }
 }
