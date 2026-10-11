@@ -73,6 +73,5 @@
     <string name="widget_no_entries">Nicio intrare astazi</string>
     <string name="settings_widget">Widget ecran principal</string>
     <string name="settings_widget_desc">Afiseaza dispozitia de azi pe ecranul principal.</string>
-    <string name="settings_widget_enabled">Activeaza widget</string>
     <string name="settings_widget_hint">Dupa activare, apasa lung pe ecranul principal si adauga widgetul.</string>
 </resources>

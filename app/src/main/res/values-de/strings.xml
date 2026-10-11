@@ -123,6 +123,5 @@
     <string name="widget_no_entries">Keine Eintraege heute</string>
     <string name="settings_widget">Startbildschirm-Widget</string>
     <string name="settings_widget_desc">Zeige die heutige Stimmung auf dem Startbildschirm.</string>
-    <string name="settings_widget_enabled">Widget aktivieren</string>
     <string name="settings_widget_hint">Nach der Aktivierung halte den Startbildschirm gedrueckt und fuege das Widget hinzu.</string>
 </resources>

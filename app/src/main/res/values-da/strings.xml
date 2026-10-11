@@ -73,6 +73,5 @@
     <string name="widget_no_entries">Ingen indlaeg i dag</string>
     <string name="settings_widget">Startskarm-widget</string>
     <string name="settings_widget_desc">Vis dagens humor pa startskermen.</string>
-    <string name="settings_widget_enabled">Aktiver widget</string>
     <string name="settings_widget_hint">Hold startskermen nede efter aktivering og tilfoej widgeten.</string>
 </resources>

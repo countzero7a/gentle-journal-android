@@ -73,6 +73,5 @@
     <string name="widget_no_entries">Inga inlagg idag</string>
     <string name="settings_widget">Hemskaermswidget</string>
     <string name="settings_widget_desc">Visa dagens staemning pa hemskaermen.</string>
-    <string name="settings_widget_enabled">Aktivera widget</string>
     <string name="settings_widget_hint">Haall ned hemskaermen efter aktivering och laegg till widgeten.</string>
 </resources>

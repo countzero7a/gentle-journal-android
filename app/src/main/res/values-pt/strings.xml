@@ -76,6 +76,5 @@
     <string name="widget_no_entries">Nenhuma entrada hoje</string>
     <string name="settings_widget">Widget da tela inicial</string>
     <string name="settings_widget_desc">Mostre o humor de hoje na tela inicial.</string>
-    <string name="settings_widget_enabled">Ativar widget</string>
     <string name="settings_widget_hint">Apos ativar, pressione a tela inicial e adicione o widget.</string>
 </resources>

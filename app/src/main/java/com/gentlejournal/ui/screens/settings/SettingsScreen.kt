@@ -57,8 +57,6 @@ fun SettingsScreen(
     onFontChange: (AppFont) -> Unit,
     currentFontSize: AppFontSize,
     onFontSizeChange: (AppFontSize) -> Unit,
-    widgetEnabled: Boolean,
-    onWidgetToggle: (Boolean) -> Unit,
     onDeleteAllData: () -> Unit,
     onImportData: () -> Unit,
     importStatus: ImportStatus?,
@@ -236,31 +234,16 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Widget toggle
+        // Widget: always available from the home screen, so this only explains how to add it
         JournalCard {
             Text(text = stringResource(R.string.settings_widget), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = stringResource(R.string.settings_widget_desc), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(R.string.settings_widget_enabled), style = MaterialTheme.typography.bodyMedium)
-                Switch(
-                    checked = widgetEnabled,
-                    onCheckedChange = onWidgetToggle,
-                    colors = SwitchDefaults.colors(checkedTrackColor = colors.Accent)
-                )
-            }
-            if (widgetEnabled) {
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = stringResource(R.string.settings_widget_hint),
-                    style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted, lineHeight = 18.sp)
-                )
-            }
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = stringResource(R.string.settings_widget_hint),
+                style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted, lineHeight = 18.sp)
+            )
         }
 
         Spacer(modifier = Modifier.height(12.dp))

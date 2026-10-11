@@ -172,8 +172,7 @@
     <string name="settings_donate">Buy me a coffee</string>
     <string name="settings_widget">Home Screen Widget</string>
     <string name="settings_widget_desc">Show today\'s mood on your home screen.</string>
-    <string name="settings_widget_enabled">Enable widget</string>
-    <string name="settings_widget_hint">After enabling, long-press your home screen and add the Moments widget.</string>
+    <string name="settings_widget_hint">To add it, long-press your home screen, open Widgets and choose Moments.</string>
     <string name="settings_footer">v3.1 \u00B7 Made with care \u00B7 No data collected</string>
     <string name="settings_back">Back</string>
     <string name="settings_selected">Selected</string>

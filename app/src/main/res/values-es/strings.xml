@@ -118,6 +118,5 @@
     <string name="widget_no_entries">Sin entradas hoy</string>
     <string name="settings_widget">Widget de pantalla</string>
     <string name="settings_widget_desc">Muestra el animo de hoy en tu pantalla de inicio.</string>
-    <string name="settings_widget_enabled">Activar widget</string>
     <string name="settings_widget_hint">Tras activar, manten pulsada la pantalla de inicio y anade el widget.</string>
 </resources>

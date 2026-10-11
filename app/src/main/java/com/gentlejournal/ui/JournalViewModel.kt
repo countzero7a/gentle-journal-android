@@ -28,6 +28,7 @@ import com.gentlejournal.domain.usecase.ImportEntriesUseCase
 import com.gentlejournal.domain.model.InsightType
 import com.gentlejournal.ui.util.LocaleHelper
 import com.gentlejournal.ui.util.ResourceInsightStrings
+import com.gentlejournal.ui.widget.MoodWidgetProvider
 import androidx.room.withTransaction
 import com.gentlejournal.ui.util.resolveEmotionLabel
 import com.gentlejournal.ui.util.resolveActionLabel
@@ -85,15 +86,6 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     fun setFontSize(fontSize: AppFontSize) {
         viewModelScope.launch { themePreferences.setFontSize(fontSize) }
-    }
-
-    // ── Widget preference (v3.1) ────────────────────────────────────
-
-    val widgetEnabled: StateFlow<Boolean> = themePreferences.widgetEnabled
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-
-    fun setWidgetEnabled(enabled: Boolean) {
-        viewModelScope.launch { themePreferences.setWidgetEnabled(enabled) }
     }
 
     // ── Reminder ────────────────────────────────────────────────────
@@ -361,6 +353,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
                 text = text
             )
             repository.saveEntry(entry, emotionIds, actionIds)
+            MoodWidgetProvider.updateAll(getApplication())
             resetForm()
             onComplete()
         }
@@ -376,6 +369,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
         runSaving {
             val existing = repository.getEntry(entryId) ?: return@runSaving
             repository.updateEntry(existing.entry.copy(text = text), emotionIds, actionIds)
+            MoodWidgetProvider.updateAll(getApplication())
             resetForm()
             onComplete()
         }
@@ -384,6 +378,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
     fun deleteEntry(entryId: String, onComplete: () -> Unit) {
         runSaving {
             repository.deleteEntry(entryId)
+            MoodWidgetProvider.updateAll(getApplication())
             resetForm()
             onComplete()
         }
@@ -404,6 +399,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
     fun deleteAllEntries() {
         viewModelScope.launch {
             repository.deleteAllEntries()
+            MoodWidgetProvider.updateAll(getApplication())
             withContext(Dispatchers.IO) { ExportFiles.clear(getApplication()) }
         }
     }
@@ -518,6 +514,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
                 actionLabel = { resolveActionLabel(context, it.id, it.label) }
             )
         }
+        if (plan.entries.isNotEmpty()) MoodWidgetProvider.updateAll(app)
         return ImportStatus.Done(plan.entries.size, plan.duplicateCount, plan.errorCount)
     }
 

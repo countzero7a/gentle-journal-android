@@ -122,6 +122,5 @@
     <string name="widget_no_entries">Aucune entree aujourd\'hui</string>
     <string name="settings_widget">Widget ecran d\'accueil</string>
     <string name="settings_widget_desc">Affichez l\'humeur du jour sur votre ecran d\'accueil.</string>
-    <string name="settings_widget_enabled">Activer le widget</string>
     <string name="settings_widget_hint">Apres activation, appuyez longuement sur l\'ecran d\'accueil et ajoutez le widget.</string>
 </resources>

@@ -71,7 +71,6 @@ fun JournalApp(
     val formActionIds by viewModel.formActionIds.collectAsStateWithLifecycle()
     val isSaving by viewModel.isSaving.collectAsStateWithLifecycle()
     val importStatus by viewModel.importStatus.collectAsStateWithLifecycle()
-    val widgetEnabled by viewModel.widgetEnabled.collectAsStateWithLifecycle()
     val reminderEnabled by viewModel.reminderEnabled.collectAsStateWithLifecycle()
     val reminderHour by viewModel.reminderHour.collectAsStateWithLifecycle()
     val reminderMinute by viewModel.reminderMinute.collectAsStateWithLifecycle()
@@ -210,8 +209,6 @@ fun JournalApp(
                     onFontChange = viewModel::setFont,
                     currentFontSize = appFontSize,
                     onFontSizeChange = viewModel::setFontSize,
-                    widgetEnabled = widgetEnabled,
-                    onWidgetToggle = viewModel::setWidgetEnabled,
                     onDeleteAllData = viewModel::deleteAllEntries,
                     onImportData = { importLauncher.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
                     importStatus = importStatus,

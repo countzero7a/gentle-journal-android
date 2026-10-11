@@ -76,6 +76,5 @@
     <string name="widget_no_entries">Geen notities vandaag</string>
     <string name="settings_widget">Startscherm-widget</string>
     <string name="settings_widget_desc">Toon de stemming van vandaag op je startscherm.</string>
-    <string name="settings_widget_enabled">Widget inschakelen</string>
     <string name="settings_widget_hint">Houd na activering het startscherm ingedrukt en voeg de widget toe.</string>
 </resources>
