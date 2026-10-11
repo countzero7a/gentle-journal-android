@@ -65,9 +65,10 @@ fun EntryFormScreen(
         // Top-level emotions
         val topEmotions = emotions.filter { it.parentId == null }
         val subEmotions = emotions.filter { it.parentId != null }
-        // Show sub-emotions for any selected parent
+        // Show sub-emotions for any selected parent, and keep them visible after one of them
+        // has replaced its parent
         val selectedParentIds = selectedEmotionIds.mapNotNull { selId ->
-            topEmotions.find { it.id == selId }?.id
+            emotions.find { it.id == selId }?.let { it.parentId ?: it.id }
         }.toSet()
         val visibleSubEmotions = subEmotions.filter { it.parentId in selectedParentIds }
 

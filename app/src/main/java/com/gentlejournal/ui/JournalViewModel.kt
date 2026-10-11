@@ -22,6 +22,7 @@ import com.gentlejournal.domain.model.AppTheme
 import com.gentlejournal.domain.model.AppLanguage
 import com.gentlejournal.domain.model.ExportFormat
 import com.gentlejournal.domain.model.Insight
+import com.gentlejournal.domain.usecase.EmotionSelection
 import com.gentlejournal.domain.usecase.ExportEntriesUseCase
 import com.gentlejournal.domain.usecase.GenerateInsightsUseCase
 import com.gentlejournal.domain.usecase.ImportEntriesUseCase
@@ -282,34 +283,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
     fun updateFormText(text: String) { _formText.value = text }
 
     fun toggleFormEmotion(emotionId: String) {
-        val current = _formEmotionIds.value.toMutableList()
-        val allEmotions = emotions.value
-
-        // Find the tapped emotion
-        val tappedEmotion = allEmotions.find { it.id == emotionId }
-
-        if (current.contains(emotionId)) {
-            // Deselecting: if it's a parent, also remove its children
-            current.remove(emotionId)
-            if (tappedEmotion != null && tappedEmotion.parentId == null) {
-                // It's a parent -- remove all children
-                val childIds = allEmotions.filter { it.parentId == emotionId }.map { it.id }
-                current.removeAll(childIds)
-            }
-            _formEmotionIds.value = current
-        } else if (current.size < 2) {
-            if (tappedEmotion != null && tappedEmotion.parentId != null) {
-                // It's a sub-emotion -- replace its parent with this sub
-                val parentId = tappedEmotion.parentId
-                if (current.contains(parentId)) {
-                    current.remove(parentId)
-                }
-                current.add(emotionId)
-            } else {
-                current.add(emotionId)
-            }
-            _formEmotionIds.value = current
-        }
+        _formEmotionIds.value = EmotionSelection.toggle(_formEmotionIds.value, emotionId, emotions.value)
     }
 
     fun toggleFormAction(actionId: String) {

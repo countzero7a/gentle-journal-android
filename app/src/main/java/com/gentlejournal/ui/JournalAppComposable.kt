@@ -1,5 +1,6 @@
 package com.gentlejournal.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -43,6 +44,9 @@ import com.gentlejournal.ui.screens.charts.ChartsScreen
 import com.gentlejournal.ui.screens.settings.SettingsScreen
 import com.gentlejournal.ui.screens.timeline.TimelineScreen
 import com.gentlejournal.ui.theme.LocalJournalColors
+
+// TODO: point this at the project's own donation page
+private const val DONATE_URL = "https://ko-fi.com"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -222,8 +226,11 @@ fun JournalApp(
                     onEditAction = viewModel::updateCustomAction,
                     onDeleteAction = viewModel::deleteCustomAction,
                     onDonate = {
-                        val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://ko-fi.com"))
-                        context.startActivity(intent)
+                        try {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(DONATE_URL)))
+                        } catch (e: ActivityNotFoundException) {
+                            // No browser installed; nothing to open
+                        }
                     }
                 )
             }
