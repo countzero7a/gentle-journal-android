@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Moments</string>
+
+    <!-- Navigation -->
+    <string name="nav_journal">Journal</string>
+    <string name="nav_insights">Insights</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_new_entry">New Entry</string>
+    <string name="nav_edit_entry">Edit Entry</string>
+    <string name="nav_export">Export</string>
+    <string name="nav_charts">Charts</string>
+
+    <!-- Timeline -->
+    <string name="timeline_empty_title">Your journal is empty</string>
+    <string name="timeline_empty_message">Tap the + button to create your first entry.\nNo pressure — write as much or as little as you\'d like.</string>
+    <string name="timeline_today">today</string>
+    <string name="timeline_subtitle_one">%d entry \u00B7 Private &amp; on-device</string>
+    <string name="timeline_subtitle_many">%d entries \u00B7 Private &amp; on-device</string>
+    <string name="timeline_export">Export \u2197</string>
+
+    <!-- Entry form -->
+    <string name="entry_how_feeling">How are you feeling?</string>
+    <string name="entry_up_to_two">(up to 2)</string>
+    <string name="entry_what_did">What did you do?</string>
+    <string name="entry_on_your_mind">Anything on your mind?</string>
+    <string name="entry_optional">(optional)</string>
+    <string name="entry_placeholder">Write freely, or leave this blank \u2014 both are fine.</string>
+    <string name="entry_save">Save Entry</string>
+    <string name="entry_update">Update Entry</string>
+    <string name="entry_delete">Delete Entry</string>
+    <string name="entry_custom">+ Custom</string>
+    <string name="entry_new_emotion_tag">New emotion tag</string>
+    <string name="entry_new_action_tag">New action tag</string>
+    <string name="entry_add">Add</string>
+    <string name="entry_cancel">Cancel</string>
+    <string name="entry_label_hint">Label</string>
+    <string name="entry_more_specific">More specific?</string>
+
+    <!-- Insights -->
+    <string name="insights_header">Patterns noticed from your recent entries. These are observations, not judgments.</string>
+    <string name="insights_empty_title">Not enough data yet</string>
+    <string name="insights_empty_message">After a few entries, gentle patterns will start to appear here.</string>
+    <string name="insights_privacy">All pattern detection happens on-device. Your journal data never leaves this app.</string>
+    <string name="insights_correlation">Observed correlation</string>
+    <string name="insights_pattern">Recurring pattern</string>
+    <string name="insights_time">Time-based pattern</string>
+    <string name="insights_trend">Trend</string>
+    <string name="insights_summary">Weekly summary</string>
+    <string name="insights_observation">Observation</string>
+    <string name="insights_7days">7 days</string>
+    <string name="insights_14days">14 days</string>
+    <string name="insights_30days">30 days</string>
+    <string name="insights_past">Past Insights</string>
+    <string name="insights_sequence">Day-to-day pattern</string>
+    <string name="insights_seasonal">Calendar pattern</string>
+    <string name="insights_keyword">Text pattern</string>
+
+    <!-- Charts -->
+    <string name="charts_title">Your Patterns</string>
+    <string name="charts_frequency">Emotion Frequency</string>
+    <string name="charts_timeline">Daily Mood Timeline</string>
+    <string name="charts_stats">Stats Summary</string>
+    <string name="charts_total_entries">Total entries</string>
+    <string name="charts_days_journaled">Days journaled</string>
+    <string name="charts_unique_emotions">Unique emotions</string>
+    <string name="charts_total_tags">Total emotion tags</string>
+    <string name="charts_empty">Not enough data yet. Keep journaling!</string>
+
+    <!-- Widget -->
+    <string name="widget_no_entries">No entries today</string>
+
+    <!-- Reminder -->
+    <string name="reminder_channel_name">Daily check-in</string>
+    <string name="reminder_channel_desc">Optional gentle reminder to journal</string>
+    <string name="reminder_text">Your journal is here if you\'d like it \uD83C\uDF3F</string>
+    <string name="settings_reminder">Reminder</string>
+    <string name="settings_reminder_desc">A gentle daily nudge. No pressure, no streaks.</string>
+    <string name="settings_reminder_enabled">Remind me to check in</string>
+    <string name="settings_reminder_time">Reminder time</string>
+
+    <!-- Export -->
+    <string name="export_description">Export your journal data in the format you prefer. Your data belongs to you.</string>
+    <string name="export_format">Format</string>
+    <string name="export_entries_count">%d entries will be exported</string>
+    <string name="export_range">From %1$s to %2$s</string>
+    <string name="export_button">Export %s</string>
+    <string name="export_journal">Export journal</string>
+
+    <!-- Settings -->
+    <string name="settings_theme">Theme</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_typography">Typography</string>
+    <string name="settings_font">Font</string>
+    <string name="settings_font_size">Size</string>
+    <string name="settings_about">About</string>
+    <string name="settings_about_text">A private journaling companion for self-observation. No accounts, no cloud, no tracking. Your data stays on your device.</string>
+    <string name="settings_emotion_tags">Emotion Tags (%d)</string>
+    <string name="settings_action_tags">Action Tags (%d)</string>
+    <string name="settings_your_data">Your Data</string>
+    <string name="settings_entries_stored">%d entries stored locally on this device.</string>
+    <string name="settings_delete_confirm">Are you sure? This cannot be undone.</string>
+    <string name="settings_delete_yes">Yes, delete all</string>
+    <string name="settings_delete_all">Delete All Data</string>
+    <string name="settings_import">Import Data</string>
+    <string name="settings_import_desc">Restore entries from a previous JSON export.</string>
+    <string name="settings_support">Support this project</string>
+    <string name="settings_support_text">This app is a free, ad-free personal innovation project created for learning and experimentation. If you find it useful, you may optionally show your appreciation with a voluntary donation.</string>
+    <string name="settings_donate">Buy me a coffee</string>
+    <string name="settings_widget">Home Screen Widget</string>
+    <string name="settings_widget_desc">Show today\'s mood on your home screen.</string>
+    <string name="settings_widget_enabled">Enable widget</string>
+    <string name="settings_widget_hint">After enabling, long-press your home screen and add the Moments widget.</string>
+    <string name="settings_footer">v3.1 \u00B7 Made with care \u00B7 No data collected</string>
+    <string name="settings_back">Back</string>
+    <string name="settings_selected">Selected</string>
+    <string name="settings_new_entry">New entry</string>
+
+    <!-- Theme names -->
+    <string name="theme_system">Follow system</string>
+    <string name="theme_meadow">Meadow</string>
+    <string name="theme_moonlight">Moonlight</string>
+    <string name="theme_ocean">Ocean</string>
+    <string name="theme_ember">Ember</string>
+
+    <!-- Default emotions -->
+    <string name="emotion_happy">Happy</string>
+    <string name="emotion_calm">Calm</string>
+    <string name="emotion_anxious">Anxious</string>
+    <string name="emotion_sad">Sad</string>
+    <string name="emotion_angry">Angry</string>
+    <string name="emotion_tired">Tired</string>
+    <string name="emotion_grateful">Grateful</string>
+    <string name="emotion_hopeful">Hopeful</string>
+    <string name="emotion_confused">Confused</string>
+    <string name="emotion_content">Content</string>
+
+    <!-- Sub-emotions (v1.2) -->
+    <string name="emotion_excited">Excited</string>
+    <string name="emotion_proud">Proud</string>
+    <string name="emotion_peaceful">Peaceful</string>
+    <string name="emotion_relaxed">Relaxed</string>
+    <string name="emotion_overwhelmed">Overwhelmed</string>
+    <string name="emotion_nervous">Nervous</string>
+    <string name="emotion_lonely">Lonely</string>
+    <string name="emotion_melancholy">Melancholy</string>
+    <string name="emotion_frustrated">Frustrated</string>
+    <string name="emotion_irritated">Irritated</string>
+
+    <!-- Default actions -->
+    <string name="action_exercise">Exercise</string>
+    <string name="action_social">Socialised</string>
+    <string name="action_worked">Worked</string>
+    <string name="action_rested">Rested</string>
+    <string name="action_nature">Nature</string>
+    <string name="action_creative">Creative</string>
+    <string name="action_read">Read</string>
+    <string name="action_cooked">Cooked</string>
+    <string name="action_nothing">Nothing</string>
+    <string name="action_meditated">Meditated</string>
+</resources>
