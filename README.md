@@ -102,7 +102,7 @@ Import also accepts the older export (a plain array with `yyyy-MM-dd HH:mm` time
 
 ```bash
 ./gradlew assembleDebug
-./gradlew testReleaseUnitTest
+./gradlew testDebugUnitTest
 python3 tools/check_translations.py
 ```
 

@@ -50,7 +50,7 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         # gradle.properties is tuned for a 4 GB laptop; CI runners have more room
-        run: ./gradlew testReleaseUnitTest assembleRelease -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
+        run: ./gradlew testDebugUnitTest assembleRelease -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
 
       # Temporary: produce the official wrapper files for the Gradle version in use
       - name: Regenerate Gradle wrapper
