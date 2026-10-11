@@ -10,7 +10,6 @@
     <string name="timeline_empty_title">Tu diario est\u00E1 vac\u00EDo</string>
     <string name="timeline_empty_message">Toca + para crear tu primera entrada.\nSin presi\u00F3n — escribe tanto o tan poco como quieras.</string>
     <string name="timeline_today">hoy</string>
-    <string name="timeline_subtitle">Privado &amp; en el dispositivo</string>
     <string name="timeline_export">Exportar</string>
     <string name="entry_how_feeling">\u00BFC\u00F3mo te sientes?</string>
     <string name="entry_up_to_two">(hasta 2)</string>

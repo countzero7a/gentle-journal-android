@@ -55,6 +55,10 @@
     <string name="insights_sequence">Day-to-day pattern</string>
     <string name="insights_seasonal">Calendar pattern</string>
     <string name="insights_keyword">Text pattern</string>
+    <string name="time_morning">morning</string>
+    <string name="time_afternoon">afternoon</string>
+    <string name="time_evening">evening</string>
+    <string name="time_night">night</string>
 
     <!-- Charts -->
     <string name="charts_title">Your Patterns</string>

@@ -10,7 +10,6 @@
     <string name="timeline_empty_title">Votre journal est vide</string>
     <string name="timeline_empty_message">Appuyez sur + pour cr\u00E9er votre premi\u00E8re entr\u00E9e.\nPas de pression — \u00E9crivez autant ou aussi peu que vous le souhaitez.</string>
     <string name="timeline_today">aujourd\'hui</string>
-    <string name="timeline_subtitle">Priv\u00E9 &amp; sur l\'appareil</string>
     <string name="timeline_export">Exporter</string>
     <string name="entry_how_feeling">Comment vous sentez-vous ?</string>
     <string name="entry_up_to_two">(jusqu\'\u00E0 2)</string>
