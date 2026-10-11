@@ -99,27 +99,3 @@ val EmberPalette = JournalColorPalette(
 )
 
 val LocalJournalColors = staticCompositionLocalOf { MeadowPalette }
-
-/**
- * Backward-compatible singleton.
- * Screens using JournalColors.Accent etc. keep compiling.
- * These resolve to Meadow defaults; in composable scope
- * prefer LocalJournalColors.current for theme-awareness.
- */
-object JournalColors {
-    val Background  = MeadowPalette.Background
-    val Surface     = MeadowPalette.Surface
-    val SurfaceAlt  = MeadowPalette.SurfaceAlt
-    val Border      = MeadowPalette.Border
-    val Text        = MeadowPalette.Text
-    val TextMuted   = MeadowPalette.TextMuted
-    val Accent      = MeadowPalette.Accent
-    val AccentLight = MeadowPalette.AccentLight
-    val AccentDark  = MeadowPalette.AccentDark
-    val Warm        = MeadowPalette.Warm
-    val WarmLight   = MeadowPalette.WarmLight
-    val Danger      = MeadowPalette.Danger
-    val DangerLight = MeadowPalette.DangerLight
-    val White       = Color(0xFFFFFFFF)
-    val Transparent = Color.Transparent
-}

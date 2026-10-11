@@ -42,7 +42,6 @@ import com.gentlejournal.ui.screens.insights.InsightsScreen
 import com.gentlejournal.ui.screens.charts.ChartsScreen
 import com.gentlejournal.ui.screens.settings.SettingsScreen
 import com.gentlejournal.ui.screens.timeline.TimelineScreen
-import com.gentlejournal.ui.theme.JournalColors
 import com.gentlejournal.ui.theme.LocalJournalColors
 
 @OptIn(ExperimentalMaterial3Api::class)

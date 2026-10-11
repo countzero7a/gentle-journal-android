@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.gentlejournal.R
-import com.gentlejournal.ui.theme.JournalColors
+import com.gentlejournal.ui.theme.LocalJournalColors
 
 // ── Tag Chip (emotion / action selector) ────────────────────────────
 
@@ -37,12 +37,13 @@ fun TagChip(
     modifier: Modifier = Modifier,
     small: Boolean = false
 ) {
+    val colors = LocalJournalColors.current
     val bgColor by animateColorAsState(
-        if (selected) JournalColors.AccentLight else JournalColors.Background,
+        if (selected) colors.AccentLight else colors.Background,
         label = "chipBg"
     )
     val borderColor by animateColorAsState(
-        if (selected) JournalColors.Accent else JournalColors.Border,
+        if (selected) colors.Accent else colors.Border,
         label = "chipBorder"
     )
 
@@ -74,7 +75,7 @@ fun TagChip(
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontSize = if (small) 12.sp else 14.sp,
                     fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-                    color = if (selected) JournalColors.AccentDark else JournalColors.TextMuted
+                    color = if (selected) colors.AccentDark else colors.TextMuted
                 )
             )
         }
@@ -88,19 +89,20 @@ fun AddCustomChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val colors = LocalJournalColors.current
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(20.dp),
         color = Color.Transparent,
-        border = BorderStroke(1.5.dp, JournalColors.Accent)
+        border = BorderStroke(1.5.dp, colors.Accent)
     ) {
         Text(
             text = stringResource(R.string.entry_custom),
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
             style = MaterialTheme.typography.bodySmall.copy(
-                color = JournalColors.Accent,
+                color = colors.Accent,
                 fontWeight = FontWeight.SemiBold
             )
         )
@@ -145,13 +147,15 @@ fun JournalCard(
     borderStart: Color? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val colors = LocalJournalColors.current
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         shape = RoundedCornerShape(16.dp),
-        color = JournalColors.Surface,
-        border = BorderStroke(1.dp, JournalColors.Border)
+        color = colors.Surface,
+        contentColor = colors.Text,
+        border = BorderStroke(1.dp, colors.Border)
     ) {
         Row {
             if (borderStart != null) {
@@ -179,6 +183,7 @@ fun EmptyState(
     message: String,
     modifier: Modifier = Modifier
 ) {
+    val colors = LocalJournalColors.current
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -195,7 +200,7 @@ fun EmptyState(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = message,
-            style = MaterialTheme.typography.bodyMedium.copy(color = JournalColors.TextMuted),
+            style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted),
             textAlign = TextAlign.Center
         )
     }
