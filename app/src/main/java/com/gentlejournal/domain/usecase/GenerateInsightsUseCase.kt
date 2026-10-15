@@ -132,7 +132,7 @@ class GenerateInsightsUseCase {
         }
         var ba: String? = null; var be: String? = null; var bc = 1
         map.forEach { (a, emos) -> val t = emos.maxByOrNull { it.value }; if (t != null && t.value > bc) { bc = t.value; ba = a; be = t.key } }
-        return if (ba != null && be != null) Pair(ba!!, be!!) else null
+        return if (ba != null && be != null) Pair(ba, be) else null
     }
 
     // ── v1.0: Emotion frequency ───────────────────────────────────────
