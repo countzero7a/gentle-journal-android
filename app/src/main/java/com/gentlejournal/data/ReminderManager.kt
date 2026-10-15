@@ -85,7 +85,10 @@ object ReminderManager {
         val nm = context.getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(channel)
 
-        val tapIntent = Intent(context, MainActivity::class.java).apply {
+        // Same action and category as MainActivity's launcher filter, so the intent always matches it
+        val tapIntent = Intent(Intent.ACTION_MAIN).apply {
+            setClass(context, MainActivity::class.java)
+            addCategory(Intent.CATEGORY_LAUNCHER)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(

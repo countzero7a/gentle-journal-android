@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "com.gentlejournal"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 36
         versionCode = buildNumber ?: 1
         versionName = "1.0.0" + (buildNumber?.let { "-build.$it" } ?: "")
 
