@@ -202,6 +202,15 @@
     <string name="font_size_extra_large">Extra large</string>
     <string name="language_system">System default</string>
 
+    <!-- Shown when the journal's key can't be read -->
+    <string name="locked_title">Your journal can\'t be unlocked</string>
+    <string name="locked_message">The key that protects your journal on this phone couldn\'t be read. This can happen after some system updates, or if the phone\'s secure storage was reset. Your entries are still on the device, but without the key they can\'t be opened.\n\nTry again first. If it keeps happening, you can start a new journal and import a JSON export, if you have one.</string>
+    <string name="locked_retry">Try again</string>
+    <string name="locked_start_new">Start a new journal</string>
+    <string name="locked_confirm_title">Start a new, empty journal?</string>
+    <string name="locked_confirm_message">This permanently deletes the journal that can\'t be opened. If you have a JSON export, you can import it afterwards in Settings.</string>
+    <string name="locked_confirm_yes">Delete and start new</string>
+
     <!-- Default emotions -->
     <string name="emotion_happy">Happy</string>
     <string name="emotion_calm">Calm</string>

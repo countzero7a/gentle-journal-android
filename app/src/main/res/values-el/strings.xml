@@ -205,4 +205,11 @@
     <string name="font_size_large">Μεγάλο</string>
     <string name="font_size_extra_large">Πολύ μεγάλο</string>
     <string name="language_system">Προεπιλογή συστήματος</string>
+    <string name="locked_title">Το ημερολόγιό σου δεν μπορεί να ξεκλειδωθεί</string>
+    <string name="locked_message">Το κλειδί που προστατεύει το ημερολόγιό σου σε αυτό το τηλέφωνο δεν μπόρεσε να διαβαστεί. Αυτό μπορεί να συμβεί μετά από ορισμένες ενημερώσεις συστήματος ή αν έγινε επαναφορά του ασφαλούς χώρου αποθήκευσης του τηλεφώνου. Οι εγγραφές σου είναι ακόμη στη συσκευή, αλλά χωρίς το κλειδί δεν μπορούν να ανοίξουν.\n\nΔοκίμασε πρώτα ξανά. Αν συνεχίσει να συμβαίνει, μπορείς να ξεκινήσεις νέο ημερολόγιο και να εισαγάγεις μια εξαγωγή JSON, αν έχεις.</string>
+    <string name="locked_retry">Δοκίμασε ξανά</string>
+    <string name="locked_start_new">Νέο ημερολόγιο</string>
+    <string name="locked_confirm_title">Να ξεκινήσει νέο, άδειο ημερολόγιο;</string>
+    <string name="locked_confirm_message">Το ημερολόγιο που δεν μπορεί να ανοίξει θα διαγραφεί οριστικά. Αν έχεις εξαγωγή JSON, μπορείς να την εισαγάγεις μετά από τις Ρυθμίσεις.</string>
+    <string name="locked_confirm_yes">Διαγραφή και νέα αρχή</string>
 </resources>

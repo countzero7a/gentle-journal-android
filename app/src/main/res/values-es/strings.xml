@@ -214,4 +214,11 @@
     <string name="font_size_large">Grande</string>
     <string name="font_size_extra_large">Muy grande</string>
     <string name="language_system">Predeterminado del sistema</string>
+    <string name="locked_title">No se puede desbloquear tu diario</string>
+    <string name="locked_message">No se pudo leer la clave que protege tu diario en este teléfono. Puede ocurrir tras algunas actualizaciones del sistema o si se restableció el almacenamiento seguro del teléfono. Tus entradas siguen en el dispositivo, pero sin la clave no se pueden abrir.\n\nPrimero vuelve a intentarlo. Si sigue ocurriendo, puedes empezar un diario nuevo e importar una exportación JSON, si tienes una.</string>
+    <string name="locked_retry">Reintentar</string>
+    <string name="locked_start_new">Empezar un diario nuevo</string>
+    <string name="locked_confirm_title">¿Empezar un diario nuevo y vacío?</string>
+    <string name="locked_confirm_message">Se eliminará para siempre el diario que no se puede abrir. Si tienes una exportación JSON, puedes importarla después en Ajustes.</string>
+    <string name="locked_confirm_yes">Eliminar y empezar de nuevo</string>
 </resources>

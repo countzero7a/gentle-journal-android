@@ -214,4 +214,11 @@
     <string name="font_size_large">Mare</string>
     <string name="font_size_extra_large">Foarte mare</string>
     <string name="language_system">Implicit (sistem)</string>
+    <string name="locked_title">Jurnalul tău nu poate fi deblocat</string>
+    <string name="locked_message">Cheia care îți protejează jurnalul pe acest telefon nu a putut fi citită. Se poate întâmpla după unele actualizări de sistem sau dacă stocarea securizată a telefonului a fost resetată. Intrările tale sunt încă pe dispozitiv, dar fără cheie nu pot fi deschise.\n\nÎncearcă mai întâi din nou. Dacă problema persistă, poți începe un jurnal nou și poți importa un export JSON, dacă ai unul.</string>
+    <string name="locked_retry">Încearcă din nou</string>
+    <string name="locked_start_new">Începe un jurnal nou</string>
+    <string name="locked_confirm_title">Începi un jurnal nou, gol?</string>
+    <string name="locked_confirm_message">Jurnalul care nu poate fi deschis va fi șters definitiv. Dacă ai un export JSON, îl poți importa apoi din Setări.</string>
+    <string name="locked_confirm_yes">Șterge și începe din nou</string>
 </resources>

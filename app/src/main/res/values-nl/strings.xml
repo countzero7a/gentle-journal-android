@@ -205,4 +205,11 @@
     <string name="font_size_large">Groot</string>
     <string name="font_size_extra_large">Extra groot</string>
     <string name="language_system">Systeemstandaard</string>
+    <string name="locked_title">Je dagboek kan niet worden ontgrendeld</string>
+    <string name="locked_message">De sleutel die je dagboek op deze telefoon beschermt, kon niet worden gelezen. Dat kan gebeuren na sommige systeemupdates of als de beveiligde opslag van de telefoon is gereset. Je notities staan nog op het apparaat, maar zonder de sleutel kunnen ze niet worden geopend.\n\nProbeer het eerst opnieuw. Blijft het gebeuren, dan kun je een nieuw dagboek beginnen en een JSON-export importeren als je die hebt.</string>
+    <string name="locked_retry">Opnieuw proberen</string>
+    <string name="locked_start_new">Nieuw dagboek beginnen</string>
+    <string name="locked_confirm_title">Een nieuw, leeg dagboek beginnen?</string>
+    <string name="locked_confirm_message">Hiermee wordt het dagboek dat niet kan worden geopend definitief verwijderd. Heb je een JSON-export, dan kun je die daarna importeren via Instellingen.</string>
+    <string name="locked_confirm_yes">Verwijderen en opnieuw beginnen</string>
 </resources>

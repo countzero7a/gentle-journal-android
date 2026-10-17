@@ -223,4 +223,11 @@
     <string name="font_size_large">Duża</string>
     <string name="font_size_extra_large">Bardzo duża</string>
     <string name="language_system">Domyślny systemowy</string>
+    <string name="locked_title">Nie można odblokować dziennika</string>
+    <string name="locked_message">Nie udało się odczytać klucza, który chroni twój dziennik na tym telefonie. Może się to zdarzyć po niektórych aktualizacjach systemu lub po zresetowaniu bezpiecznego magazynu telefonu. Wpisy nadal są na urządzeniu, ale bez klucza nie da się ich otworzyć.\n\nNajpierw spróbuj ponownie. Jeśli to się powtarza, możesz założyć nowy dziennik i zaimportować eksport JSON, jeśli go masz.</string>
+    <string name="locked_retry">Spróbuj ponownie</string>
+    <string name="locked_start_new">Załóż nowy dziennik</string>
+    <string name="locked_confirm_title">Założyć nowy, pusty dziennik?</string>
+    <string name="locked_confirm_message">Dziennik, którego nie da się otworzyć, zostanie trwale usunięty. Jeśli masz eksport JSON, możesz go potem zaimportować w Ustawieniach.</string>
+    <string name="locked_confirm_yes">Usuń i zacznij od nowa</string>
 </resources>

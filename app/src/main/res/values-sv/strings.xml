@@ -205,4 +205,11 @@
     <string name="font_size_large">Stor</string>
     <string name="font_size_extra_large">Extra stor</string>
     <string name="language_system">Systemstandard</string>
+    <string name="locked_title">Din dagbok kan inte låsas upp</string>
+    <string name="locked_message">Nyckeln som skyddar din dagbok på den här telefonen kunde inte läsas. Det kan hända efter vissa systemuppdateringar eller om telefonens säkra lagring har återställts. Dina inlägg finns kvar på enheten, men utan nyckeln går de inte att öppna.\n\nFörsök igen först. Om det fortsätter kan du starta en ny dagbok och importera en JSON-export om du har en.</string>
+    <string name="locked_retry">Försök igen</string>
+    <string name="locked_start_new">Starta en ny dagbok</string>
+    <string name="locked_confirm_title">Starta en ny, tom dagbok?</string>
+    <string name="locked_confirm_message">Det här raderar dagboken som inte kan öppnas för gott. Om du har en JSON-export kan du importera den efteråt under Inställningar.</string>
+    <string name="locked_confirm_yes">Radera och börja om</string>
 </resources>

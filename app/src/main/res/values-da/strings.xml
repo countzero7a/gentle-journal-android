@@ -205,4 +205,11 @@
     <string name="font_size_large">Stor</string>
     <string name="font_size_extra_large">Ekstra stor</string>
     <string name="language_system">Systemstandard</string>
+    <string name="locked_title">Din dagbog kan ikke låses op</string>
+    <string name="locked_message">Nøglen, der beskytter din dagbog på denne telefon, kunne ikke læses. Det kan ske efter visse systemopdateringer, eller hvis telefonens sikre lager er blevet nulstillet. Dine indlæg er stadig på enheden, men uden nøglen kan de ikke åbnes.\n\nPrøv igen først. Hvis det bliver ved, kan du starte en ny dagbog og importere en JSON-eksport, hvis du har en.</string>
+    <string name="locked_retry">Prøv igen</string>
+    <string name="locked_start_new">Start en ny dagbog</string>
+    <string name="locked_confirm_title">Start en ny, tom dagbog?</string>
+    <string name="locked_confirm_message">Det sletter permanent den dagbog, der ikke kan åbnes. Har du en JSON-eksport, kan du importere den bagefter under Indstillinger.</string>
+    <string name="locked_confirm_yes">Slet og start forfra</string>
 </resources>

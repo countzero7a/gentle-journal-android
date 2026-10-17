@@ -205,4 +205,11 @@
     <string name="font_size_large">Groß</string>
     <string name="font_size_extra_large">Sehr groß</string>
     <string name="language_system">Systemstandard</string>
+    <string name="locked_title">Dein Tagebuch lässt sich nicht entsperren</string>
+    <string name="locked_message">Der Schlüssel, der dein Tagebuch auf diesem Telefon schützt, konnte nicht gelesen werden. Das kann nach manchen Systemupdates passieren oder wenn der sichere Speicher des Telefons zurückgesetzt wurde. Deine Einträge sind noch auf dem Gerät, lassen sich ohne den Schlüssel aber nicht öffnen.\n\nVersuch es zuerst noch einmal. Passiert es weiterhin, kannst du ein neues Tagebuch beginnen und einen JSON-Export importieren, falls du einen hast.</string>
+    <string name="locked_retry">Erneut versuchen</string>
+    <string name="locked_start_new">Neues Tagebuch beginnen</string>
+    <string name="locked_confirm_title">Ein neues, leeres Tagebuch beginnen?</string>
+    <string name="locked_confirm_message">Dadurch wird das Tagebuch, das sich nicht öffnen lässt, endgültig gelöscht. Wenn du einen JSON-Export hast, kannst du ihn danach in den Einstellungen importieren.</string>
+    <string name="locked_confirm_yes">Löschen und neu beginnen</string>
 </resources>

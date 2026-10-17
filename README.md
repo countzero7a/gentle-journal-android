@@ -12,7 +12,8 @@ com.gentlejournal/
 │   ├── repository/
 │   │   └── JournalRepository.kt  # Transactions for saving, importing, deleting
 │   ├── JournalDatabase.kt        # Room DB (SQLCipher) with default tag seeding
-│   ├── DatabaseKeyManager.kt     # Random DB key, kept in Keystore-backed storage
+│   ├── DatabaseKeyManager.kt     # Random DB key, encrypted with an Android Keystore key
+│   ├── PassphraseResolver.kt     # Where that key comes from (migration, never overwrite)
 │   ├── ThemePreferences.kt       # DataStore: theme, language, font, reminder
 │   ├── ReminderManager.kt        # Daily reminder + reschedule after reboot
 │   └── ExportFiles.kt            # Short-lived export files in the cache

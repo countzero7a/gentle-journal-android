@@ -214,4 +214,11 @@
     <string name="font_size_large">Grande</string>
     <string name="font_size_extra_large">Très grande</string>
     <string name="language_system">Langue du système</string>
+    <string name="locked_title">Impossible de déverrouiller votre journal</string>
+    <string name="locked_message">La clé qui protège votre journal sur ce téléphone n\'a pas pu être lue. Cela peut arriver après certaines mises à jour du système ou si le stockage sécurisé du téléphone a été réinitialisé. Vos entrées sont toujours sur l\'appareil, mais sans la clé elles ne peuvent pas être ouvertes.\n\nRéessayez d\'abord. Si le problème persiste, vous pouvez commencer un nouveau journal et importer un export JSON, si vous en avez un.</string>
+    <string name="locked_retry">Réessayer</string>
+    <string name="locked_start_new">Commencer un nouveau journal</string>
+    <string name="locked_confirm_title">Commencer un nouveau journal vide ?</string>
+    <string name="locked_confirm_message">Le journal qui ne peut pas être ouvert sera définitivement supprimé. Si vous avez un export JSON, vous pourrez l\'importer ensuite dans les Paramètres.</string>
+    <string name="locked_confirm_yes">Supprimer et recommencer</string>
 </resources>

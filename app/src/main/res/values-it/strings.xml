@@ -214,4 +214,11 @@
     <string name="font_size_large">Grande</string>
     <string name="font_size_extra_large">Molto grande</string>
     <string name="language_system">Predefinita di sistema</string>
+    <string name="locked_title">Impossibile sbloccare il diario</string>
+    <string name="locked_message">Non è stato possibile leggere la chiave che protegge il tuo diario su questo telefono. Può succedere dopo alcuni aggiornamenti di sistema o se l\'archivio sicuro del telefono è stato reimpostato. Le tue voci sono ancora sul dispositivo, ma senza la chiave non si possono aprire.\n\nPer prima cosa riprova. Se continua a succedere, puoi iniziare un nuovo diario e importare un\'esportazione JSON, se ne hai una.</string>
+    <string name="locked_retry">Riprova</string>
+    <string name="locked_start_new">Inizia un nuovo diario</string>
+    <string name="locked_confirm_title">Iniziare un nuovo diario vuoto?</string>
+    <string name="locked_confirm_message">Il diario che non si può aprire verrà eliminato definitivamente. Se hai un\'esportazione JSON, puoi importarla dopo dalle Impostazioni.</string>
+    <string name="locked_confirm_yes">Elimina e ricomincia</string>
 </resources>

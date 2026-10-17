@@ -52,7 +52,7 @@ abstract class JournalDatabase : RoomDatabase() {
             return Room.databaseBuilder(
                 context.applicationContext,
                 JournalDatabase::class.java,
-                "gentle_journal.db"
+                DatabaseKeyManager.DATABASE_NAME
             )
                 .openHelperFactory(DatabaseKeyManager.getFactory(context))
                 .addCallback(SeedCallback(context.applicationContext))

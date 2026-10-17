@@ -11,10 +11,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.gentlejournal.data.DatabaseKeyManager
 import com.gentlejournal.data.ThemePreferences
 import com.gentlejournal.domain.model.AppLanguage
 import com.gentlejournal.ui.JournalApp
 import com.gentlejournal.ui.JournalViewModel
+import com.gentlejournal.ui.screens.locked.JournalLockedScreen
 import com.gentlejournal.ui.theme.GentleJournalTheme
 import com.gentlejournal.ui.util.LocaleHelper
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,6 +40,29 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Unlock the journal's key before anything touches the database; if it can't be
+        // read, explain and offer a way out instead of crashing on every start
+        val keyUnavailable = try {
+            DatabaseKeyManager.getPassphrase(applicationContext)
+            false
+        } catch (e: Exception) {
+            true
+        }
+        if (keyUnavailable) {
+            setContent {
+                GentleJournalTheme {
+                    JournalLockedScreen(
+                        onRetry = { recreate() },
+                        onStartNew = {
+                            DatabaseKeyManager.resetJournal(applicationContext)
+                            recreate()
+                        }
+                    )
+                }
+            }
+            return
+        }
 
         // Recreate only when the stored language differs from the one this activity was built with
         lifecycleScope.launch {
