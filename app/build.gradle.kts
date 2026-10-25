@@ -111,9 +111,6 @@ dependencies {
     implementation(libs.sqlcipher.android)
     implementation(libs.androidx.sqlite.ktx)
 
-    // AndroidX Security (encrypted key storage)
-    implementation(libs.androidx.security.crypto)
-
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

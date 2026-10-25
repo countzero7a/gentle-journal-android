@@ -4,8 +4,6 @@ import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.AtomicFile
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.io.File
 import java.io.IOException
@@ -24,9 +22,9 @@ import javax.crypto.spec.GCMParameterSpec
  *   in a small file under noBackupFilesDir
  * - Provides a SupportOpenHelperFactory for Room
  *
- * Earlier versions kept the passphrase in androidx.security-crypto's
- * EncryptedSharedPreferences, which Google has deprecated. That store is read once
- * to migrate (see [PassphraseResolver]) and left in place as a fallback.
+ * Before build 17 the passphrase lived in androidx.security-crypto's (deprecated)
+ * EncryptedSharedPreferences. Build 17 migrated it; this version only deletes
+ * what's left of that old store.
  *
  * The user never sees or manages a password.
  * If someone extracts the .db file, it is unreadable.
@@ -48,7 +46,6 @@ object DatabaseKeyManager {
         val passphrase = try {
             PassphraseResolver.resolve(
                 store = KeystorePassphraseStore(app),
-                legacy = EncryptedPrefsLegacyStore(app),
                 databaseExists = app.getDatabasePath(DATABASE_NAME).exists(),
                 newPassphrase = { ByteArray(PASSPHRASE_LENGTH).also { SecureRandom().nextBytes(it) } }
             )
@@ -57,6 +54,8 @@ object DatabaseKeyManager {
         } catch (e: Exception) {
             throw DatabaseKeyException("The database key can't be loaded", e)
         }
+        // The key came from the new store, so the old one is no longer needed
+        runCatching { LegacyKeyStore.delete(app) }
         cached = passphrase
         // SQLCipher may clear the array it's given, so callers always get a copy
         return passphrase.copyOf()
@@ -73,7 +72,7 @@ object DatabaseKeyManager {
         val app = context.applicationContext
         app.deleteDatabase(DATABASE_NAME)
         KeystorePassphraseStore(app).delete()
-        EncryptedPrefsLegacyStore(app).delete()
+        runCatching { LegacyKeyStore.delete(app) }
         cached = null
     }
 }
@@ -144,37 +143,17 @@ private class KeystorePassphraseStore(context: Context) : PassphraseStore {
     }
 }
 
-/** Read-only access to the deprecated security-crypto store used before this version. */
-private class EncryptedPrefsLegacyStore(private val context: Context) : LegacyPassphraseStore {
+/** What's left of the security-crypto store used before build 17, deleted once the new key works. */
+private object LegacyKeyStore {
 
-    // Checked by file, because creating EncryptedSharedPreferences would set up a new empty store
-    private val prefsFile = File(context.dataDir, "shared_prefs/$PREFS_NAME.xml")
+    private const val PREFS_NAME = "gentle_journal_crypto"
+    // The alias security-crypto's MasterKey used for its Keystore key
+    private const val MASTER_KEY_ALIAS = "_androidx_security_master_key_"
 
-    override fun exists(): Boolean = prefsFile.exists()
-
-    override fun read(): ByteArray {
-        val masterKey = MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-        val prefs = EncryptedSharedPreferences.create(
-            context,
-            PREFS_NAME,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-        val hex = prefs.getString(KEY_DB_PASSPHRASE, null)
-            ?: throw IllegalStateException("The old store has no database key")
-        return ByteArray(hex.length / 2) { hex.substring(it * 2, it * 2 + 2).toInt(16).toByte() }
-    }
-
-    fun delete() {
+    fun delete(context: Context) {
+        val prefsFile = File(context.dataDir, "shared_prefs/$PREFS_NAME.xml")
+        if (!prefsFile.exists()) return
         context.deleteSharedPreferences(PREFS_NAME)
-        KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(MasterKey.DEFAULT_MASTER_KEY_ALIAS)
-    }
-
-    private companion object {
-        const val PREFS_NAME = "gentle_journal_crypto"
-        const val KEY_DB_PASSPHRASE = "db_passphrase"
+        KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(MASTER_KEY_ALIAS)
     }
 }
