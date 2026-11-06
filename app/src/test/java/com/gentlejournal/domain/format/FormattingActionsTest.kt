@@ -61,6 +61,72 @@ class FormattingActionsTest {
         assertEquals("- **item**", FormattingActions.toggleBold("- item", 0, 6).text)
     }
 
+    // ── Typing with the toolbar, as in a word processor ──────────────
+
+    /** Presses toolbar buttons and types character by character, like the entry screen. */
+    private class Editor(var text: String = "", var cursor: Int = text.length) {
+        fun press(action: (String, Int, Int) -> EditResult) = apply {
+            val result = action(text, cursor, cursor)
+            text = result.text
+            cursor = result.selectionStart
+        }
+
+        fun type(chars: String) = apply {
+            for (c in chars) {
+                val typed = text.substring(0, cursor) + c + text.substring(cursor)
+                val adjusted = FormattingActions.afterTyping(text, cursor, cursor, typed, cursor + 1, cursor + 1)
+                text = adjusted?.text ?: typed
+                cursor = adjusted?.selectionStart ?: (cursor + 1)
+            }
+        }
+    }
+
+    private val bold = FormattingActions::toggleBold
+    private val italic = FormattingActions::toggleItalic
+
+    @Test
+    fun italicSwitchedOffAndOnAgainInsideBold() {
+        // The reported sequence: B, I, a word, I off, another word, I on, a third word
+        val editor = Editor().press(bold).press(italic).type("word").press(italic).type(" more").press(italic).type(" again")
+        assertEquals("***word* more *again***", editor.text)
+
+        val rendered = MarkdownLite.render(editor.text)
+        assertEquals("word more again", rendered.text)
+        val italic = rendered.spans.filter { it.kind == FormatKind.ITALIC }.map { it.start until it.end }
+        val bold = rendered.spans.filter { it.kind == FormatKind.BOLD }.map { it.start until it.end }
+        assertEquals(listOf(0 until 4, 10 until 15), italic)
+        assertEquals(listOf(0 until 15), bold)
+    }
+
+    @Test
+    fun boldOnTypeBoldOffType() {
+        assertEquals("**bold** plain", Editor().press(bold).type("bold").press(bold).type(" plain").text)
+    }
+
+    @Test
+    fun switchingOnAfterAWordKeepsTheSpaceOutside() {
+        assertEquals("hello *world*", Editor("hello").press(italic).type(" world").text)
+    }
+
+    @Test
+    fun pressingTwiceWithoutTypingUndoesIt() {
+        val editor = Editor("hi ").press(bold).press(bold)
+        assertEquals("hi ", editor.text)
+        assertEquals(3, editor.cursor)
+    }
+
+    @Test
+    fun switchingOffAndOnAgainContinuesTheSameFormatting() {
+        assertEquals("**ab**", Editor().press(bold).type("a").press(bold).press(bold).type("b").text)
+    }
+
+    @Test
+    fun adjacentFormattedWordsAreNotMerged() {
+        // Between two italic words the asterisks close one word and open the next
+        val editor = Editor("*a**b*", cursor = 3).type(" ")
+        assertEquals("*a* *b*", editor.text)
+    }
+
     // ── Lists ────────────────────────────────────────────────────────
 
     @Test

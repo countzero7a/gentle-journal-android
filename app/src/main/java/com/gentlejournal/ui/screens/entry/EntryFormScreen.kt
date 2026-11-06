@@ -85,7 +85,7 @@ fun EntryFormScreen(
                     BasicTextField(
                         value = fieldValue,
                         onValueChange = { new ->
-                            val continued = FormattingActions.continueList(
+                            val continued = FormattingActions.afterTyping(
                                 fieldValue.text, fieldValue.selection.start, fieldValue.selection.end,
                                 new.text, new.selection.start, new.selection.end
                             )

@@ -24,10 +24,44 @@ object FormattingActions {
     fun toggleNumbers(text: String, selectionStart: Int, selectionEnd: Int) =
         toggleList(text, selectionStart, selectionEnd, numbered = true)
 
+    /** Called for every change in the editor; returns an adjusted edit, or null to keep it as typed. */
+    fun afterTyping(
+        oldText: String, oldSelectionStart: Int, oldSelectionEnd: Int,
+        newText: String, newSelectionStart: Int, newSelectionEnd: Int
+    ): EditResult? =
+        continueList(oldText, oldSelectionStart, oldSelectionEnd, newText, newSelectionStart, newSelectionEnd)
+            ?: moveSpaceOutOfEmptyPair(oldText, oldSelectionStart, oldSelectionEnd, newText, newSelectionStart, newSelectionEnd)
+
     /**
-     * Called for every change in the editor. If the change was Enter pressed inside a
-     * list item, the new line gets the next marker ("- ", or "3. " after "2. "); Enter
-     * on an empty item removes it and ends the list. Returns null for any other change.
+     * A space typed right after switching bold or italic on would leave it inside the
+     * markers ("* word*"), which Markdown doesn't treat as formatting. The space goes
+     * before the markers instead, and the cursor stays inside them.
+     */
+    fun moveSpaceOutOfEmptyPair(
+        oldText: String, oldSelectionStart: Int, oldSelectionEnd: Int,
+        newText: String, newSelectionStart: Int, newSelectionEnd: Int
+    ): EditResult? {
+        val p = oldSelectionStart
+        if (oldSelectionStart != oldSelectionEnd || newSelectionStart != newSelectionEnd) return null
+        if (newSelectionStart != p + 1 || newText.length != oldText.length + 1 || p > oldText.length) return null
+        val typed = newText[p]
+        if (!typed.isWhitespace() || !newText.startsWith(oldText.substring(0, p)) || !newText.endsWith(oldText.substring(p))) return null
+
+        val before = asterisksBefore(oldText, p)
+        val after = asterisksAfter(oldText, p)
+        if (before == 0 || after < before || !nothingFollows(oldText, p + after)) return null
+        // The asterisks before the cursor must open formatting, not close a formatted word
+        val opening = p - before
+        if (MarkdownLite.parse(oldText).any { (it.kind == FormatKind.BOLD || it.kind == FormatKind.ITALIC) && it.end == opening }) return null
+
+        val text = oldText.substring(0, opening) + typed + oldText.substring(opening)
+        return EditResult(text, p + 1, p + 1)
+    }
+
+    /**
+     * If the change was Enter pressed inside a list item, the new line gets the next
+     * marker ("- ", or "3. " after "2. "); Enter on an empty item removes it and ends
+     * the list. Returns null for any other change.
      */
     fun continueList(
         oldText: String, oldSelectionStart: Int, oldSelectionEnd: Int,
@@ -69,23 +103,54 @@ object FormattingActions {
         val start = min(selectionStart, selectionEnd)
         val end = max(selectionStart, selectionEnd)
 
-        if (start == end) {
-            // No selection: format the word under the cursor, or start an empty pair
-            var a = start
-            var b = start
-            while (a > 0 && text[a - 1].isLetterOrDigit()) a--
-            while (b < text.length && text[b].isLetterOrDigit()) b++
-            if (a == b) {
-                val marker = "*".repeat(width)
-                val newText = text.substring(0, start) + marker + marker + text.substring(start)
-                return EditResult(newText, start + width, start + width)
-            }
-            val edits = inlineEdits(text, a, b, width)
-            val cursor = mapPosition(start, edits, insertionAtPositionGoesBefore = true)
-            return EditResult(applyEdits(text, edits), cursor, cursor)
+        if (start == end) return toggleAtCursor(text, start, width)
+        return apply(text, start, end, inlineEdits(text, start, end, width))
+    }
+
+    /**
+     * No selection, as in a word processor: inside a word the button formats the word;
+     * elsewhere it switches formatting on or off for what's typed next.
+     */
+    private fun toggleAtCursor(text: String, cursor: Int, width: Int): EditResult {
+        val kind = if (width == 2) FormatKind.BOLD else FormatKind.ITALIC
+        val spans = MarkdownLite.parse(text).filter { it.kind == kind }
+        val before = asterisksBefore(text, cursor)
+        val after = asterisksAfter(text, cursor)
+        fun onlyAsterisks(from: Int, to: Int) = (from until to).all { text[it] == '*' }
+
+        // Pressed twice with nothing typed in between: remove the empty pair again
+        if (hasMarker(before, width) && hasMarker(after, width) &&
+            spans.none { it.end == cursor - before } && nothingFollows(text, cursor + after)
+        ) {
+            val newText = text.substring(0, cursor - width) + text.substring(cursor + width)
+            return EditResult(newText, cursor - width, cursor - width)
         }
 
-        return apply(text, start, end, inlineEdits(text, start, end, width))
+        // At the end of formatted text: step past its closing marker, so typing continues unformatted
+        if (after >= width && spans.any { it.start <= cursor && cursor <= it.end && onlyAsterisks(cursor, it.end) }) {
+            return EditResult(text, cursor + width, cursor + width)
+        }
+
+        // Just after formatted text: step back inside, so typing continues formatted
+        if (before >= width && spans.any { it.end <= cursor && onlyAsterisks(it.end, cursor) }) {
+            return EditResult(text, cursor - width, cursor - width)
+        }
+
+        // Inside a word: format the whole word
+        if (cursor in 1 until text.length && text[cursor - 1].isLetterOrDigit() && text[cursor].isLetterOrDigit()) {
+            var a = cursor
+            var b = cursor
+            while (a > 0 && text[a - 1].isLetterOrDigit()) a--
+            while (b < text.length && text[b].isLetterOrDigit()) b++
+            val edits = inlineEdits(text, a, b, width)
+            val newCursor = mapPosition(cursor, edits, insertionAtPositionGoesBefore = true)
+            return EditResult(applyEdits(text, edits), newCursor, newCursor)
+        }
+
+        // Otherwise start an empty pair for what's typed next
+        val marker = "*".repeat(width)
+        val newText = text.substring(0, cursor) + marker + marker + text.substring(cursor)
+        return EditResult(newText, cursor + width, cursor + width)
     }
 
     private fun inlineEdits(text: String, start: Int, end: Int, width: Int): List<Edit> {
@@ -170,12 +235,23 @@ object FormattingActions {
     }
 
     /** Whether [a, b) sits between markers of [width] (bold: 2+ asterisks, italic: an odd run). */
-    private fun isWrapped(text: String, a: Int, b: Int, width: Int): Boolean {
-        var before = 0
-        while (a - before - 1 >= 0 && text[a - before - 1] == '*') before++
-        var after = 0
-        while (b + after < text.length && text[b + after] == '*') after++
-        return hasMarker(before, width) && hasMarker(after, width)
+    private fun isWrapped(text: String, a: Int, b: Int, width: Int): Boolean =
+        hasMarker(asterisksBefore(text, a), width) && hasMarker(asterisksAfter(text, b), width)
+
+    /** An empty pair is followed by a space or the end of the text, not by more words. */
+    private fun nothingFollows(text: String, position: Int): Boolean =
+        position >= text.length || text[position].isWhitespace()
+
+    private fun asterisksBefore(text: String, position: Int): Int {
+        var count = 0
+        while (position - count - 1 >= 0 && text[position - count - 1] == '*') count++
+        return count
+    }
+
+    private fun asterisksAfter(text: String, position: Int): Int {
+        var count = 0
+        while (position + count < text.length && text[position + count] == '*') count++
+        return count
     }
 
     /** Whether [a, b) itself starts and ends with markers of [width]. */
