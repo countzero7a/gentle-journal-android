@@ -23,6 +23,7 @@ import com.gentlejournal.data.entity.EntryWithTags
 import com.gentlejournal.ui.components.EmptyState
 import com.gentlejournal.ui.components.JournalCard
 import com.gentlejournal.ui.theme.LocalJournalColors
+import com.gentlejournal.ui.util.formattedEntryText
 import com.gentlejournal.ui.util.resolveActionLabel
 import android.text.format.DateFormat
 import java.time.Instant
@@ -80,7 +81,8 @@ private fun EntryCard(entry: EntryWithTags, timeFormat: java.text.DateFormat, on
         }
         if (entry.entry.text.isNotBlank()) {
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = entry.entry.text, style = MaterialTheme.typography.bodyMedium, maxLines = 3, overflow = TextOverflow.Ellipsis)
+            val formatted = remember(entry.entry.text, colors.Accent) { formattedEntryText(entry.entry.text, colors.Accent) }
+            Text(text = formatted, style = MaterialTheme.typography.bodyMedium, maxLines = 3, overflow = TextOverflow.Ellipsis)
         }
         if (entry.actions.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))

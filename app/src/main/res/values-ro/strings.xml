@@ -221,4 +221,8 @@
     <string name="locked_confirm_title">Începi un jurnal nou, gol?</string>
     <string name="locked_confirm_message">Jurnalul care nu poate fi deschis va fi șters definitiv. Dacă ai un export JSON, îl poți importa apoi din Setări.</string>
     <string name="locked_confirm_yes">Șterge și începe din nou</string>
+    <string name="format_bold">Aldin</string>
+    <string name="format_italic">Cursiv</string>
+    <string name="format_bullets">Listă cu marcatori</string>
+    <string name="format_numbers">Listă numerotată</string>
 </resources>

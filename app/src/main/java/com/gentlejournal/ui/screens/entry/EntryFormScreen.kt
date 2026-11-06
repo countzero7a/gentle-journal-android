@@ -16,13 +16,18 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.gentlejournal.R
 import com.gentlejournal.data.entity.ActionEntity
 import com.gentlejournal.data.entity.EmotionEntity
+import com.gentlejournal.domain.format.EditResult
+import com.gentlejournal.domain.format.FormattingActions
 import com.gentlejournal.ui.components.*
 import com.gentlejournal.ui.theme.LocalJournalColors
+import com.gentlejournal.ui.util.FormattingVisualTransformation
 import com.gentlejournal.ui.util.resolveActionLabel
 import com.gentlejournal.ui.util.resolveEmotionLabel
 import kotlinx.coroutines.launch
@@ -48,15 +53,55 @@ fun EntryFormScreen(
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
 
+    // The editor needs the selection (for the toolbar and list continuation), so it keeps a
+    // TextFieldValue and follows the ViewModel's text when that changes from outside
+    var fieldValue by remember { mutableStateOf(TextFieldValue(text, TextRange(text.length))) }
+    LaunchedEffect(text) {
+        if (text != fieldValue.text) fieldValue = TextFieldValue(text, TextRange(text.length))
+    }
+    fun applyEdit(result: EditResult) {
+        fieldValue = TextFieldValue(result.text, TextRange(result.selectionStart, result.selectionEnd))
+        onTextChange(result.text)
+    }
+    fun selectionEdit(action: (String, Int, Int) -> EditResult) =
+        applyEdit(action(fieldValue.text, fieldValue.selection.start, fieldValue.selection.end))
+    val formatting = remember(colors) { FormattingVisualTransformation(muted = colors.TextMuted, accent = colors.Accent) }
+
     Column(modifier = modifier.fillMaxSize().imePadding().verticalScroll(scrollState).padding(horizontal = 16.dp, vertical = 12.dp)) {
         SectionLabel(text = stringResource(R.string.entry_on_your_mind), hint = stringResource(R.string.entry_optional))
         Surface(shape = RoundedCornerShape(12.dp), color = colors.SurfaceAlt, border = BorderStroke(1.dp, colors.Border)) {
-            Box(modifier = Modifier.padding(14.dp)) {
-                if (text.isEmpty()) {
-                    Text(text = stringResource(R.string.entry_placeholder), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted))
+            Column(modifier = Modifier.padding(14.dp)) {
+                FormattingToolbar(
+                    onBold = { selectionEdit(FormattingActions::toggleBold) },
+                    onItalic = { selectionEdit(FormattingActions::toggleItalic) },
+                    onBullets = { selectionEdit(FormattingActions::toggleBullets) },
+                    onNumbers = { selectionEdit(FormattingActions::toggleNumbers) }
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Box {
+                    if (fieldValue.text.isEmpty()) {
+                        Text(text = stringResource(R.string.entry_placeholder), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted))
+                    }
+                    BasicTextField(
+                        value = fieldValue,
+                        onValueChange = { new ->
+                            val continued = FormattingActions.continueList(
+                                fieldValue.text, fieldValue.selection.start, fieldValue.selection.end,
+                                new.text, new.selection.start, new.selection.end
+                            )
+                            if (continued != null) {
+                                applyEdit(continued)
+                            } else {
+                                fieldValue = new
+                                if (new.text != text) onTextChange(new.text)
+                            }
+                        },
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = colors.Text),
+                        cursorBrush = SolidColor(colors.Accent),
+                        visualTransformation = formatting,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp).onFocusChanged { if (it.isFocused) coroutineScope.launch { scrollState.animateScrollTo(0) } }
+                    )
                 }
-                BasicTextField(value = text, onValueChange = onTextChange, textStyle = MaterialTheme.typography.bodyLarge.copy(color = colors.Text), cursorBrush = SolidColor(colors.Accent),
-                    modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp).onFocusChanged { if (it.isFocused) coroutineScope.launch { scrollState.animateScrollTo(0) } })
             }
         }
         Spacer(modifier = Modifier.height(20.dp))

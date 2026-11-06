@@ -37,6 +37,10 @@
     <string name="entry_cancel">Cancel</string>
     <string name="entry_label_hint">Label</string>
     <string name="entry_more_specific">More specific?</string>
+    <string name="format_bold">Bold</string>
+    <string name="format_italic">Italic</string>
+    <string name="format_bullets">Bulleted list</string>
+    <string name="format_numbers">Numbered list</string>
     <string name="tag_label_taken">A tag with this name already exists.</string>
     <string name="tag_edit_title">Edit tag</string>
     <string name="tag_save">Save</string>

@@ -221,4 +221,8 @@
     <string name="locked_confirm_title">Commencer un nouveau journal vide ?</string>
     <string name="locked_confirm_message">Le journal qui ne peut pas être ouvert sera définitivement supprimé. Si vous avez un export JSON, vous pourrez l\'importer ensuite dans les Paramètres.</string>
     <string name="locked_confirm_yes">Supprimer et recommencer</string>
+    <string name="format_bold">Gras</string>
+    <string name="format_italic">Italique</string>
+    <string name="format_bullets">Liste à puces</string>
+    <string name="format_numbers">Liste numérotée</string>
 </resources>

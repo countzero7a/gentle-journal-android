@@ -221,4 +221,8 @@
     <string name="locked_confirm_title">Começar um diário novo e vazio?</string>
     <string name="locked_confirm_message">Isso exclui permanentemente o diário que não pode ser aberto. Se você tiver uma exportação JSON, pode importá-la depois em Configurações.</string>
     <string name="locked_confirm_yes">Excluir e começar de novo</string>
+    <string name="format_bold">Negrito</string>
+    <string name="format_italic">Itálico</string>
+    <string name="format_bullets">Lista com marcadores</string>
+    <string name="format_numbers">Lista numerada</string>
 </resources>

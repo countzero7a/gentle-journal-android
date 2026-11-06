@@ -221,4 +221,8 @@
     <string name="locked_confirm_title">Iniziare un nuovo diario vuoto?</string>
     <string name="locked_confirm_message">Il diario che non si può aprire verrà eliminato definitivamente. Se hai un\'esportazione JSON, puoi importarla dopo dalle Impostazioni.</string>
     <string name="locked_confirm_yes">Elimina e ricomincia</string>
+    <string name="format_bold">Grassetto</string>
+    <string name="format_italic">Corsivo</string>
+    <string name="format_bullets">Elenco puntato</string>
+    <string name="format_numbers">Elenco numerato</string>
 </resources>

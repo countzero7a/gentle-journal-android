@@ -212,4 +212,8 @@
     <string name="locked_confirm_title">Ein neues, leeres Tagebuch beginnen?</string>
     <string name="locked_confirm_message">Dadurch wird das Tagebuch, das sich nicht öffnen lässt, endgültig gelöscht. Wenn du einen JSON-Export hast, kannst du ihn danach in den Einstellungen importieren.</string>
     <string name="locked_confirm_yes">Löschen und neu beginnen</string>
+    <string name="format_bold">Fett</string>
+    <string name="format_italic">Kursiv</string>
+    <string name="format_bullets">Aufzählung</string>
+    <string name="format_numbers">Nummerierte Liste</string>
 </resources>

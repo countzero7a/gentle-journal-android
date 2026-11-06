@@ -20,6 +20,7 @@ com.gentlejournal/
 │
 ├── domain/                        # Business logic (plain Kotlin, unit-tested)
 │   ├── model/                     # Insight, ExportFormat + backup format, settings enums
+│   ├── format/                    # Markdown-lite parsing and toolbar/Enter editing actions
 │   └── usecase/
 │       ├── GenerateInsightsUseCase.kt  # On-device pattern detection
 │       ├── InsightStrings.kt           # Insight sentences, supplied by the app
@@ -51,6 +52,7 @@ tools/check_translations.py        # Translation completeness check (also run in
 | TDD Requirement | Implementation |
 |---|---|
 | Short text entries, optional | `EntryFormScreen` — textarea with placeholder |
+| Basic formatting | Bold, italic, bulleted and numbered lists via a toolbar, stored as Markdown (`domain/format/`) |
 | 1–2 emotion tags per entry | `EmotionSelection.toggle()` enforces max 2; a sub-emotion replaces its parent |
 | User-customizable tags | Add from the entry form; rename, re-emoji or delete in Settings |
 | Action tags (including "nothing") | Default seeded actions include "Nothing 💤" |

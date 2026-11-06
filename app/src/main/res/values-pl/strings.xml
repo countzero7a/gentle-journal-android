@@ -230,4 +230,8 @@
     <string name="locked_confirm_title">Założyć nowy, pusty dziennik?</string>
     <string name="locked_confirm_message">Dziennik, którego nie da się otworzyć, zostanie trwale usunięty. Jeśli masz eksport JSON, możesz go potem zaimportować w Ustawieniach.</string>
     <string name="locked_confirm_yes">Usuń i zacznij od nowa</string>
+    <string name="format_bold">Pogrubienie</string>
+    <string name="format_italic">Kursywa</string>
+    <string name="format_bullets">Lista punktowana</string>
+    <string name="format_numbers">Lista numerowana</string>
 </resources>

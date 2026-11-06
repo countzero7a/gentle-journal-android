@@ -212,4 +212,8 @@
     <string name="locked_confirm_title">Starta en ny, tom dagbok?</string>
     <string name="locked_confirm_message">Det här raderar dagboken som inte kan öppnas för gott. Om du har en JSON-export kan du importera den efteråt under Inställningar.</string>
     <string name="locked_confirm_yes">Radera och börja om</string>
+    <string name="format_bold">Fet</string>
+    <string name="format_italic">Kursiv</string>
+    <string name="format_bullets">Punktlista</string>
+    <string name="format_numbers">Numrerad lista</string>
 </resources>
