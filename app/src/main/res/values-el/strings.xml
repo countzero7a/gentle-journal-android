@@ -116,7 +116,6 @@
     <string name="charts_unique_emotions">Μοναδικά συναισθήματα</string>
     <string name="charts_total_tags">Συνολικές ετικέτες</string>
     <string name="charts_empty">Δεν υπάρχουν αρκετά δεδομένα ακόμα. Συνέχισε!</string>
-    <string name="widget_no_entries">Καμία καταχώρηση σήμερα</string>
     <string name="settings_widget">Widget αρχικής οθόνης</string>
     <string name="settings_widget_desc">Εμφάνισε τη σημερινή διάθεση στην αρχική οθόνη.</string>
     <string name="settings_widget_hint">Πάτα παρατεταμένα στην αρχική οθόνη, άνοιξε τα Widget και διάλεξε τις Στιγμές.</string>
@@ -224,4 +223,15 @@
     <string name="settings_lock_desc">Ζητά ξεκλείδωμα όταν ανοίγεις την εφαρμογή ή επιστρέφεις μετά από ένα λεπτό.</string>
     <string name="settings_lock_unavailable">Για να το χρησιμοποιήσεις, ρύθμισε πρώτα κλείδωμα οθόνης (PIN, μοτίβο ή δακτυλικό αποτύπωμα) στις ρυθμίσεις του τηλεφώνου.</string>
     <string name="widget_locked">Άνοιξε για να δεις τη σημερινή μέρα</string>
+    <string name="welcome_1_title">Ένας ήπιος χώρος για ό,τι νιώθεις</string>
+    <string name="welcome_1_text">Σημείωσε με λίγα πατήματα πώς νιώθεις και τι έκανες. Με τον καιρό εμφανίζονται ήπια μοτίβα — παρατηρήσεις, ποτέ κρίσεις.</string>
+    <string name="welcome_2_title">Ιδιωτικό από τη σχεδίαση</string>
+    <string name="welcome_2_text">Το ημερολόγιό σου είναι κρυπτογραφημένο και μένει σε αυτό το τηλέφωνο. Χωρίς λογαριασμό, χωρίς διαφημίσεις, χωρίς πρόσβαση στο διαδίκτυο.</string>
+    <string name="welcome_3_title">Χωρίς πίεση</string>
+    <string name="welcome_3_text">Χωρίς σερί, χωρίς ενοχές. Γράψε όποτε θέλεις, όσο πολύ ή όσο λίγο θέλεις.</string>
+    <string name="welcome_reminder">Υπενθύμισέ μου ήπια κάθε βράδυ</string>
+    <string name="welcome_next">Επόμενο</string>
+    <string name="welcome_skip">Παράλειψη</string>
+    <string name="welcome_start">Γράψε την πρώτη σου εγγραφή</string>
+    <string name="widget_how_feeling">Πώς νιώθεις;</string>
 </resources>

@@ -119,7 +119,6 @@
     <string name="charts_unique_emotions">Émotions distinctes</string>
     <string name="charts_total_tags">Étiquettes d\'émotion</string>
     <string name="charts_empty">Pas encore assez de données. Continuez !</string>
-    <string name="widget_no_entries">Aucune entrée aujourd\'hui</string>
     <string name="settings_widget">Widget de l\'écran d\'accueil</string>
     <string name="settings_widget_desc">Affichez l\'humeur du jour sur votre écran d\'accueil.</string>
     <string name="settings_widget_hint">Appuyez longuement sur l\'écran d\'accueil, ouvrez Widgets et choisissez Instants.</string>
@@ -233,4 +232,15 @@
     <string name="settings_lock_desc">Demande le déverrouillage à l\'ouverture de l\'application ou au retour après une minute.</string>
     <string name="settings_lock_unavailable">Pour l\'utiliser, configurez d\'abord un verrouillage de l\'écran (code, schéma ou empreinte) dans les paramètres du téléphone.</string>
     <string name="widget_locked">Ouvrez pour voir aujourd\'hui</string>
+    <string name="welcome_1_title">Un espace doux pour ce que vous ressentez</string>
+    <string name="welcome_1_text">Notez en quelques gestes ce que vous ressentez et ce que vous avez fait. Avec le temps, des tendances apparaissent en douceur — des observations, jamais des jugements.</string>
+    <string name="welcome_2_title">Privé par conception</string>
+    <string name="welcome_2_text">Votre journal est chiffré et reste sur ce téléphone. Pas de compte, pas de publicité, pas d\'accès à Internet.</string>
+    <string name="welcome_3_title">Aucune pression</string>
+    <string name="welcome_3_text">Pas de séries, pas de culpabilité. Écrivez quand vous le souhaitez, autant ou aussi peu que vous voulez.</string>
+    <string name="welcome_reminder">Me le rappeler en douceur chaque soir</string>
+    <string name="welcome_next">Suivant</string>
+    <string name="welcome_skip">Passer</string>
+    <string name="welcome_start">Écrire ma première entrée</string>
+    <string name="widget_how_feeling">Comment vous sentez-vous ?</string>
 </resources>

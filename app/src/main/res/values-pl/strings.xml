@@ -70,7 +70,6 @@
     <string name="charts_unique_emotions">Różne emocje</string>
     <string name="charts_total_tags">Wszystkie tagi emocji</string>
     <string name="charts_empty">Za mało danych. Pisz dalej!</string>
-    <string name="widget_no_entries">Brak wpisów dzisiaj</string>
     <string name="settings_widget">Widżet na ekranie głównym</string>
     <string name="settings_widget_desc">Pokaż dzisiejszy nastrój na ekranie głównym.</string>
     <string name="settings_widget_hint">Przytrzymaj ekran główny, otwórz Widżety i wybierz Chwile.</string>
@@ -242,4 +241,15 @@
     <string name="settings_lock_desc">Prosi o odblokowanie przy otwieraniu aplikacji lub po powrocie po minucie.</string>
     <string name="settings_lock_unavailable">Aby z tego korzystać, najpierw ustaw blokadę ekranu (PIN, wzór lub odcisk palca) w ustawieniach telefonu.</string>
     <string name="widget_locked">Otwórz, aby zobaczyć dzisiejszy dzień</string>
+    <string name="welcome_1_title">Łagodne miejsce na to, co czujesz</string>
+    <string name="welcome_1_text">Zapisz kilkoma dotknięciami, jak się czujesz i co robisz. Z czasem pojawią się łagodne wzorce — obserwacje, nigdy oceny.</string>
+    <string name="welcome_2_title">Prywatność od podstaw</string>
+    <string name="welcome_2_text">Twój dziennik jest zaszyfrowany i zostaje na tym telefonie. Bez konta, bez reklam, bez dostępu do internetu.</string>
+    <string name="welcome_3_title">Bez presji</string>
+    <string name="welcome_3_text">Bez serii, bez poczucia winy. Pisz, kiedy chcesz, tyle, ile chcesz.</string>
+    <string name="welcome_reminder">Przypominaj mi łagodnie co wieczór</string>
+    <string name="welcome_next">Dalej</string>
+    <string name="welcome_skip">Pomiń</string>
+    <string name="welcome_start">Napisz pierwszy wpis</string>
+    <string name="widget_how_feeling">Jak się czujesz?</string>
 </resources>

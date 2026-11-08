@@ -22,6 +22,7 @@ import com.gentlejournal.domain.model.AppTheme
 import com.gentlejournal.domain.model.AppLanguage
 import com.gentlejournal.domain.model.ExportFormat
 import com.gentlejournal.domain.model.Insight
+import com.gentlejournal.domain.onboarding.Welcome
 import com.gentlejournal.domain.usecase.EmotionSelection
 import com.gentlejournal.domain.usecase.ExportEntriesUseCase
 import com.gentlejournal.domain.usecase.GenerateInsightsUseCase
@@ -87,6 +88,41 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
 
     fun setFontSize(fontSize: AppFontSize) {
         viewModelScope.launch { themePreferences.setFontSize(fontSize) }
+    }
+
+    // ── Welcome (first start of a new journal) ──────────────────────
+
+    /** Null until preferences and the entry count have loaded, so nothing flashes. */
+    val showWelcome: StateFlow<Boolean?> = combine<Boolean, Int, Boolean?>(
+        themePreferences.welcomeDone, repository.entryCount
+    ) { done, count ->
+        // Journals that already have entries never need it, now or after a "delete all"
+        if (!done && count > 0) themePreferences.setWelcomeDone(true)
+        Welcome.shouldShow(done, count)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+    fun finishWelcome(startFirstEntry: Boolean, remind: Boolean) {
+        viewModelScope.launch { themePreferences.setWelcomeDone(true) }
+        if (remind) setReminder(true, reminderHour.value, reminderMinute.value)
+        if (startFirstEntry) requestNewEntry(null)
+    }
+
+    // ── Opening a new entry from outside the form (widget, welcome) ──
+
+    private val _newEntryRequest = MutableStateFlow<NewEntryRequest?>(null)
+    val newEntryRequest: StateFlow<NewEntryRequest?> = _newEntryRequest
+
+    fun requestNewEntry(emotionId: String?) {
+        _newEntryRequest.value = NewEntryRequest(emotionId)
+    }
+
+    fun consumeNewEntryRequest() {
+        _newEntryRequest.value = null
+    }
+
+    fun startNewEntry(preselectedEmotionId: String?) {
+        resetForm()
+        if (preselectedEmotionId != null) _formEmotionIds.value = listOf(preselectedEmotionId)
     }
 
     // ── App lock (changed through MainActivity, which confirms with the phone's lock) ──

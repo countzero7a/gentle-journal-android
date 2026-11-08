@@ -70,7 +70,6 @@
     <string name="charts_unique_emotions">Forskellige følelser</string>
     <string name="charts_total_tags">Følelsesmærker i alt</string>
     <string name="charts_empty">Ikke nok data endnu. Bliv ved med at skrive!</string>
-    <string name="widget_no_entries">Ingen indlæg i dag</string>
     <string name="settings_widget">Widget på startskærmen</string>
     <string name="settings_widget_desc">Vis dagens humør på din startskærm.</string>
     <string name="settings_widget_hint">Tryk længe på startskærmen, åbn Widgets, og vælg Øjeblikke.</string>
@@ -224,4 +223,15 @@
     <string name="settings_lock_desc">Beder om oplåsning, når du åbner appen eller vender tilbage efter et minut.</string>
     <string name="settings_lock_unavailable">For at bruge dette skal du først oprette en skærmlås (pinkode, mønster eller fingeraftryk) i telefonens indstillinger.</string>
     <string name="widget_locked">Åbn for at se i dag</string>
+    <string name="welcome_1_title">Et blidt sted for det, du føler</string>
+    <string name="welcome_1_text">Notér med få tryk, hvordan du har det, og hvad du har lavet. Med tiden dukker blide mønstre op — iagttagelser, aldrig vurderinger.</string>
+    <string name="welcome_2_title">Privat fra starten</string>
+    <string name="welcome_2_text">Din dagbog er krypteret og bliver på denne telefon. Ingen konto, ingen reklamer, ingen internetadgang.</string>
+    <string name="welcome_3_title">Intet pres</string>
+    <string name="welcome_3_text">Ingen streaks, ingen skyld. Skriv, når du har lyst, så meget eller så lidt, du vil.</string>
+    <string name="welcome_reminder">Mind mig blidt om det hver aften</string>
+    <string name="welcome_next">Næste</string>
+    <string name="welcome_skip">Spring over</string>
+    <string name="welcome_start">Skriv dit første indlæg</string>
+    <string name="widget_how_feeling">Hvordan har du det?</string>
 </resources>

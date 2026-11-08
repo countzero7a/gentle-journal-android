@@ -70,7 +70,6 @@
     <string name="charts_unique_emotions">Olika känslor</string>
     <string name="charts_total_tags">Känslotaggar totalt</string>
     <string name="charts_empty">Inte tillräckligt med data än. Fortsätt skriva!</string>
-    <string name="widget_no_entries">Inga inlägg idag</string>
     <string name="settings_widget">Widget på hemskärmen</string>
     <string name="settings_widget_desc">Visa dagens stämning på hemskärmen.</string>
     <string name="settings_widget_hint">Tryck länge på hemskärmen, öppna Widgetar och välj Stunder.</string>
@@ -224,4 +223,15 @@
     <string name="settings_lock_desc">Ber om upplåsning när du öppnar appen eller kommer tillbaka efter en minut.</string>
     <string name="settings_lock_unavailable">För att använda detta behöver du först ställa in ett skärmlås (pinkod, mönster eller fingeravtryck) i telefonens inställningar.</string>
     <string name="widget_locked">Öppna för att se idag</string>
+    <string name="welcome_1_title">En varsam plats för det du känner</string>
+    <string name="welcome_1_text">Anteckna med några tryck hur du mår och vad du har gjort. Med tiden framträder varsamma mönster — iakttagelser, aldrig omdömen.</string>
+    <string name="welcome_2_title">Privat från grunden</string>
+    <string name="welcome_2_text">Din dagbok är krypterad och stannar på den här telefonen. Inget konto, ingen reklam, ingen internetåtkomst.</string>
+    <string name="welcome_3_title">Ingen press</string>
+    <string name="welcome_3_text">Inga streaks, ingen skuld. Skriv när du vill, så mycket eller lite du vill.</string>
+    <string name="welcome_reminder">Påminn mig varsamt varje kväll</string>
+    <string name="welcome_next">Nästa</string>
+    <string name="welcome_skip">Hoppa över</string>
+    <string name="welcome_start">Skriv ditt första inlägg</string>
+    <string name="widget_how_feeling">Hur mår du?</string>
 </resources>

@@ -12,7 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -30,7 +29,6 @@ import com.gentlejournal.ui.theme.LocalJournalColors
 import com.gentlejournal.ui.util.FormattingVisualTransformation
 import com.gentlejournal.ui.util.resolveActionLabel
 import com.gentlejournal.ui.util.resolveEmotionLabel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -51,7 +49,6 @@ fun EntryFormScreen(
     var customEmoji by remember { mutableStateOf("") }
     var customLabelTaken by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
-    val coroutineScope = rememberCoroutineScope()
 
     // The editor needs the selection (for the toolbar and list continuation), so it keeps a
     // TextFieldValue and follows the ViewModel's text when that changes from outside
@@ -68,43 +65,6 @@ fun EntryFormScreen(
     val formatting = remember(colors) { FormattingVisualTransformation(muted = colors.TextMuted, accent = colors.Accent) }
 
     Column(modifier = modifier.fillMaxSize().imePadding().verticalScroll(scrollState).padding(horizontal = 16.dp, vertical = 12.dp)) {
-        SectionLabel(text = stringResource(R.string.entry_on_your_mind), hint = stringResource(R.string.entry_optional))
-        Surface(shape = RoundedCornerShape(12.dp), color = colors.SurfaceAlt, border = BorderStroke(1.dp, colors.Border)) {
-            Column(modifier = Modifier.padding(14.dp)) {
-                FormattingToolbar(
-                    onBold = { selectionEdit(FormattingActions::toggleBold) },
-                    onItalic = { selectionEdit(FormattingActions::toggleItalic) },
-                    onBullets = { selectionEdit(FormattingActions::toggleBullets) },
-                    onNumbers = { selectionEdit(FormattingActions::toggleNumbers) }
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Box {
-                    if (fieldValue.text.isEmpty()) {
-                        Text(text = stringResource(R.string.entry_placeholder), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted))
-                    }
-                    BasicTextField(
-                        value = fieldValue,
-                        onValueChange = { new ->
-                            val continued = FormattingActions.afterTyping(
-                                fieldValue.text, fieldValue.selection.start, fieldValue.selection.end,
-                                new.text, new.selection.start, new.selection.end
-                            )
-                            if (continued != null) {
-                                applyEdit(continued)
-                            } else {
-                                fieldValue = new
-                                if (new.text != text) onTextChange(new.text)
-                            }
-                        },
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = colors.Text),
-                        cursorBrush = SolidColor(colors.Accent),
-                        visualTransformation = formatting,
-                        modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp).onFocusChanged { if (it.isFocused) coroutineScope.launch { scrollState.animateScrollTo(0) } }
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
 
         SectionLabel(text = stringResource(R.string.entry_how_feeling), hint = stringResource(R.string.entry_up_to_two))
 
@@ -158,6 +118,44 @@ fun EntryFormScreen(
             Spacer(modifier = Modifier.height(12.dp))
             CustomTagCard(title = stringResource(R.string.entry_new_action_tag), emoji = customEmoji, label = customLabel, onEmojiChange = { customEmoji = it }, labelTaken = customLabelTaken, onLabelChange = { customLabel = it; customLabelTaken = false },
                 onAdd = { if (onAddCustomAction(customLabel, customEmoji.ifBlank { "\u2728" })) showNewAction = false else customLabelTaken = true }, onCancel = { showNewAction = false })
+        }
+        // Writing comes last and stays optional, so a quick log is a couple of taps
+        Spacer(modifier = Modifier.height(16.dp))
+        SectionLabel(text = stringResource(R.string.entry_on_your_mind), hint = stringResource(R.string.entry_optional))
+        Surface(shape = RoundedCornerShape(12.dp), color = colors.SurfaceAlt, border = BorderStroke(1.dp, colors.Border)) {
+            Column(modifier = Modifier.padding(14.dp)) {
+                FormattingToolbar(
+                    onBold = { selectionEdit(FormattingActions::toggleBold) },
+                    onItalic = { selectionEdit(FormattingActions::toggleItalic) },
+                    onBullets = { selectionEdit(FormattingActions::toggleBullets) },
+                    onNumbers = { selectionEdit(FormattingActions::toggleNumbers) }
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Box {
+                    if (fieldValue.text.isEmpty()) {
+                        Text(text = stringResource(R.string.entry_placeholder), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted))
+                    }
+                    BasicTextField(
+                        value = fieldValue,
+                        onValueChange = { new ->
+                            val continued = FormattingActions.afterTyping(
+                                fieldValue.text, fieldValue.selection.start, fieldValue.selection.end,
+                                new.text, new.selection.start, new.selection.end
+                            )
+                            if (continued != null) {
+                                applyEdit(continued)
+                            } else {
+                                fieldValue = new
+                                if (new.text != text) onTextChange(new.text)
+                            }
+                        },
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = colors.Text),
+                        cursorBrush = SolidColor(colors.Accent),
+                        visualTransformation = formatting,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 120.dp)
+                    )
+                }
+            }
         }
         Spacer(modifier = Modifier.height(24.dp))
 

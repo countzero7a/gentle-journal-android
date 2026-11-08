@@ -115,7 +115,6 @@
     <string name="charts_unique_emotions">Emociones distintas</string>
     <string name="charts_total_tags">Etiquetas emocionales</string>
     <string name="charts_empty">Aún no hay suficientes datos. ¡Sigue escribiendo!</string>
-    <string name="widget_no_entries">Sin entradas hoy</string>
     <string name="settings_widget">Widget de la pantalla de inicio</string>
     <string name="settings_widget_desc">Muestra el ánimo de hoy en tu pantalla de inicio.</string>
     <string name="settings_widget_hint">Mantén pulsada la pantalla de inicio, abre Widgets y elige Momentos.</string>
@@ -233,4 +232,15 @@
     <string name="settings_lock_desc">Pide desbloquear al abrir la app o al volver tras un minuto.</string>
     <string name="settings_lock_unavailable">Para usarlo, primero configura un bloqueo de pantalla (PIN, patrón o huella) en los ajustes del teléfono.</string>
     <string name="widget_locked">Ábrela para ver hoy</string>
+    <string name="welcome_1_title">Un lugar amable para lo que sientes</string>
+    <string name="welcome_1_text">Anota en pocos toques cómo te sientes y qué hiciste. Con el tiempo aparecen patrones suaves: observaciones, nunca juicios.</string>
+    <string name="welcome_2_title">Privado desde el diseño</string>
+    <string name="welcome_2_text">Tu diario está cifrado y se queda en este teléfono. Sin cuenta, sin anuncios, sin acceso a internet.</string>
+    <string name="welcome_3_title">Sin presión</string>
+    <string name="welcome_3_text">Sin rachas, sin culpa. Escribe cuando quieras, tanto o tan poco como quieras.</string>
+    <string name="welcome_reminder">Recuérdamelo con suavidad cada noche</string>
+    <string name="welcome_next">Siguiente</string>
+    <string name="welcome_skip">Omitir</string>
+    <string name="welcome_start">Escribe tu primera entrada</string>
+    <string name="widget_how_feeling">¿Cómo te sientes?</string>
 </resources>

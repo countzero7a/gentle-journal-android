@@ -70,7 +70,6 @@
     <string name="charts_unique_emotions">Emoții diferite</string>
     <string name="charts_total_tags">Total etichete de emoții</string>
     <string name="charts_empty">Încă nu sunt destule date. Continuă să scrii!</string>
-    <string name="widget_no_entries">Nicio intrare azi</string>
     <string name="settings_widget">Widget pe ecranul principal</string>
     <string name="settings_widget_desc">Afișează starea de azi pe ecranul principal.</string>
     <string name="settings_widget_hint">Apasă lung pe ecranul principal, deschide Widgeturi și alege Momente.</string>
@@ -233,4 +232,15 @@
     <string name="settings_lock_desc">Cere deblocarea când deschizi aplicația sau revii după un minut.</string>
     <string name="settings_lock_unavailable">Pentru asta, configurează mai întâi o blocare a ecranului (PIN, model sau amprentă) în setările telefonului.</string>
     <string name="widget_locked">Deschide pentru a vedea ziua de azi</string>
+    <string name="welcome_1_title">Un loc blând pentru ce simți</string>
+    <string name="welcome_1_text">Notează în câteva atingeri cum te simți și ce ai făcut. Cu timpul apar tipare blânde — observații, niciodată judecăți.</string>
+    <string name="welcome_2_title">Privat din construcție</string>
+    <string name="welcome_2_text">Jurnalul tău este criptat și rămâne pe acest telefon. Fără cont, fără reclame, fără acces la internet.</string>
+    <string name="welcome_3_title">Fără presiune</string>
+    <string name="welcome_3_text">Fără serii, fără vinovăție. Scrie când vrei, cât de mult sau cât de puțin vrei.</string>
+    <string name="welcome_reminder">Amintește-mi blând în fiecare seară</string>
+    <string name="welcome_next">Înainte</string>
+    <string name="welcome_skip">Omite</string>
+    <string name="welcome_start">Scrie prima intrare</string>
+    <string name="widget_how_feeling">Cum te simți?</string>
 </resources>

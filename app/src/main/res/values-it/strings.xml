@@ -80,7 +80,6 @@
     <string name="charts_unique_emotions">Emozioni uniche</string>
     <string name="charts_total_tags">Tag emozionali totali</string>
     <string name="charts_empty">Dati insufficienti. Continua a scrivere!</string>
-    <string name="widget_no_entries">Nessuna voce oggi</string>
     <string name="settings_widget">Widget schermata home</string>
     <string name="settings_widget_desc">Mostra l\'umore di oggi nella schermata home.</string>
     <string name="settings_widget_hint">Tieni premuta la schermata home, apri Widget e scegli Momenti.</string>
@@ -233,4 +232,15 @@
     <string name="settings_lock_desc">Chiede lo sblocco quando apri l\'app o torni dopo un minuto.</string>
     <string name="settings_lock_unavailable">Per usarlo, imposta prima un blocco schermo (PIN, sequenza o impronta) nelle impostazioni del telefono.</string>
     <string name="widget_locked">Apri per vedere oggi</string>
+    <string name="welcome_1_title">Un posto gentile per ciò che senti</string>
+    <string name="welcome_1_text">Annota con pochi tocchi come ti senti e cosa hai fatto. Col tempo emergono schemi gentili: osservazioni, mai giudizi.</string>
+    <string name="welcome_2_title">Privato per scelta</string>
+    <string name="welcome_2_text">Il tuo diario è cifrato e resta su questo telefono. Nessun account, nessuna pubblicità, nessun accesso a internet.</string>
+    <string name="welcome_3_title">Nessuna pressione</string>
+    <string name="welcome_3_text">Niente serie, niente sensi di colpa. Scrivi quando vuoi, quanto vuoi.</string>
+    <string name="welcome_reminder">Ricordamelo con gentilezza ogni sera</string>
+    <string name="welcome_next">Avanti</string>
+    <string name="welcome_skip">Salta</string>
+    <string name="welcome_start">Scrivi la tua prima voce</string>
+    <string name="widget_how_feeling">Come ti senti?</string>
 </resources>

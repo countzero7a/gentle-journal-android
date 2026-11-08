@@ -1,6 +1,7 @@
 package com.gentlejournal
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -18,6 +19,7 @@ import com.gentlejournal.domain.lock.LockPolicy
 import com.gentlejournal.domain.model.AppLanguage
 import com.gentlejournal.ui.JournalApp
 import com.gentlejournal.ui.JournalViewModel
+import com.gentlejournal.ui.QuickLog
 import com.gentlejournal.ui.lock.AppLock
 import com.gentlejournal.ui.lock.LockAction
 import com.gentlejournal.ui.lock.LockSession
@@ -117,6 +119,19 @@ class MainActivity : FragmentActivity() {
                 }
             }
         }
+
+        // Not on recreation (rotation, language change), which would repeat the request
+        if (savedInstanceState == null) handleQuickLog(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (::appLock.isInitialized) handleQuickLog(intent)
+    }
+
+    /** A widget emoji opens a new entry with that feeling chosen (after unlocking, if locked). */
+    private fun handleQuickLog(intent: Intent?) {
+        intent?.getStringExtra(QuickLog.EXTRA_EMOTION_ID)?.let(viewModel::requestNewEntry)
     }
 
     override fun onStart() {

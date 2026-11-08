@@ -120,7 +120,6 @@
     <string name="charts_unique_emotions">Verschiedene Emotionen</string>
     <string name="charts_total_tags">Emotions-Tags gesamt</string>
     <string name="charts_empty">Noch nicht genug Daten. Schreib weiter!</string>
-    <string name="widget_no_entries">Heute keine Einträge</string>
     <string name="settings_widget">Startbildschirm-Widget</string>
     <string name="settings_widget_desc">Zeige die heutige Stimmung auf dem Startbildschirm.</string>
     <string name="settings_widget_hint">Halte den Startbildschirm gedrückt, öffne „Widgets“ und wähle Momente.</string>
@@ -224,4 +223,15 @@
     <string name="settings_lock_desc">Fragt nach dem Entsperren, wenn du die App öffnest oder nach einer Minute zurückkommst.</string>
     <string name="settings_lock_unavailable">Richte dafür zuerst eine Displaysperre (PIN, Muster oder Fingerabdruck) in den Einstellungen deines Telefons ein.</string>
     <string name="widget_locked">Öffnen, um heute zu sehen</string>
+    <string name="welcome_1_title">Ein sanfter Ort für deine Gefühle</string>
+    <string name="welcome_1_text">Halte mit wenigen Tippern fest, wie du dich fühlst und was du gemacht hast. Mit der Zeit zeigen sich sanfte Muster — Beobachtungen, nie Urteile.</string>
+    <string name="welcome_2_title">Privat von Grund auf</string>
+    <string name="welcome_2_text">Dein Tagebuch ist verschlüsselt und bleibt auf diesem Telefon. Kein Konto, keine Werbung, kein Internetzugriff.</string>
+    <string name="welcome_3_title">Kein Druck</string>
+    <string name="welcome_3_text">Keine Streaks, kein schlechtes Gewissen. Schreib, wann du möchtest — so viel oder so wenig du willst.</string>
+    <string name="welcome_reminder">Erinnere mich sanft jeden Abend</string>
+    <string name="welcome_next">Weiter</string>
+    <string name="welcome_skip">Überspringen</string>
+    <string name="welcome_start">Ersten Eintrag schreiben</string>
+    <string name="widget_how_feeling">Wie fühlst du dich?</string>
 </resources>

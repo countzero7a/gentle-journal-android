@@ -43,6 +43,7 @@ import com.gentlejournal.ui.screens.insights.InsightsScreen
 import com.gentlejournal.ui.screens.charts.ChartsScreen
 import com.gentlejournal.ui.screens.settings.SettingsScreen
 import com.gentlejournal.ui.screens.timeline.TimelineScreen
+import com.gentlejournal.ui.screens.welcome.WelcomeScreen
 import com.gentlejournal.ui.theme.LocalJournalColors
 
 // TODO: point this at the project's own donation page
@@ -79,6 +80,8 @@ fun JournalApp(
     val importStatus by viewModel.importStatus.collectAsStateWithLifecycle()
     val reminderEnabled by viewModel.reminderEnabled.collectAsStateWithLifecycle()
     val appLockEnabled by viewModel.appLockEnabled.collectAsStateWithLifecycle()
+    val showWelcome by viewModel.showWelcome.collectAsStateWithLifecycle()
+    val newEntryRequest by viewModel.newEntryRequest.collectAsStateWithLifecycle()
     val reminderHour by viewModel.reminderHour.collectAsStateWithLifecycle()
     val reminderMinute by viewModel.reminderMinute.collectAsStateWithLifecycle()
 
@@ -88,6 +91,24 @@ fun JournalApp(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         uri?.let { viewModel.importData(it) }
+    }
+
+    // A new journal starts with the welcome; until we know, show only the background
+    if (showWelcome != false) {
+        if (showWelcome == true) {
+            WelcomeScreen(onFinish = viewModel::finishWelcome)
+        } else {
+            Box(modifier = Modifier.fillMaxSize().background(colors.Background))
+        }
+        return
+    }
+
+    // The widget and the welcome ask for a new entry, possibly with a feeling chosen
+    LaunchedEffect(newEntryRequest) {
+        val request = newEntryRequest ?: return@LaunchedEffect
+        viewModel.startNewEntry(request.emotionId)
+        navController.navigate(Screen.NewEntry.route) { launchSingleTop = true }
+        viewModel.consumeNewEntryRequest()
     }
 
     val isMainScreen = currentRoute in listOf(

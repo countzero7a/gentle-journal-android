@@ -73,7 +73,6 @@
     <string name="charts_unique_emotions">Unieke emoties</string>
     <string name="charts_total_tags">Totaal emotie-tags</string>
     <string name="charts_empty">Nog niet genoeg gegevens. Blijf schrijven!</string>
-    <string name="widget_no_entries">Geen notities vandaag</string>
     <string name="settings_widget">Startscherm-widget</string>
     <string name="settings_widget_desc">Toon de stemming van vandaag op je startscherm.</string>
     <string name="settings_widget_hint">Houd je startscherm ingedrukt, open Widgets en kies Momenten.</string>
@@ -224,4 +223,15 @@
     <string name="settings_lock_desc">Vraagt om te ontgrendelen als je de app opent of na een minuut terugkomt.</string>
     <string name="settings_lock_unavailable">Stel hiervoor eerst een schermvergrendeling in (pincode, patroon of vingerafdruk) in de instellingen van je telefoon.</string>
     <string name="widget_locked">Open om vandaag te zien</string>
+    <string name="welcome_1_title">Een zachte plek voor wat je voelt</string>
+    <string name="welcome_1_text">Noteer in een paar tikken hoe je je voelt en wat je deed. Na verloop van tijd verschijnen zachte patronen — observaties, nooit oordelen.</string>
+    <string name="welcome_2_title">Privé vanaf het begin</string>
+    <string name="welcome_2_text">Je dagboek is versleuteld en blijft op deze telefoon. Geen account, geen advertenties, geen internettoegang.</string>
+    <string name="welcome_3_title">Geen druk</string>
+    <string name="welcome_3_text">Geen reeksen, geen schuldgevoel. Schrijf wanneer je wilt, zoveel of zo weinig als je wilt.</string>
+    <string name="welcome_reminder">Herinner me elke avond zachtjes</string>
+    <string name="welcome_next">Volgende</string>
+    <string name="welcome_skip">Overslaan</string>
+    <string name="welcome_start">Schrijf je eerste notitie</string>
+    <string name="widget_how_feeling">Hoe voel je je?</string>
 </resources>
