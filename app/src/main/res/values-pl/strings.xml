@@ -234,4 +234,12 @@
     <string name="format_italic">Kursywa</string>
     <string name="format_bullets">Lista punktowana</string>
     <string name="format_numbers">Lista numerowana</string>
+    <string name="lock_title">Twój dziennik jest zablokowany</string>
+    <string name="lock_unlock">Odblokuj</string>
+    <string name="lock_prompt_title">Odblokuj dziennik</string>
+    <string name="settings_section_privacy">Prywatność i dane</string>
+    <string name="settings_lock">Blokuj odciskiem palca lub blokadą ekranu</string>
+    <string name="settings_lock_desc">Prosi o odblokowanie przy otwieraniu aplikacji lub po powrocie po minucie.</string>
+    <string name="settings_lock_unavailable">Aby z tego korzystać, najpierw ustaw blokadę ekranu (PIN, wzór lub odcisk palca) w ustawieniach telefonu.</string>
+    <string name="widget_locked">Otwórz, aby zobaczyć dzisiejszy dzień</string>
 </resources>

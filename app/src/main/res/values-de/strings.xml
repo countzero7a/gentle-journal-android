@@ -216,4 +216,12 @@
     <string name="format_italic">Kursiv</string>
     <string name="format_bullets">Aufzählung</string>
     <string name="format_numbers">Nummerierte Liste</string>
+    <string name="lock_title">Dein Tagebuch ist gesperrt</string>
+    <string name="lock_unlock">Entsperren</string>
+    <string name="lock_prompt_title">Tagebuch entsperren</string>
+    <string name="settings_section_privacy">Datenschutz &amp; Daten</string>
+    <string name="settings_lock">Mit Fingerabdruck oder Displaysperre sperren</string>
+    <string name="settings_lock_desc">Fragt nach dem Entsperren, wenn du die App öffnest oder nach einer Minute zurückkommst.</string>
+    <string name="settings_lock_unavailable">Richte dafür zuerst eine Displaysperre (PIN, Muster oder Fingerabdruck) in den Einstellungen deines Telefons ein.</string>
+    <string name="widget_locked">Öffnen, um heute zu sehen</string>
 </resources>

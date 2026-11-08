@@ -216,4 +216,12 @@
     <string name="format_italic">Cursief</string>
     <string name="format_bullets">Lijst met opsommingstekens</string>
     <string name="format_numbers">Genummerde lijst</string>
+    <string name="lock_title">Je dagboek is vergrendeld</string>
+    <string name="lock_unlock">Ontgrendelen</string>
+    <string name="lock_prompt_title">Ontgrendel je dagboek</string>
+    <string name="settings_section_privacy">Privacy en gegevens</string>
+    <string name="settings_lock">Vergrendelen met vingerafdruk of schermvergrendeling</string>
+    <string name="settings_lock_desc">Vraagt om te ontgrendelen als je de app opent of na een minuut terugkomt.</string>
+    <string name="settings_lock_unavailable">Stel hiervoor eerst een schermvergrendeling in (pincode, patroon of vingerafdruk) in de instellingen van je telefoon.</string>
+    <string name="widget_locked">Open om vandaag te zien</string>
 </resources>

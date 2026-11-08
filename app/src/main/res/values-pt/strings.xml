@@ -225,4 +225,12 @@
     <string name="format_italic">Itálico</string>
     <string name="format_bullets">Lista com marcadores</string>
     <string name="format_numbers">Lista numerada</string>
+    <string name="lock_title">Seu diário está bloqueado</string>
+    <string name="lock_unlock">Desbloquear</string>
+    <string name="lock_prompt_title">Desbloqueie seu diário</string>
+    <string name="settings_section_privacy">Privacidade e dados</string>
+    <string name="settings_lock">Bloquear com impressão digital ou bloqueio de tela</string>
+    <string name="settings_lock_desc">Pede desbloqueio ao abrir o app ou ao voltar depois de um minuto.</string>
+    <string name="settings_lock_unavailable">Para usar, primeiro configure um bloqueio de tela (PIN, padrão ou impressão digital) nas configurações do telefone.</string>
+    <string name="widget_locked">Abra para ver hoje</string>
 </resources>

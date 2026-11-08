@@ -38,7 +38,8 @@ class MoodWidgetProvider : AppWidgetProvider() {
     }
 
     private suspend fun buildViews(context: Context): RemoteViews {
-        val language = ThemePreferences(context.applicationContext).selectedLanguage.first()
+        val preferences = ThemePreferences(context.applicationContext)
+        val language = preferences.selectedLanguage.first()
         val localized = LocaleHelper.localizedContext(context, language)
         val views = RemoteViews(context.packageName, R.layout.widget_mood)
 
@@ -53,6 +54,13 @@ class MoodWidgetProvider : AppWidgetProvider() {
         )
         views.setOnClickPendingIntent(R.id.widget_root, pi)
         views.setTextViewText(R.id.widget_app_name, localized.getString(R.string.app_name))
+
+        // With the app lock on, the home screen doesn't reveal how you feel
+        if (preferences.appLockEnabled.first()) {
+            views.setTextViewText(R.id.widget_emoji, "\uD83D\uDD12")
+            views.setTextViewText(R.id.widget_label, localized.getString(R.string.widget_locked))
+            return views
+        }
 
         // Today's most frequent emotion, by its label in the app language
         val todayStart = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()

@@ -225,4 +225,12 @@
     <string name="format_italic">Cursiv</string>
     <string name="format_bullets">Listă cu marcatori</string>
     <string name="format_numbers">Listă numerotată</string>
+    <string name="lock_title">Jurnalul tău este blocat</string>
+    <string name="lock_unlock">Deblochează</string>
+    <string name="lock_prompt_title">Deblochează-ți jurnalul</string>
+    <string name="settings_section_privacy">Confidențialitate și date</string>
+    <string name="settings_lock">Blocare cu amprentă sau blocarea ecranului</string>
+    <string name="settings_lock_desc">Cere deblocarea când deschizi aplicația sau revii după un minut.</string>
+    <string name="settings_lock_unavailable">Pentru asta, configurează mai întâi o blocare a ecranului (PIN, model sau amprentă) în setările telefonului.</string>
+    <string name="widget_locked">Deschide pentru a vedea ziua de azi</string>
 </resources>

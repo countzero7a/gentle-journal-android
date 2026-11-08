@@ -225,4 +225,12 @@
     <string name="format_italic">Corsivo</string>
     <string name="format_bullets">Elenco puntato</string>
     <string name="format_numbers">Elenco numerato</string>
+    <string name="lock_title">Il tuo diario è bloccato</string>
+    <string name="lock_unlock">Sblocca</string>
+    <string name="lock_prompt_title">Sblocca il tuo diario</string>
+    <string name="settings_section_privacy">Privacy e dati</string>
+    <string name="settings_lock">Blocca con impronta o blocco schermo</string>
+    <string name="settings_lock_desc">Chiede lo sblocco quando apri l\'app o torni dopo un minuto.</string>
+    <string name="settings_lock_unavailable">Per usarlo, imposta prima un blocco schermo (PIN, sequenza o impronta) nelle impostazioni del telefono.</string>
+    <string name="widget_locked">Apri per vedere oggi</string>
 </resources>

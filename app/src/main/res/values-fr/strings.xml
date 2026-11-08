@@ -225,4 +225,12 @@
     <string name="format_italic">Italique</string>
     <string name="format_bullets">Liste à puces</string>
     <string name="format_numbers">Liste numérotée</string>
+    <string name="lock_title">Votre journal est verrouillé</string>
+    <string name="lock_unlock">Déverrouiller</string>
+    <string name="lock_prompt_title">Déverrouillez votre journal</string>
+    <string name="settings_section_privacy">Confidentialité et données</string>
+    <string name="settings_lock">Verrouiller avec l\'empreinte ou le verrouillage de l\'écran</string>
+    <string name="settings_lock_desc">Demande le déverrouillage à l\'ouverture de l\'application ou au retour après une minute.</string>
+    <string name="settings_lock_unavailable">Pour l\'utiliser, configurez d\'abord un verrouillage de l\'écran (code, schéma ou empreinte) dans les paramètres du téléphone.</string>
+    <string name="widget_locked">Ouvrez pour voir aujourd\'hui</string>
 </resources>

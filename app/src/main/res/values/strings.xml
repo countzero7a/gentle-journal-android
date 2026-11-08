@@ -206,6 +206,16 @@
     <string name="font_size_extra_large">Extra large</string>
     <string name="language_system">System default</string>
 
+    <!-- App lock -->
+    <string name="lock_title">Your journal is locked</string>
+    <string name="lock_unlock">Unlock</string>
+    <string name="lock_prompt_title">Unlock your journal</string>
+    <string name="settings_section_privacy">Privacy &amp; data</string>
+    <string name="settings_lock">Lock with fingerprint or screen lock</string>
+    <string name="settings_lock_desc">Asks to unlock when you open the app, or come back after a minute away.</string>
+    <string name="settings_lock_unavailable">To use this, first set up a screen lock (PIN, pattern or fingerprint) in your phone\'s settings.</string>
+    <string name="widget_locked">Open to see today</string>
+
     <!-- Shown when the journal's key can't be read -->
     <string name="locked_title">Your journal can\'t be unlocked</string>
     <string name="locked_message">The key that protects your journal on this phone couldn\'t be read. This can happen after some system updates, or if the phone\'s secure storage was reset. Your entries are still on the device, but without the key they can\'t be opened.\n\nTry again first. If it keeps happening, you can start a new journal and import a JSON export, if you have one.</string>

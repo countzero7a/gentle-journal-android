@@ -216,4 +216,12 @@
     <string name="format_italic">Πλάγια</string>
     <string name="format_bullets">Λίστα με κουκκίδες</string>
     <string name="format_numbers">Αριθμημένη λίστα</string>
+    <string name="lock_title">Το ημερολόγιό σου είναι κλειδωμένο</string>
+    <string name="lock_unlock">Ξεκλείδωμα</string>
+    <string name="lock_prompt_title">Ξεκλείδωσε το ημερολόγιό σου</string>
+    <string name="settings_section_privacy">Απόρρητο και δεδομένα</string>
+    <string name="settings_lock">Κλείδωμα με δακτυλικό αποτύπωμα ή κλείδωμα οθόνης</string>
+    <string name="settings_lock_desc">Ζητά ξεκλείδωμα όταν ανοίγεις την εφαρμογή ή επιστρέφεις μετά από ένα λεπτό.</string>
+    <string name="settings_lock_unavailable">Για να το χρησιμοποιήσεις, ρύθμισε πρώτα κλείδωμα οθόνης (PIN, μοτίβο ή δακτυλικό αποτύπωμα) στις ρυθμίσεις του τηλεφώνου.</string>
+    <string name="widget_locked">Άνοιξε για να δεις τη σημερινή μέρα</string>
 </resources>

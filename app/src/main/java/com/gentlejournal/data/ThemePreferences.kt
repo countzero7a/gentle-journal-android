@@ -26,6 +26,7 @@ class ThemePreferences(private val context: Context) {
     private val reminderEnabledKey = booleanPreferencesKey("reminder_enabled")
     private val reminderHourKey = intPreferencesKey("reminder_hour")
     private val reminderMinuteKey = intPreferencesKey("reminder_minute")
+    private val appLockKey = booleanPreferencesKey("app_lock_enabled")
 
     val selectedTheme: Flow<AppTheme> = context.dataStore.data.map { prefs ->
         val name = prefs[themeKey] ?: AppTheme.MEADOW.name
@@ -73,6 +74,14 @@ class ThemePreferences(private val context: Context) {
 
     val reminderMinute: Flow<Int> = context.dataStore.data.map { prefs ->
         prefs[reminderMinuteKey] ?: 0
+    }
+
+    val appLockEnabled: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[appLockKey] ?: false
+    }
+
+    suspend fun setAppLockEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[appLockKey] = enabled }
     }
 
     suspend fun setReminder(enabled: Boolean, hour: Int, minute: Int) {

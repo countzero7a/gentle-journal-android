@@ -89,6 +89,11 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch { themePreferences.setFontSize(fontSize) }
     }
 
+    // ── App lock (changed through MainActivity, which confirms with the phone's lock) ──
+
+    val appLockEnabled: StateFlow<Boolean> = themePreferences.appLockEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
     // ── Reminder ────────────────────────────────────────────────────
 
     val reminderEnabled: StateFlow<Boolean> = themePreferences.reminderEnabled

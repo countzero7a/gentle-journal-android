@@ -70,6 +70,9 @@ fun SettingsScreen(
     reminderMinute: Int,
     onReminderChange: (Boolean, Int, Int) -> Unit,
     onDonate: () -> Unit,
+    appLockEnabled: Boolean = false,
+    appLockAvailable: Boolean = false,
+    onAppLockChange: (Boolean) -> Unit = {},
     onEditEmotion: (EmotionEntity, String, String) -> Boolean = { _, _, _ -> false },
     onDeleteEmotion: (EmotionEntity) -> Unit = {},
     onEditAction: (ActionEntity, String, String) -> Boolean = { _, _, _ -> false },
@@ -349,6 +352,37 @@ fun SettingsScreen(
                     }
                 }
             }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Privacy: lock with the phone's fingerprint or screen lock
+        JournalCard {
+            Text(text = stringResource(R.string.settings_section_privacy), style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_lock),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.weight(1f).padding(end = 12.dp)
+                )
+                Switch(
+                    checked = appLockEnabled,
+                    onCheckedChange = onAppLockChange,
+                    // Switching off stays possible even if the phone's screen lock was removed
+                    enabled = appLockAvailable || appLockEnabled,
+                    colors = SwitchDefaults.colors(checkedTrackColor = colors.Accent)
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(if (appLockAvailable) R.string.settings_lock_desc else R.string.settings_lock_unavailable),
+                style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted, lineHeight = 18.sp)
+            )
         }
 
         Spacer(modifier = Modifier.height(12.dp))

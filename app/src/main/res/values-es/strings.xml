@@ -225,4 +225,12 @@
     <string name="format_italic">Cursiva</string>
     <string name="format_bullets">Lista con viñetas</string>
     <string name="format_numbers">Lista numerada</string>
+    <string name="lock_title">Tu diario está bloqueado</string>
+    <string name="lock_unlock">Desbloquear</string>
+    <string name="lock_prompt_title">Desbloquea tu diario</string>
+    <string name="settings_section_privacy">Privacidad y datos</string>
+    <string name="settings_lock">Bloquear con huella o bloqueo de pantalla</string>
+    <string name="settings_lock_desc">Pide desbloquear al abrir la app o al volver tras un minuto.</string>
+    <string name="settings_lock_unavailable">Para usarlo, primero configura un bloqueo de pantalla (PIN, patrón o huella) en los ajustes del teléfono.</string>
+    <string name="widget_locked">Ábrela para ver hoy</string>
 </resources>

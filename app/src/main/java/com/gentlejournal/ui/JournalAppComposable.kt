@@ -51,7 +51,9 @@ private const val DONATE_URL = "https://ko-fi.com"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalApp(
-    viewModel: JournalViewModel = viewModel()
+    viewModel: JournalViewModel = viewModel(),
+    appLockAvailable: Boolean = false,
+    onAppLockChange: (Boolean) -> Unit = {}
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -76,6 +78,7 @@ fun JournalApp(
     val isSaving by viewModel.isSaving.collectAsStateWithLifecycle()
     val importStatus by viewModel.importStatus.collectAsStateWithLifecycle()
     val reminderEnabled by viewModel.reminderEnabled.collectAsStateWithLifecycle()
+    val appLockEnabled by viewModel.appLockEnabled.collectAsStateWithLifecycle()
     val reminderHour by viewModel.reminderHour.collectAsStateWithLifecycle()
     val reminderMinute by viewModel.reminderMinute.collectAsStateWithLifecycle()
 
@@ -221,6 +224,9 @@ fun JournalApp(
                     reminderHour = reminderHour,
                     reminderMinute = reminderMinute,
                     onReminderChange = viewModel::setReminder,
+                    appLockEnabled = appLockEnabled,
+                    appLockAvailable = appLockAvailable,
+                    onAppLockChange = onAppLockChange,
                     onEditEmotion = viewModel::updateCustomEmotion,
                     onDeleteEmotion = viewModel::deleteCustomEmotion,
                     onEditAction = viewModel::updateCustomAction,

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.GentleJournal" parent="android:Theme.Material.Light.NoActionBar">
+    <!-- AppCompat parent: the biometric library's fingerprint dialog (Android 8.x) needs it.
+         Compose draws all content, so this only affects the window and system dialogs. -->
+    <style name="Theme.GentleJournal" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

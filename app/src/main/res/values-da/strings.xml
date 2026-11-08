@@ -216,4 +216,12 @@
     <string name="format_italic">Kursiv</string>
     <string name="format_bullets">Punktliste</string>
     <string name="format_numbers">Nummereret liste</string>
+    <string name="lock_title">Din dagbog er låst</string>
+    <string name="lock_unlock">Lås op</string>
+    <string name="lock_prompt_title">Lås din dagbog op</string>
+    <string name="settings_section_privacy">Privatliv og data</string>
+    <string name="settings_lock">Lås med fingeraftryk eller skærmlås</string>
+    <string name="settings_lock_desc">Beder om oplåsning, når du åbner appen eller vender tilbage efter et minut.</string>
+    <string name="settings_lock_unavailable">For at bruge dette skal du først oprette en skærmlås (pinkode, mønster eller fingeraftryk) i telefonens indstillinger.</string>
+    <string name="widget_locked">Åbn for at se i dag</string>
 </resources>
