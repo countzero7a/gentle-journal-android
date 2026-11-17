@@ -263,4 +263,12 @@
     <string name="backup_reminder_text">Αν χαθεί αυτό το τηλέφωνο, χάνονται και οι εγγραφές σου. Η ρύθμιση αντιγράφου παίρνει μόνο λίγο χρόνο.</string>
     <string name="backup_reminder_action">Ρύθμιση αντιγράφου</string>
     <string name="backup_reminder_later">Αργότερα</string>
+    <string name="timeline_search_hint">Αναζήτηση εγγραφών</string>
+    <string name="timeline_clear_search">Καθαρισμός αναζήτησης</string>
+    <string name="timeline_show_calendar">Εμφάνιση ημερολογίου</string>
+    <string name="timeline_show_list">Εμφάνιση λίστας</string>
+    <string name="timeline_no_results">Καμία εγγραφή δεν ταιριάζει με την αναζήτηση.</string>
+    <string name="calendar_previous_month">Προηγούμενος μήνας</string>
+    <string name="calendar_next_month">Επόμενος μήνας</string>
+    <string name="calendar_no_entries_day">Καμία εγγραφή αυτή τη μέρα.</string>
 </resources>

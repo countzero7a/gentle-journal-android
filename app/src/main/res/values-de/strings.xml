@@ -263,4 +263,12 @@
     <string name="backup_reminder_text">Wenn dieses Telefon verloren geht, sind deine Einträge mit ihm weg. Eine Sicherung ist schnell eingerichtet.</string>
     <string name="backup_reminder_action">Sicherung einrichten</string>
     <string name="backup_reminder_later">Später</string>
+    <string name="timeline_search_hint">Einträge durchsuchen</string>
+    <string name="timeline_clear_search">Suche löschen</string>
+    <string name="timeline_show_calendar">Kalender zeigen</string>
+    <string name="timeline_show_list">Liste zeigen</string>
+    <string name="timeline_no_results">Keine Einträge passen zu deiner Suche.</string>
+    <string name="calendar_previous_month">Vorheriger Monat</string>
+    <string name="calendar_next_month">Nächster Monat</string>
+    <string name="calendar_no_entries_day">Keine Einträge an diesem Tag.</string>
 </resources>

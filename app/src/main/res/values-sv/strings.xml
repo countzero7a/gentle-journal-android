@@ -263,4 +263,12 @@
     <string name="backup_reminder_text">Om telefonen försvinner följer dina inlägg med. Att ställa in en säkerhetskopia tar bara ett ögonblick.</string>
     <string name="backup_reminder_action">Ställ in säkerhetskopia</string>
     <string name="backup_reminder_later">Senare</string>
+    <string name="timeline_search_hint">Sök i inlägg</string>
+    <string name="timeline_clear_search">Rensa sökning</string>
+    <string name="timeline_show_calendar">Visa kalender</string>
+    <string name="timeline_show_list">Visa lista</string>
+    <string name="timeline_no_results">Inga inlägg matchar din sökning.</string>
+    <string name="calendar_previous_month">Föregående månad</string>
+    <string name="calendar_next_month">Nästa månad</string>
+    <string name="calendar_no_entries_day">Inga inlägg den här dagen.</string>
 </resources>

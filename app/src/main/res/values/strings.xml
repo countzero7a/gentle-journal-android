@@ -18,6 +18,14 @@
     <string name="timeline_yesterday">yesterday</string>
     <string name="timeline_subtitle_one">%d entry \u00B7 Private &amp; on-device</string>
     <string name="timeline_subtitle_many">%d entries \u00B7 Private &amp; on-device</string>
+    <string name="timeline_search_hint">Search entries</string>
+    <string name="timeline_clear_search">Clear search</string>
+    <string name="timeline_show_calendar">Show calendar</string>
+    <string name="timeline_show_list">Show list</string>
+    <string name="timeline_no_results">No entries match your search.</string>
+    <string name="calendar_previous_month">Previous month</string>
+    <string name="calendar_next_month">Next month</string>
+    <string name="calendar_no_entries_day">No entries on this day.</string>
     <string name="timeline_export">Export \u2197</string>
 
     <!-- Entry form -->

@@ -281,4 +281,12 @@
     <string name="backup_reminder_text">Jeśli zgubisz ten telefon, wpisy przepadną razem z nim. Konfiguracja kopii zajmuje tylko chwilę.</string>
     <string name="backup_reminder_action">Skonfiguruj kopię</string>
     <string name="backup_reminder_later">Później</string>
+    <string name="timeline_search_hint">Szukaj wpisów</string>
+    <string name="timeline_clear_search">Wyczyść wyszukiwanie</string>
+    <string name="timeline_show_calendar">Pokaż kalendarz</string>
+    <string name="timeline_show_list">Pokaż listę</string>
+    <string name="timeline_no_results">Żaden wpis nie pasuje do wyszukiwania.</string>
+    <string name="calendar_previous_month">Poprzedni miesiąc</string>
+    <string name="calendar_next_month">Następny miesiąc</string>
+    <string name="calendar_no_entries_day">Brak wpisów tego dnia.</string>
 </resources>

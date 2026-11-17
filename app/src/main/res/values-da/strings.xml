@@ -263,4 +263,12 @@
     <string name="backup_reminder_text">Hvis telefonen bliver væk, forsvinder dine indlæg med den. Det tager kun et øjeblik at opsætte en sikkerhedskopi.</string>
     <string name="backup_reminder_action">Opsæt sikkerhedskopi</string>
     <string name="backup_reminder_later">Senere</string>
+    <string name="timeline_search_hint">Søg i indlæg</string>
+    <string name="timeline_clear_search">Ryd søgning</string>
+    <string name="timeline_show_calendar">Vis kalender</string>
+    <string name="timeline_show_list">Vis liste</string>
+    <string name="timeline_no_results">Ingen indlæg passer til din søgning.</string>
+    <string name="calendar_previous_month">Forrige måned</string>
+    <string name="calendar_next_month">Næste måned</string>
+    <string name="calendar_no_entries_day">Ingen indlæg denne dag.</string>
 </resources>

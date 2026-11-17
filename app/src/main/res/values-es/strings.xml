@@ -272,4 +272,12 @@
     <string name="backup_reminder_text">Si pierdes este teléfono, tus entradas se pierden con él. Configurar una copia lleva solo un momento.</string>
     <string name="backup_reminder_action">Configurar copia</string>
     <string name="backup_reminder_later">Más tarde</string>
+    <string name="timeline_search_hint">Buscar entradas</string>
+    <string name="timeline_clear_search">Borrar búsqueda</string>
+    <string name="timeline_show_calendar">Ver calendario</string>
+    <string name="timeline_show_list">Ver lista</string>
+    <string name="timeline_no_results">Ninguna entrada coincide con tu búsqueda.</string>
+    <string name="calendar_previous_month">Mes anterior</string>
+    <string name="calendar_next_month">Mes siguiente</string>
+    <string name="calendar_no_entries_day">No hay entradas este día.</string>
 </resources>

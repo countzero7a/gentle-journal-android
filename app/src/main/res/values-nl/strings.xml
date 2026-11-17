@@ -263,4 +263,12 @@
     <string name="backup_reminder_text">Raak je deze telefoon kwijt, dan zijn je notities ook weg. Een back-up instellen kost maar even.</string>
     <string name="backup_reminder_action">Back-up instellen</string>
     <string name="backup_reminder_later">Later</string>
+    <string name="timeline_search_hint">Notities zoeken</string>
+    <string name="timeline_clear_search">Zoekopdracht wissen</string>
+    <string name="timeline_show_calendar">Kalender tonen</string>
+    <string name="timeline_show_list">Lijst tonen</string>
+    <string name="timeline_no_results">Geen notities gevonden voor je zoekopdracht.</string>
+    <string name="calendar_previous_month">Vorige maand</string>
+    <string name="calendar_next_month">Volgende maand</string>
+    <string name="calendar_no_entries_day">Geen notities op deze dag.</string>
 </resources>

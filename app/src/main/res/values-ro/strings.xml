@@ -272,4 +272,12 @@
     <string name="backup_reminder_text">Dacă pierzi acest telefon, intrările se pierd odată cu el. Configurarea unei copii durează doar o clipă.</string>
     <string name="backup_reminder_action">Configurează copia</string>
     <string name="backup_reminder_later">Mai târziu</string>
+    <string name="timeline_search_hint">Caută în intrări</string>
+    <string name="timeline_clear_search">Șterge căutarea</string>
+    <string name="timeline_show_calendar">Arată calendarul</string>
+    <string name="timeline_show_list">Arată lista</string>
+    <string name="timeline_no_results">Nicio intrare nu se potrivește căutării.</string>
+    <string name="calendar_previous_month">Luna anterioară</string>
+    <string name="calendar_next_month">Luna următoare</string>
+    <string name="calendar_no_entries_day">Nicio intrare în această zi.</string>
 </resources>

@@ -272,4 +272,12 @@
     <string name="backup_reminder_text">Se perdi questo telefono, le tue voci se ne vanno con lui. Configurare un backup richiede solo un momento.</string>
     <string name="backup_reminder_action">Configura il backup</string>
     <string name="backup_reminder_later">Più tardi</string>
+    <string name="timeline_search_hint">Cerca nelle voci</string>
+    <string name="timeline_clear_search">Cancella ricerca</string>
+    <string name="timeline_show_calendar">Mostra calendario</string>
+    <string name="timeline_show_list">Mostra elenco</string>
+    <string name="timeline_no_results">Nessuna voce corrisponde alla ricerca.</string>
+    <string name="calendar_previous_month">Mese precedente</string>
+    <string name="calendar_next_month">Mese successivo</string>
+    <string name="calendar_no_entries_day">Nessuna voce in questo giorno.</string>
 </resources>
