@@ -82,7 +82,6 @@
     <string name="timeline_yesterday">igår</string>
     <string name="timeline_subtitle_one">%d inlägg · Privat &amp; på enheten</string>
     <string name="timeline_subtitle_many">%d inlägg · Privat &amp; på enheten</string>
-    <string name="timeline_export">Exportera ↗</string>
     <string name="entry_up_to_two">(upp till 2)</string>
     <string name="entry_on_your_mind">Något du tänker på?</string>
     <string name="entry_optional">(valfritt)</string>
@@ -271,4 +270,11 @@
     <string name="calendar_previous_month">Föregående månad</string>
     <string name="calendar_next_month">Nästa månad</string>
     <string name="calendar_no_entries_day">Inga inlägg den här dagen.</string>
+    <string name="nav_patterns">Mönster</string>
+    <string name="settings_section_appearance">Utseende</string>
+    <string name="settings_section_reminders">Påminnelser och widget</string>
+    <string name="settings_section_tags">Taggar</string>
+    <string name="settings_section_about">Om och stöd</string>
+    <string name="settings_export">Exportera inlägg</string>
+    <string name="settings_export_desc">Spara din dagbok som JSON, CSV eller Markdown, för att ha en kopia eller läsa den någon annanstans.</string>
 </resources>

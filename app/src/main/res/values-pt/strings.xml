@@ -84,7 +84,6 @@
     <string name="timeline_yesterday">ontem</string>
     <string name="timeline_subtitle_one">%d entrada · Privado e no dispositivo</string>
     <string name="timeline_subtitle_many">%d entradas · Privado e no dispositivo</string>
-    <string name="timeline_export">Exportar ↗</string>
     <string name="entry_up_to_two">(até 2)</string>
     <string name="entry_on_your_mind">Algo em mente?</string>
     <string name="entry_optional">(opcional)</string>
@@ -280,4 +279,11 @@
     <string name="calendar_previous_month">Mês anterior</string>
     <string name="calendar_next_month">Próximo mês</string>
     <string name="calendar_no_entries_day">Nenhuma entrada neste dia.</string>
+    <string name="nav_patterns">Padrões</string>
+    <string name="settings_section_appearance">Aparência</string>
+    <string name="settings_section_reminders">Lembretes e widget</string>
+    <string name="settings_section_tags">Etiquetas</string>
+    <string name="settings_section_about">Sobre e apoio</string>
+    <string name="settings_export">Exportar entradas</string>
+    <string name="settings_export_desc">Salve seu diário como JSON, CSV ou Markdown, para guardar uma cópia ou ler em outro lugar.</string>
 </resources>

@@ -10,7 +10,6 @@
     <string name="timeline_empty_title">Tu diario est\u00E1 vac\u00EDo</string>
     <string name="timeline_empty_message">Toca + para crear tu primera entrada.\nSin presi\u00F3n — escribe tanto o tan poco como quieras.</string>
     <string name="timeline_today">hoy</string>
-    <string name="timeline_export">Exportar</string>
     <string name="entry_how_feeling">\u00BFC\u00F3mo te sientes?</string>
     <string name="entry_up_to_two">(hasta 2)</string>
     <string name="entry_what_did">\u00BFQu\u00E9 hiciste?</string>
@@ -280,4 +279,11 @@
     <string name="calendar_previous_month">Mes anterior</string>
     <string name="calendar_next_month">Mes siguiente</string>
     <string name="calendar_no_entries_day">No hay entradas este día.</string>
+    <string name="nav_patterns">Patrones</string>
+    <string name="settings_section_appearance">Apariencia</string>
+    <string name="settings_section_reminders">Recordatorios y widget</string>
+    <string name="settings_section_tags">Etiquetas</string>
+    <string name="settings_section_about">Acerca de y apoyo</string>
+    <string name="settings_export">Exportar entradas</string>
+    <string name="settings_export_desc">Guarda tu diario como JSON, CSV o Markdown, para tener una copia o leerlo en otro sitio.</string>
 </resources>

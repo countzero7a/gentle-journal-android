@@ -84,7 +84,6 @@
     <string name="timeline_yesterday">gisteren</string>
     <string name="timeline_subtitle_one">%d notitie · Privé &amp; op het apparaat</string>
     <string name="timeline_subtitle_many">%d notities · Privé &amp; op het apparaat</string>
-    <string name="timeline_export">Exporteren ↗</string>
     <string name="entry_up_to_two">(maximaal 2)</string>
     <string name="entry_on_your_mind">Iets wat je bezighoudt?</string>
     <string name="entry_optional">(optioneel)</string>
@@ -271,4 +270,11 @@
     <string name="calendar_previous_month">Vorige maand</string>
     <string name="calendar_next_month">Volgende maand</string>
     <string name="calendar_no_entries_day">Geen notities op deze dag.</string>
+    <string name="nav_patterns">Patronen</string>
+    <string name="settings_section_appearance">Weergave</string>
+    <string name="settings_section_reminders">Herinneringen en widget</string>
+    <string name="settings_section_tags">Labels</string>
+    <string name="settings_section_about">Over en steun</string>
+    <string name="settings_export">Notities exporteren</string>
+    <string name="settings_export_desc">Bewaar je dagboek als JSON, CSV of Markdown, om een kopie te houden of het elders te lezen.</string>
 </resources>

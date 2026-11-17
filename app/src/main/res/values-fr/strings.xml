@@ -10,7 +10,6 @@
     <string name="timeline_empty_title">Votre journal est vide</string>
     <string name="timeline_empty_message">Appuyez sur + pour cr\u00E9er votre premi\u00E8re entr\u00E9e.\nPas de pression — \u00E9crivez autant ou aussi peu que vous le souhaitez.</string>
     <string name="timeline_today">aujourd\'hui</string>
-    <string name="timeline_export">Exporter</string>
     <string name="entry_how_feeling">Comment vous sentez-vous ?</string>
     <string name="entry_up_to_two">(jusqu\'\u00E0 2)</string>
     <string name="entry_what_did">Qu\'avez-vous fait ?</string>
@@ -280,4 +279,11 @@
     <string name="calendar_previous_month">Mois précédent</string>
     <string name="calendar_next_month">Mois suivant</string>
     <string name="calendar_no_entries_day">Aucune entrée ce jour-là.</string>
+    <string name="nav_patterns">Tendances</string>
+    <string name="settings_section_appearance">Apparence</string>
+    <string name="settings_section_reminders">Rappels et widget</string>
+    <string name="settings_section_tags">Étiquettes</string>
+    <string name="settings_section_about">À propos et soutien</string>
+    <string name="settings_export">Exporter les entrées</string>
+    <string name="settings_export_desc">Enregistrez votre journal en JSON, CSV ou Markdown, pour en garder une copie ou le lire ailleurs.</string>
 </resources>

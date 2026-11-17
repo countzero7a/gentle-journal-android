@@ -82,7 +82,6 @@
     <string name="timeline_yesterday">ieri</string>
     <string name="timeline_subtitle_one">%d intrare · Privat și pe dispozitiv</string>
     <string name="timeline_subtitle_many">Intrări: %d · Privat și pe dispozitiv</string>
-    <string name="timeline_export">Exportă ↗</string>
     <string name="entry_up_to_two">(până la 2)</string>
     <string name="entry_on_your_mind">Ce ai pe suflet?</string>
     <string name="entry_optional">(opțional)</string>
@@ -280,4 +279,11 @@
     <string name="calendar_previous_month">Luna anterioară</string>
     <string name="calendar_next_month">Luna următoare</string>
     <string name="calendar_no_entries_day">Nicio intrare în această zi.</string>
+    <string name="nav_patterns">Tipare</string>
+    <string name="settings_section_appearance">Aspect</string>
+    <string name="settings_section_reminders">Mementouri și widget</string>
+    <string name="settings_section_tags">Etichete</string>
+    <string name="settings_section_about">Despre și sprijin</string>
+    <string name="settings_export">Exportă intrările</string>
+    <string name="settings_export_desc">Salvează-ți jurnalul ca JSON, CSV sau Markdown, ca să păstrezi o copie sau să-l citești în altă parte.</string>
 </resources>

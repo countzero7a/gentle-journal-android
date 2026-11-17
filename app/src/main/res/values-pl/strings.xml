@@ -82,7 +82,6 @@
     <string name="timeline_yesterday">wczoraj</string>
     <string name="timeline_subtitle_one">%d wpis · Prywatnie i na urządzeniu</string>
     <string name="timeline_subtitle_many">Wpisy: %d · Prywatnie i na urządzeniu</string>
-    <string name="timeline_export">Eksportuj ↗</string>
     <string name="entry_up_to_two">(maks. 2)</string>
     <string name="entry_on_your_mind">Co chodzi ci po głowie?</string>
     <string name="entry_optional">(opcjonalnie)</string>
@@ -289,4 +288,11 @@
     <string name="calendar_previous_month">Poprzedni miesiąc</string>
     <string name="calendar_next_month">Następny miesiąc</string>
     <string name="calendar_no_entries_day">Brak wpisów tego dnia.</string>
+    <string name="nav_patterns">Wzorce</string>
+    <string name="settings_section_appearance">Wygląd</string>
+    <string name="settings_section_reminders">Przypomnienia i widżet</string>
+    <string name="settings_section_tags">Etykiety</string>
+    <string name="settings_section_about">O aplikacji i wsparcie</string>
+    <string name="settings_export">Eksportuj wpisy</string>
+    <string name="settings_export_desc">Zapisz swój dziennik jako JSON, CSV lub Markdown, aby mieć kopię albo czytać go gdzie indziej.</string>
 </resources>

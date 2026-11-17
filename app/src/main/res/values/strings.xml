@@ -10,6 +10,7 @@
     <string name="nav_edit_entry">Edit Entry</string>
     <string name="nav_export">Export</string>
     <string name="nav_charts">Charts</string>
+    <string name="nav_patterns">Patterns</string>
 
     <!-- Timeline -->
     <string name="timeline_empty_title">Your journal is empty</string>
@@ -26,7 +27,6 @@
     <string name="calendar_previous_month">Previous month</string>
     <string name="calendar_next_month">Next month</string>
     <string name="calendar_no_entries_day">No entries on this day.</string>
-    <string name="timeline_export">Export \u2197</string>
 
     <!-- Entry form -->
     <string name="entry_how_feeling">How are you feeling?</string>
@@ -262,6 +262,12 @@
     <string name="lock_unlock">Unlock</string>
     <string name="lock_prompt_title">Unlock your journal</string>
     <string name="settings_section_privacy">Privacy &amp; data</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_section_reminders">Reminders &amp; widget</string>
+    <string name="settings_section_tags">Tags</string>
+    <string name="settings_section_about">About &amp; support</string>
+    <string name="settings_export">Export entries</string>
+    <string name="settings_export_desc">Save your journal as JSON, CSV or Markdown, to keep a copy or read it elsewhere.</string>
     <string name="settings_lock">Lock with fingerprint or screen lock</string>
     <string name="settings_lock_desc">Asks to unlock when you open the app, or come back after a minute away.</string>
     <string name="settings_lock_unavailable">To use this, first set up a screen lock (PIN, pattern or fingerprint) in your phone\'s settings.</string>

@@ -82,7 +82,6 @@
     <string name="timeline_yesterday">i går</string>
     <string name="timeline_subtitle_one">%d indlæg · Privat &amp; på enheden</string>
     <string name="timeline_subtitle_many">%d indlæg · Privat &amp; på enheden</string>
-    <string name="timeline_export">Eksportér ↗</string>
     <string name="entry_up_to_two">(op til 2)</string>
     <string name="entry_on_your_mind">Noget på hjerte?</string>
     <string name="entry_optional">(valgfrit)</string>
@@ -271,4 +270,11 @@
     <string name="calendar_previous_month">Forrige måned</string>
     <string name="calendar_next_month">Næste måned</string>
     <string name="calendar_no_entries_day">Ingen indlæg denne dag.</string>
+    <string name="nav_patterns">Mønstre</string>
+    <string name="settings_section_appearance">Udseende</string>
+    <string name="settings_section_reminders">Påmindelser og widget</string>
+    <string name="settings_section_tags">Mærker</string>
+    <string name="settings_section_about">Om og støtte</string>
+    <string name="settings_export">Eksportér indlæg</string>
+    <string name="settings_export_desc">Gem din dagbog som JSON, CSV eller Markdown for at have en kopi eller læse den et andet sted.</string>
 </resources>

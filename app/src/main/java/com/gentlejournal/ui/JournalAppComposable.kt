@@ -41,6 +41,7 @@ import com.gentlejournal.ui.screens.entry.EntryFormScreen
 import com.gentlejournal.ui.screens.export_screen.ExportScreen
 import com.gentlejournal.ui.screens.insights.InsightsScreen
 import com.gentlejournal.ui.screens.charts.ChartsScreen
+import com.gentlejournal.ui.screens.patterns.PatternsScreen
 import com.gentlejournal.ui.screens.settings.BackupCallbacks
 import com.gentlejournal.ui.screens.settings.BackupUiState
 import com.gentlejournal.ui.screens.settings.SettingsScreen
@@ -130,7 +131,7 @@ fun JournalApp(
     }
 
     val isMainScreen = currentRoute in listOf(
-        Screen.Timeline.route, Screen.Insights.route, Screen.Charts.route, Screen.Settings.route
+        Screen.Timeline.route, Screen.Patterns.route, Screen.Settings.route
     )
 
     Scaffold(
@@ -142,8 +143,7 @@ fun JournalApp(
                 onBack = {
                     viewModel.resetForm()
                     navController.popBackStack()
-                },
-                onExport = { navController.navigate(Screen.Export.route) }
+                }
             )
         },
         bottomBar = {
@@ -236,18 +236,19 @@ fun JournalApp(
                 )
             }
 
-            composable(Screen.Insights.route) {
-                InsightsScreen(
-                    insights = insights,
-                    savedInsights = savedInsights,
-                    currentPeriod = insightPeriod,
-                    onPeriodChange = viewModel::setInsightPeriod,
-                    onInsightTap = viewModel::recordInsightEngagement
+            composable(Screen.Patterns.route) {
+                PatternsScreen(
+                    insights = {
+                        InsightsScreen(
+                            insights = insights,
+                            savedInsights = savedInsights,
+                            currentPeriod = insightPeriod,
+                            onPeriodChange = viewModel::setInsightPeriod,
+                            onInsightTap = viewModel::recordInsightEngagement
+                        )
+                    },
+                    charts = { ChartsScreen(entries = entries) }
                 )
-            }
-
-            composable(Screen.Charts.route) {
-                ChartsScreen(entries = entries)
             }
 
             composable(Screen.Settings.route) {
@@ -275,6 +276,7 @@ fun JournalApp(
                     backup = BackupUiState(backupFrequency, backupFolderName, lastBackupAt, backupResult, backupBusy),
                     backupCallbacks = backupCallbacks,
                     onImportPassword = viewModel::importWithPassword,
+                    onExport = { navController.navigate(Screen.Export.route) },
                     appLockAvailable = appLockAvailable,
                     onAppLockChange = onAppLockChange,
                     onEditEmotion = viewModel::updateCustomEmotion,
@@ -314,8 +316,7 @@ fun JournalApp(
 private fun JournalTopBar(
     currentRoute: String?,
     entryCount: Int,
-    onBack: () -> Unit,
-    onExport: () -> Unit
+    onBack: () -> Unit
 ) {
     val colors = LocalJournalColors.current
     val isDetailScreen = currentRoute in listOf(
@@ -326,8 +327,7 @@ private fun JournalTopBar(
         currentRoute == Screen.Timeline.route -> "\uD83C\uDF3F " + stringResource(R.string.nav_journal)
         currentRoute == Screen.NewEntry.route -> stringResource(R.string.nav_new_entry)
         currentRoute?.startsWith("edit_entry") == true -> stringResource(R.string.nav_edit_entry)
-        currentRoute == Screen.Insights.route -> stringResource(R.string.nav_insights)
-        currentRoute == Screen.Charts.route -> stringResource(R.string.nav_charts)
+        currentRoute == Screen.Patterns.route -> stringResource(R.string.nav_patterns)
         currentRoute == Screen.Settings.route -> stringResource(R.string.nav_settings)
         currentRoute == Screen.Export.route -> stringResource(R.string.nav_export)
         else -> ""
@@ -364,18 +364,6 @@ private fun JournalTopBar(
                 }
             }
         },
-        actions = {
-            if (currentRoute == Screen.Timeline.route) {
-                TextButton(onClick = onExport) {
-                    Text(
-                        text = stringResource(R.string.timeline_export),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = colors.TextMuted
-                        )
-                    )
-                }
-            }
-        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = colors.Background
         )
@@ -399,15 +387,15 @@ private fun JournalBottomBar(
             selected = currentRoute == Screen.Timeline.route,
             onClick = { onNavigate(Screen.Timeline.route) },
             icon = { Text("\uD83D\uDCD6", fontSize = 22.sp) },
-            label = { Text(stringResource(R.string.nav_journal), fontSize = 10.sp) },
+            label = { Text(stringResource(R.string.nav_journal), fontSize = 12.sp) },
             colors = navItemColors()
         )
 
         NavigationBarItem(
-            selected = currentRoute == Screen.Insights.route,
-            onClick = { onNavigate(Screen.Insights.route) },
-            icon = { Text("\uD83D\uDCA1", fontSize = 22.sp) },
-            label = { Text(stringResource(R.string.nav_insights), fontSize = 10.sp) },
+            selected = currentRoute == Screen.Patterns.route,
+            onClick = { onNavigate(Screen.Patterns.route) },
+            icon = { Text("\uD83D\uDCC8", fontSize = 22.sp) },
+            label = { Text(stringResource(R.string.nav_patterns), fontSize = 12.sp) },
             colors = navItemColors()
         )
 
@@ -436,18 +424,10 @@ private fun JournalBottomBar(
         )
 
         NavigationBarItem(
-            selected = currentRoute == Screen.Charts.route,
-            onClick = { onNavigate(Screen.Charts.route) },
-            icon = { Text("\uD83D\uDCCA", fontSize = 22.sp) },
-            label = { Text(stringResource(R.string.nav_charts), fontSize = 10.sp) },
-            colors = navItemColors()
-        )
-
-        NavigationBarItem(
             selected = currentRoute == Screen.Settings.route,
             onClick = { onNavigate(Screen.Settings.route) },
             icon = { Text("\u2699\uFE0F", fontSize = 22.sp) },
-            label = { Text(stringResource(R.string.nav_settings), fontSize = 10.sp) },
+            label = { Text(stringResource(R.string.nav_settings), fontSize = 12.sp) },
             colors = navItemColors()
         )
     }

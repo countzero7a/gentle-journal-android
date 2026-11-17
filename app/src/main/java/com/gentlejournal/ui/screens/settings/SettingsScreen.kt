@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -76,6 +78,7 @@ fun SettingsScreen(
     backup: BackupUiState = BackupUiState(),
     backupCallbacks: BackupCallbacks? = null,
     onImportPassword: (CharArray) -> Unit = {},
+    onExport: () -> Unit = {},
     onAppLockChange: (Boolean) -> Unit = {},
     onEditEmotion: (EmotionEntity, String, String) -> Boolean = { _, _, _ -> false },
     onDeleteEmotion: (EmotionEntity) -> Unit = {},
@@ -107,6 +110,7 @@ fun SettingsScreen(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
+        SectionHeader(stringResource(R.string.settings_section_appearance), first = true)
         // Theme picker
         JournalCard {
             Text(text = stringResource(R.string.settings_theme), style = MaterialTheme.typography.titleMedium)
@@ -256,20 +260,7 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Widget: always available from the home screen, so this only explains how to add it
-        JournalCard {
-            Text(text = stringResource(R.string.settings_widget), style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = stringResource(R.string.settings_widget_desc), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = stringResource(R.string.settings_widget_hint),
-                style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted, lineHeight = 18.sp)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
+        SectionHeader(stringResource(R.string.settings_section_reminders))
         // Reminder
         JournalCard {
             Text(text = stringResource(R.string.settings_reminder), style = MaterialTheme.typography.titleMedium)
@@ -364,10 +355,23 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Privacy: lock with the phone's fingerprint or screen lock
+        // Widget: always available from the home screen, so this only explains how to add it
         JournalCard {
-            Text(text = stringResource(R.string.settings_section_privacy), style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(12.dp))
+            Text(text = stringResource(R.string.settings_widget), style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = stringResource(R.string.settings_widget_desc), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = stringResource(R.string.settings_widget_hint),
+                style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted, lineHeight = 18.sp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        SectionHeader(stringResource(R.string.settings_section_privacy))
+        // Lock with the phone's fingerprint or screen lock, and automatic backups
+        JournalCard {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -399,49 +403,22 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // About
-        JournalCard {
-            Text(text = stringResource(R.string.settings_about), style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = stringResource(R.string.settings_about_text), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted, lineHeight = 22.sp))
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Emotion tags
-        JournalCard {
-            Text(text = stringResource(R.string.settings_emotion_tags, emotions.size), style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = stringResource(R.string.settings_tags_edit_hint), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
-            Spacer(modifier = Modifier.height(10.dp))
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                emotions.forEach { emo ->
-                    // Only tags the user created can be edited
-                    TagChip(emoji = emo.emoji, label = resolveEmotionLabel(context, emo.id, emo.label), selected = !emo.isDefault, onClick = { if (!emo.isDefault) editingEmotion = emo }, small = true)
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Action tags
-        JournalCard {
-            Text(text = stringResource(R.string.settings_action_tags, actions.size), style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(10.dp))
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                actions.forEach { action ->
-                    TagChip(emoji = action.emoji, label = resolveActionLabel(context, action.id, action.label), selected = !action.isDefault, onClick = { if (!action.isDefault) editingAction = action }, small = true)
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
         // Data management
         JournalCard {
             Text(text = stringResource(R.string.settings_your_data), style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = stringResource(R.string.settings_entries_stored, entryCount), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted))
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedButton(
+                onClick = onExport,
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Text(stringResource(R.string.settings_export), fontSize = 13.sp)
+            }
+            Text(text = stringResource(R.string.settings_export_desc), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted), modifier = Modifier.padding(top = 4.dp))
+
             Spacer(modifier = Modifier.height(12.dp))
 
             // Import button
@@ -479,6 +456,46 @@ fun SettingsScreen(
                     Text(stringResource(R.string.settings_delete_all), fontSize = 13.sp)
                 }
             }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        SectionHeader(stringResource(R.string.settings_section_tags))
+        // Emotion tags
+        JournalCard {
+            Text(text = stringResource(R.string.settings_emotion_tags, emotions.size), style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = stringResource(R.string.settings_tags_edit_hint), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted))
+            Spacer(modifier = Modifier.height(10.dp))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                emotions.forEach { emo ->
+                    // Only tags the user created can be edited
+                    TagChip(emoji = emo.emoji, label = resolveEmotionLabel(context, emo.id, emo.label), selected = !emo.isDefault, onClick = { if (!emo.isDefault) editingEmotion = emo }, small = true)
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Action tags
+        JournalCard {
+            Text(text = stringResource(R.string.settings_action_tags, actions.size), style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(10.dp))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                actions.forEach { action ->
+                    TagChip(emoji = action.emoji, label = resolveActionLabel(context, action.id, action.label), selected = !action.isDefault, onClick = { if (!action.isDefault) editingAction = action }, small = true)
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        SectionHeader(stringResource(R.string.settings_section_about))
+        // About
+        JournalCard {
+            Text(text = stringResource(R.string.settings_about), style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = stringResource(R.string.settings_about_text), style = MaterialTheme.typography.bodyMedium.copy(color = colors.TextMuted, lineHeight = 22.sp))
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -525,4 +542,16 @@ fun SettingsScreen(
             )
         }
     }
+}
+
+@Composable
+private fun SectionHeader(text: String, first: Boolean = false) {
+    val colors = LocalJournalColors.current
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelLarge.copy(color = colors.Accent, fontWeight = FontWeight.SemiBold),
+        modifier = Modifier
+            .padding(start = 4.dp, top = if (first) 0.dp else 12.dp, bottom = 8.dp)
+            .semantics { heading() }
+    )
 }

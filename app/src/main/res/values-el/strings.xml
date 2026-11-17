@@ -35,7 +35,6 @@
     <string name="action_meditated">Διαλογισμός</string>
     <string name="timeline_subtitle_one">%d εγγραφή · Ιδιωτικό &amp; στη συσκευή</string>
     <string name="timeline_subtitle_many">%d εγγραφές · Ιδιωτικό &amp; στη συσκευή</string>
-    <string name="timeline_export">Εξαγωγή ↗</string>
     <string name="timeline_empty_message">Πάτησε + για την πρώτη σου εγγραφή.\nΧωρίς πίεση — γράψε όσο θέλεις.</string>
     <string name="entry_optional">(προαιρετικό)</string>
     <string name="entry_up_to_two">(έως 2)</string>
@@ -271,4 +270,11 @@
     <string name="calendar_previous_month">Προηγούμενος μήνας</string>
     <string name="calendar_next_month">Επόμενος μήνας</string>
     <string name="calendar_no_entries_day">Καμία εγγραφή αυτή τη μέρα.</string>
+    <string name="nav_patterns">Μοτίβα</string>
+    <string name="settings_section_appearance">Εμφάνιση</string>
+    <string name="settings_section_reminders">Υπενθυμίσεις και widget</string>
+    <string name="settings_section_tags">Ετικέτες</string>
+    <string name="settings_section_about">Σχετικά και υποστήριξη</string>
+    <string name="settings_export">Εξαγωγή εγγραφών</string>
+    <string name="settings_export_desc">Αποθήκευσε το ημερολόγιό σου ως JSON, CSV ή Markdown, για να κρατήσεις αντίγραφο ή να το διαβάσεις αλλού.</string>
 </resources>

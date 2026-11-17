@@ -86,7 +86,6 @@
     <string name="timeline_yesterday">ieri</string>
     <string name="timeline_subtitle_one">%d voce · Privato e sul dispositivo</string>
     <string name="timeline_subtitle_many">%d voci · Privato e sul dispositivo</string>
-    <string name="timeline_export">Esporta ↗</string>
     <string name="entry_up_to_two">(fino a 2)</string>
     <string name="entry_optional">(facoltativo)</string>
     <string name="entry_custom">+ Personalizza</string>
@@ -280,4 +279,11 @@
     <string name="calendar_previous_month">Mese precedente</string>
     <string name="calendar_next_month">Mese successivo</string>
     <string name="calendar_no_entries_day">Nessuna voce in questo giorno.</string>
+    <string name="nav_patterns">Andamenti</string>
+    <string name="settings_section_appearance">Aspetto</string>
+    <string name="settings_section_reminders">Promemoria e widget</string>
+    <string name="settings_section_tags">Etichette</string>
+    <string name="settings_section_about">Informazioni e supporto</string>
+    <string name="settings_export">Esporta le voci</string>
+    <string name="settings_export_desc">Salva il tuo diario come JSON, CSV o Markdown, per tenerne una copia o leggerlo altrove.</string>
 </resources>

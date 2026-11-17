@@ -12,7 +12,6 @@
     <string name="timeline_today">heute</string>
     <string name="timeline_subtitle_one">%d Eintrag &#x00B7; Privat &amp; auf dem Ger&#x00E4;t</string>
     <string name="timeline_subtitle_many">%d Eintr&#x00E4;ge &#x00B7; Privat &amp; auf dem Ger&#x00E4;t</string>
-    <string name="timeline_export">Exportieren &#x2197;</string>
     <string name="entry_how_feeling">Wie f&#x00FC;hlst du dich?</string>
     <string name="entry_up_to_two">(bis zu 2)</string>
     <string name="entry_what_did">Was hast du gemacht?</string>
@@ -271,4 +270,11 @@
     <string name="calendar_previous_month">Vorheriger Monat</string>
     <string name="calendar_next_month">Nächster Monat</string>
     <string name="calendar_no_entries_day">Keine Einträge an diesem Tag.</string>
+    <string name="nav_patterns">Muster</string>
+    <string name="settings_section_appearance">Darstellung</string>
+    <string name="settings_section_reminders">Erinnerungen &amp; Widget</string>
+    <string name="settings_section_tags">Tags</string>
+    <string name="settings_section_about">Über &amp; Unterstützung</string>
+    <string name="settings_export">Einträge exportieren</string>
+    <string name="settings_export_desc">Speichere dein Tagebuch als JSON, CSV oder Markdown, um eine Kopie zu behalten oder es woanders zu lesen.</string>
 </resources>
