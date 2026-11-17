@@ -7,6 +7,8 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.gentlejournal.data.BackupManager
+import com.gentlejournal.data.BackupResult
 import com.gentlejournal.data.ExportFiles
 import com.gentlejournal.data.JournalDatabase
 import com.gentlejournal.data.ThemePreferences
@@ -22,6 +24,10 @@ import com.gentlejournal.domain.model.AppTheme
 import com.gentlejournal.domain.model.AppLanguage
 import com.gentlejournal.domain.model.ExportFormat
 import com.gentlejournal.domain.model.Insight
+import com.gentlejournal.domain.backup.BackupCrypto
+import com.gentlejournal.domain.backup.BackupFrequency
+import com.gentlejournal.domain.backup.BackupSchedule
+import com.gentlejournal.domain.backup.WrongBackupPasswordException
 import com.gentlejournal.domain.onboarding.Welcome
 import com.gentlejournal.domain.usecase.EmotionSelection
 import com.gentlejournal.domain.usecase.ExportEntriesUseCase
@@ -59,6 +65,106 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
     private val exportUseCase = ExportEntriesUseCase()
     private val importUseCase = ImportEntriesUseCase()
     private val themePreferences = ThemePreferences(application)
+    private val backupManager = BackupManager(application, repository, themePreferences)
+
+    // ── Automatic backup ─────────────────────────────────────────────
+
+    val backupFrequency: StateFlow<BackupFrequency?> = themePreferences.backupFrequency
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    val lastBackupAt: StateFlow<Long?> = themePreferences.lastBackupAt
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    private val _backupFolderName = MutableStateFlow<String?>(null)
+    val backupFolderName: StateFlow<String?> = _backupFolderName
+
+    /** The outcome of the latest backup worth telling the user about. */
+    private val _backupResult = MutableStateFlow<BackupResult?>(null)
+    val backupResult: StateFlow<BackupResult?> = _backupResult
+
+    private val _backupBusy = MutableStateFlow(false)
+    val backupBusy: StateFlow<Boolean> = _backupBusy
+
+    val showBackupReminder: StateFlow<Boolean> = combine(
+        themePreferences.backupFrequency,
+        repository.entryCount,
+        themePreferences.lastBackupAt,
+        themePreferences.lastExportAt,
+        themePreferences.backupReminderDismissedAt
+    ) { frequency, count, lastBackup, lastExport, dismissed ->
+        val lastSaved = listOfNotNull(lastBackup, lastExport).maxOrNull()
+        BackupSchedule.shouldSuggestBackup(frequency != null, count, lastSaved, dismissed, System.currentTimeMillis())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    init {
+        // Opening the app is one of the moments a due backup is made
+        scheduleBackup()
+    }
+
+    fun refreshBackupFolderName() {
+        viewModelScope.launch { _backupFolderName.value = backupManager.folderName() }
+    }
+
+    fun setUpBackup(password: CharArray, folder: Uri) = runBackup {
+        try {
+            backupManager.setUp(password, folder, BackupFrequency.WEEKLY)
+        } finally {
+            password.fill(' ')
+        }
+        backupManager.backUpNow()
+    }
+
+    fun backUpNow() = runBackup { backupManager.backUpNow() }
+
+    fun changeBackupFolder(folder: Uri) = runBackup {
+        backupManager.changeFolder(folder)
+        backupManager.backUpNow()
+    }
+
+    fun setBackupFrequency(frequency: BackupFrequency) {
+        viewModelScope.launch { themePreferences.setBackupFrequency(frequency) }
+    }
+
+    fun turnOffBackup() {
+        viewModelScope.launch {
+            backupManager.turnOff()
+            _backupResult.value = null
+            _backupFolderName.value = null
+        }
+    }
+
+    fun clearBackupResult() {
+        _backupResult.value = null
+    }
+
+    fun dismissBackupReminder() {
+        viewModelScope.launch { themePreferences.setBackupReminderDismissedAt(System.currentTimeMillis()) }
+    }
+
+    private fun runBackup(block: suspend () -> BackupResult) {
+        if (_backupBusy.value) return
+        _backupBusy.value = true
+        viewModelScope.launch {
+            try {
+                _backupResult.value = try {
+                    block()
+                } catch (e: Exception) {
+                    BackupResult.Failed
+                }
+            } finally {
+                _backupBusy.value = false
+                _backupFolderName.value = backupManager.folderName()
+            }
+        }
+    }
+
+    /** Backs up in the background if one is due; only problems are reported. */
+    private fun scheduleBackup() {
+        viewModelScope.launch {
+            val result = backupManager.backUpIfDue()
+            if (result != null && result !is BackupResult.Saved) _backupResult.value = result
+        }
+    }
 
     // ── Preferences ─────────────────────────────────────────────────
 
@@ -317,7 +423,10 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
     private val _importStatus = MutableStateFlow<ImportStatus?>(null)
     val importStatus: StateFlow<ImportStatus?> = _importStatus
 
-    fun clearImportStatus() { _importStatus.value = null }
+    fun clearImportStatus() {
+        _importStatus.value = null
+        pendingEncryptedImport = null
+    }
 
     // ── Form actions ────────────────────────────────────────────────
 
@@ -369,6 +478,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
             )
             repository.saveEntry(entry, emotionIds, actionIds)
             MoodWidgetProvider.updateAll(getApplication())
+            scheduleBackup()
             resetForm()
             onComplete()
         }
@@ -385,6 +495,7 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
             val existing = repository.getEntry(entryId) ?: return@runSaving
             repository.updateEntry(existing.entry.copy(text = text), emotionIds, actionIds)
             MoodWidgetProvider.updateAll(getApplication())
+            scheduleBackup()
             resetForm()
             onComplete()
         }
@@ -540,6 +651,8 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
         ExportFiles.clear(app)
         val exportDir = ExportFiles.dir(app).apply { mkdirs() }
         val file = File(exportDir, fileName).apply { writeText(content) }
+        // A JSON export is a restorable backup, so it counts for the backup reminder
+        if (format == ExportFormat.JSON) themePreferences.setLastExportAt(System.currentTimeMillis())
         val uri = FileProvider.getUriForFile(app, "${app.packageName}.fileprovider", file)
 
         return Intent(Intent.ACTION_SEND).apply {
@@ -562,11 +675,41 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    // An encrypted backup waiting for its password
+    private var pendingEncryptedImport: ByteArray? = null
+
     private suspend fun runImport(uri: Uri): ImportStatus {
         val app = getApplication<Application>()
-        val jsonText = app.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+        val bytes = app.contentResolver.openInputStream(uri)?.use { it.readBytes() }
             ?: return ImportStatus.ReadError
+        if (BackupCrypto.isEncrypted(bytes)) {
+            pendingEncryptedImport = bytes
+            return ImportStatus.NeedsPassword
+        }
+        return importJson(bytes.toString(Charsets.UTF_8))
+    }
 
+    fun importWithPassword(password: CharArray) {
+        val data = pendingEncryptedImport ?: return
+        viewModelScope.launch {
+            _importStatus.value = ImportStatus.Decrypting
+            _importStatus.value = try {
+                val json = withContext(Dispatchers.Default) { BackupCrypto.decrypt(data, password) }
+                pendingEncryptedImport = null
+                withContext(Dispatchers.IO) { importJson(json.toString(Charsets.UTF_8)) }
+            } catch (e: WrongBackupPasswordException) {
+                ImportStatus.WrongPassword
+            } catch (e: Exception) {
+                pendingEncryptedImport = null
+                ImportStatus.Failed
+            } finally {
+                password.fill(' ')
+            }
+        }
+    }
+
+    private suspend fun importJson(jsonText: String): ImportStatus {
+        val app = getApplication<Application>()
         val parsed = importUseCase.parse(jsonText)
         if (parsed.entries.isEmpty()) {
             return if (parsed.errorCount > 0) ImportStatus.Failed else ImportStatus.NoEntries
@@ -583,7 +726,10 @@ class JournalViewModel(application: Application) : AndroidViewModel(application)
                 actionLabel = { resolveActionLabel(context, it.id, it.label) }
             )
         }
-        if (plan.entries.isNotEmpty()) MoodWidgetProvider.updateAll(app)
+        if (plan.entries.isNotEmpty()) {
+            MoodWidgetProvider.updateAll(app)
+            scheduleBackup()
+        }
         return ImportStatus.Done(plan.entries.size, plan.duplicateCount, plan.errorCount)
     }
 

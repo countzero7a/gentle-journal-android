@@ -41,6 +41,8 @@ import com.gentlejournal.ui.screens.entry.EntryFormScreen
 import com.gentlejournal.ui.screens.export_screen.ExportScreen
 import com.gentlejournal.ui.screens.insights.InsightsScreen
 import com.gentlejournal.ui.screens.charts.ChartsScreen
+import com.gentlejournal.ui.screens.settings.BackupCallbacks
+import com.gentlejournal.ui.screens.settings.BackupUiState
 import com.gentlejournal.ui.screens.settings.SettingsScreen
 import com.gentlejournal.ui.screens.timeline.TimelineScreen
 import com.gentlejournal.ui.screens.welcome.WelcomeScreen
@@ -82,6 +84,22 @@ fun JournalApp(
     val appLockEnabled by viewModel.appLockEnabled.collectAsStateWithLifecycle()
     val showWelcome by viewModel.showWelcome.collectAsStateWithLifecycle()
     val newEntryRequest by viewModel.newEntryRequest.collectAsStateWithLifecycle()
+    val backupFrequency by viewModel.backupFrequency.collectAsStateWithLifecycle()
+    val backupFolderName by viewModel.backupFolderName.collectAsStateWithLifecycle()
+    val lastBackupAt by viewModel.lastBackupAt.collectAsStateWithLifecycle()
+    val backupResult by viewModel.backupResult.collectAsStateWithLifecycle()
+    val backupBusy by viewModel.backupBusy.collectAsStateWithLifecycle()
+    val showBackupReminder by viewModel.showBackupReminder.collectAsStateWithLifecycle()
+    val backupCallbacks = remember(viewModel) {
+        BackupCallbacks(
+            onSetUp = viewModel::setUpBackup,
+            onBackUpNow = viewModel::backUpNow,
+            onChangeFolder = viewModel::changeBackupFolder,
+            onFrequencyChange = viewModel::setBackupFrequency,
+            onTurnOff = viewModel::turnOffBackup,
+            onRefreshFolder = viewModel::refreshBackupFolderName
+        )
+    }
     val reminderHour by viewModel.reminderHour.collectAsStateWithLifecycle()
     val reminderMinute by viewModel.reminderMinute.collectAsStateWithLifecycle()
 
@@ -156,6 +174,14 @@ fun JournalApp(
             composable(Screen.Timeline.route) {
                 TimelineScreen(
                     entries = entries,
+                    showBackupReminder = showBackupReminder,
+                    onSetUpBackup = {
+                        navController.navigate(Screen.Settings.route) {
+                            popUpTo(Screen.Timeline.route) { saveState = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    onDismissBackupReminder = viewModel::dismissBackupReminder,
                     onEntryClick = { entryId ->
                         viewModel.loadEntryForEditing(entryId)
                         navController.navigate(Screen.EditEntry.createRoute(entryId))
@@ -246,6 +272,9 @@ fun JournalApp(
                     reminderMinute = reminderMinute,
                     onReminderChange = viewModel::setReminder,
                     appLockEnabled = appLockEnabled,
+                    backup = BackupUiState(backupFrequency, backupFolderName, lastBackupAt, backupResult, backupBusy),
+                    backupCallbacks = backupCallbacks,
+                    onImportPassword = viewModel::importWithPassword,
                     appLockAvailable = appLockAvailable,
                     onAppLockChange = onAppLockChange,
                     onEditEmotion = viewModel::updateCustomEmotion,

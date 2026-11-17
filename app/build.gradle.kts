@@ -115,6 +115,9 @@ dependencies {
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.fragment.ktx)
 
+    // Backups into a folder the user picks (Storage Access Framework)
+    implementation(libs.androidx.documentfile)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

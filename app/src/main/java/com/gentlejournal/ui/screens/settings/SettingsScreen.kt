@@ -36,6 +36,7 @@ import com.gentlejournal.domain.model.AppFontSize
 import com.gentlejournal.domain.model.AppTheme
 import com.gentlejournal.domain.model.AppLanguage
 import com.gentlejournal.ui.ImportStatus
+import com.gentlejournal.ui.isFinal
 import com.gentlejournal.ui.message
 import com.gentlejournal.ui.components.JournalCard
 import com.gentlejournal.ui.components.TagEditDialog
@@ -72,6 +73,9 @@ fun SettingsScreen(
     onDonate: () -> Unit,
     appLockEnabled: Boolean = false,
     appLockAvailable: Boolean = false,
+    backup: BackupUiState = BackupUiState(),
+    backupCallbacks: BackupCallbacks? = null,
+    onImportPassword: (CharArray) -> Unit = {},
     onAppLockChange: (Boolean) -> Unit = {},
     onEditEmotion: (EmotionEntity, String, String) -> Boolean = { _, _, _ -> false },
     onDeleteEmotion: (EmotionEntity) -> Unit = {},
@@ -86,11 +90,15 @@ fun SettingsScreen(
     var editingAction by remember { mutableStateOf<ActionEntity?>(null) }
 
     // Show import status snackbar
+    // Results disappear after a while; the password steps wait for the user
     LaunchedEffect(importStatus) {
-        if (importStatus != null) {
+        if (importStatus?.isFinal == true) {
             kotlinx.coroutines.delay(5000)
             onClearImportStatus()
         }
+    }
+    if (importStatus != null && !importStatus.isFinal) {
+        ImportPasswordDialog(status = importStatus, onOpen = onImportPassword, onCancel = onClearImportStatus)
     }
 
     Column(
@@ -383,6 +391,10 @@ fun SettingsScreen(
                 text = stringResource(if (appLockAvailable) R.string.settings_lock_desc else R.string.settings_lock_unavailable),
                 style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted, lineHeight = 18.sp)
             )
+            if (backupCallbacks != null) {
+                Spacer(modifier = Modifier.height(20.dp))
+                BackupSection(state = backup, callbacks = backupCallbacks)
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -443,7 +455,7 @@ fun SettingsScreen(
             Text(text = stringResource(R.string.settings_import_desc), style = MaterialTheme.typography.bodySmall.copy(color = colors.TextMuted), modifier = Modifier.padding(top = 4.dp))
 
             // Import status
-            if (importStatus != null) {
+            if (importStatus?.isFinal == true) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = importStatus.message(context.resources), style = MaterialTheme.typography.bodySmall.copy(color = colors.Accent, fontWeight = FontWeight.SemiBold))
             }

@@ -176,7 +176,7 @@
     <string name="settings_delete_yes">Yes, delete all</string>
     <string name="settings_delete_all">Delete All Data</string>
     <string name="settings_import">Import Data</string>
-    <string name="settings_import_desc">Restore entries from a JSON export. Entries already in your journal are skipped.</string>
+    <string name="settings_import_desc">Restore entries from a JSON export or a backup file. Entries already in your journal are skipped.</string>
     <string name="settings_support">Support this project</string>
     <string name="settings_support_text">This app is a free, ad-free personal innovation project created for learning and experimentation. If you find it useful, you may optionally show your appreciation with a voluntary donation.</string>
     <string name="settings_donate">Buy me a coffee</string>
@@ -217,6 +217,37 @@
     <string name="welcome_skip">Skip</string>
     <string name="welcome_start">Write your first entry</string>
     <string name="widget_how_feeling">How are you feeling?</string>
+
+    <!-- Automatic backup -->
+    <string name="backup_title">Automatic backup</string>
+    <string name="backup_desc">Saves an encrypted copy of your journal to a folder you choose, for example in Google Drive, so a lost phone doesn\'t mean a lost journal.</string>
+    <string name="backup_set_up">Set up automatic backup</string>
+    <string name="backup_password_title">Choose a backup password</string>
+    <string name="backup_password_message">Backups are encrypted with this password. You\'ll need it to restore your journal, for example on a new phone. If you forget it, the backups can\'t be opened.</string>
+    <string name="backup_password_hint">Backup password</string>
+    <string name="backup_password_repeat">Repeat the password</string>
+    <string name="backup_password_too_short">Use at least 8 characters.</string>
+    <string name="backup_password_mismatch">The passwords don\'t match.</string>
+    <string name="backup_continue">Choose folder</string>
+    <string name="backup_folder">Folder: %1$s</string>
+    <string name="backup_daily">Daily</string>
+    <string name="backup_weekly">Weekly</string>
+    <string name="backup_last">Last backup: %1$s</string>
+    <string name="backup_never">No backup yet</string>
+    <string name="backup_now">Back up now</string>
+    <string name="backup_change_folder">Change folder</string>
+    <string name="backup_turn_off">Turn off</string>
+    <string name="backup_saved">Backup saved.</string>
+    <string name="backup_folder_unavailable">The backup folder can\'t be reached. Choose it again with “Change folder”.</string>
+    <string name="backup_failed">The backup couldn\'t be saved.</string>
+    <string name="import_password_title">Backup password</string>
+    <string name="import_password_message">This backup is protected. Enter the password you chose when setting up backups.</string>
+    <string name="import_password_wrong">That password doesn\'t open this backup.</string>
+    <string name="import_open">Open</string>
+    <string name="backup_reminder_title">Keep your journal safe</string>
+    <string name="backup_reminder_text">If this phone is lost, your entries go with it. Setting up a backup takes a moment.</string>
+    <string name="backup_reminder_action">Set up backup</string>
+    <string name="backup_reminder_later">Later</string>
 
     <!-- App lock -->
     <string name="lock_title">Your journal is locked</string>

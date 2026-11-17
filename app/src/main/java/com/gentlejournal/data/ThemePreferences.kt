@@ -6,12 +6,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.gentlejournal.domain.model.AppFont
 import com.gentlejournal.domain.model.AppFontSize
 import com.gentlejournal.domain.model.AppTheme
 import com.gentlejournal.domain.model.AppLanguage
+import com.gentlejournal.domain.backup.BackupFrequency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -28,6 +30,11 @@ class ThemePreferences(private val context: Context) {
     private val reminderMinuteKey = intPreferencesKey("reminder_minute")
     private val appLockKey = booleanPreferencesKey("app_lock_enabled")
     private val welcomeDoneKey = booleanPreferencesKey("welcome_done")
+    private val backupFolderKey = stringPreferencesKey("backup_folder")
+    private val backupFrequencyKey = stringPreferencesKey("backup_frequency")
+    private val lastBackupAtKey = longPreferencesKey("last_backup_at")
+    private val lastExportAtKey = longPreferencesKey("last_export_at")
+    private val backupReminderDismissedAtKey = longPreferencesKey("backup_reminder_dismissed_at")
 
     val selectedTheme: Flow<AppTheme> = context.dataStore.data.map { prefs ->
         val name = prefs[themeKey] ?: AppTheme.MEADOW.name
@@ -83,6 +90,52 @@ class ThemePreferences(private val context: Context) {
 
     suspend fun setAppLockEnabled(enabled: Boolean) {
         context.dataStore.edit { it[appLockKey] = enabled }
+    }
+
+    // ── Automatic backup (the folder is a SAF tree URI; no frequency means off) ──
+
+    val backupFolder: Flow<String?> = context.dataStore.data.map { it[backupFolderKey] }
+
+    val backupFrequency: Flow<BackupFrequency?> = context.dataStore.data.map { prefs ->
+        prefs[backupFrequencyKey]?.let { name -> BackupFrequency.entries.firstOrNull { it.name == name } }
+    }
+
+    val lastBackupAt: Flow<Long?> = context.dataStore.data.map { it[lastBackupAtKey] }
+    val lastExportAt: Flow<Long?> = context.dataStore.data.map { it[lastExportAtKey] }
+    val backupReminderDismissedAt: Flow<Long?> = context.dataStore.data.map { it[backupReminderDismissedAtKey] }
+
+    suspend fun setBackup(folder: String, frequency: BackupFrequency) {
+        context.dataStore.edit {
+            it[backupFolderKey] = folder
+            it[backupFrequencyKey] = frequency.name
+        }
+    }
+
+    suspend fun setBackupFolder(folder: String) {
+        context.dataStore.edit { it[backupFolderKey] = folder }
+    }
+
+    suspend fun setBackupFrequency(frequency: BackupFrequency) {
+        context.dataStore.edit { it[backupFrequencyKey] = frequency.name }
+    }
+
+    suspend fun turnOffBackup() {
+        context.dataStore.edit {
+            it.remove(backupFolderKey)
+            it.remove(backupFrequencyKey)
+        }
+    }
+
+    suspend fun setLastBackupAt(at: Long) {
+        context.dataStore.edit { it[lastBackupAtKey] = at }
+    }
+
+    suspend fun setLastExportAt(at: Long) {
+        context.dataStore.edit { it[lastExportAtKey] = at }
+    }
+
+    suspend fun setBackupReminderDismissedAt(at: Long) {
+        context.dataStore.edit { it[backupReminderDismissedAtKey] = at }
     }
 
     val welcomeDone: Flow<Boolean> = context.dataStore.data.map { prefs ->

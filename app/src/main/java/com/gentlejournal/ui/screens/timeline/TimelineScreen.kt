@@ -23,6 +23,7 @@ import com.gentlejournal.data.entity.EntryWithTags
 import com.gentlejournal.ui.components.EmptyState
 import com.gentlejournal.ui.components.JournalCard
 import com.gentlejournal.ui.theme.LocalJournalColors
+import com.gentlejournal.ui.screens.settings.BackupReminderCard
 import com.gentlejournal.ui.util.formattedEntryText
 import com.gentlejournal.ui.util.resolveActionLabel
 import android.text.format.DateFormat
@@ -33,7 +34,14 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 @Composable
-fun TimelineScreen(entries: List<EntryWithTags>, onEntryClick: (String) -> Unit, modifier: Modifier = Modifier) {
+fun TimelineScreen(
+    entries: List<EntryWithTags>,
+    onEntryClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    showBackupReminder: Boolean = false,
+    onSetUpBackup: () -> Unit = {},
+    onDismissBackupReminder: () -> Unit = {}
+) {
     if (entries.isEmpty()) {
         EmptyState(emoji = "\uD83D\uDCD3", title = stringResource(R.string.timeline_empty_title), message = stringResource(R.string.timeline_empty_message))
         return
@@ -51,6 +59,9 @@ fun TimelineScreen(entries: List<EntryWithTags>, onEntryClick: (String) -> Unit,
     val today = LocalDate.now(zone)
 
     LazyColumn(modifier = modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        if (showBackupReminder) {
+            item(key = "backup_reminder") { BackupReminderCard(onSetUp = onSetUpBackup, onLater = onDismissBackupReminder) }
+        }
         grouped.forEach { (date, dayEntries) ->
             item(key = "header_$date") {
                 val displayDate = when (date) {
