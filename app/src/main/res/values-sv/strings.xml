@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Stunder</string>
     <string name="nav_journal">Dagbok</string>
     <string name="nav_insights">Insikter</string>
     <string name="nav_settings">Inst\u00E4llningar</string>
@@ -72,7 +71,7 @@
     <string name="charts_empty">Inte tillräckligt med data än. Fortsätt skriva!</string>
     <string name="settings_widget">Widget på hemskärmen</string>
     <string name="settings_widget_desc">Visa dagens stämning på hemskärmen.</string>
-    <string name="settings_widget_hint">Tryck länge på hemskärmen, öppna Widgetar och välj Stunder.</string>
+    <string name="settings_widget_hint">Tryck länge på hemskärmen, öppna Widgetar och välj Gentle Journal.</string>
     <string name="nav_new_entry">Nytt inlägg</string>
     <string name="nav_edit_entry">Redigera inlägg</string>
     <string name="nav_export">Exportera</string>

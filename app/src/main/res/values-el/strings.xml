@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Στιγμές</string>
     <string name="nav_journal">Ημερολόγιο</string>
     <string name="nav_insights">Επιγνώσεις</string>
     <string name="nav_settings">Ρυθμίσεις</string>
@@ -117,7 +116,7 @@
     <string name="charts_empty">Δεν υπάρχουν αρκετά δεδομένα ακόμα. Συνέχισε!</string>
     <string name="settings_widget">Widget αρχικής οθόνης</string>
     <string name="settings_widget_desc">Εμφάνισε τη σημερινή διάθεση στην αρχική οθόνη.</string>
-    <string name="settings_widget_hint">Πάτα παρατεταμένα στην αρχική οθόνη, άνοιξε τα Widget και διάλεξε τις Στιγμές.</string>
+    <string name="settings_widget_hint">Πάτα παρατεταμένα στην αρχική οθόνη, άνοιξε τα Widget και διάλεξε το Gentle Journal.</string>
     <string name="timeline_today">σήμερα</string>
     <string name="timeline_yesterday">χθες</string>
     <string name="tag_label_taken">Υπάρχει ήδη ετικέτα με αυτό το όνομα.</string>

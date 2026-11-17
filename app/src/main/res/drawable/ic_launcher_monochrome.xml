@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Same shape for themed icons (Android 13+); the launcher picks the colour. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M40,50a14,14 0,1 0,28 0a14,14 0,1 0,-28 0z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M52.75,62h2.5v10h-2.5z" />
+</vector>

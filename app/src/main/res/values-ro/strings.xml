@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Momente</string>
     <string name="nav_journal">Jurnal</string>
     <string name="nav_insights">Observa\u021Bii</string>
     <string name="nav_settings">Set\u0103ri</string>
@@ -72,7 +71,7 @@
     <string name="charts_empty">Încă nu sunt destule date. Continuă să scrii!</string>
     <string name="settings_widget">Widget pe ecranul principal</string>
     <string name="settings_widget_desc">Afișează starea de azi pe ecranul principal.</string>
-    <string name="settings_widget_hint">Apasă lung pe ecranul principal, deschide Widgeturi și alege Momente.</string>
+    <string name="settings_widget_hint">Apasă lung pe ecranul principal, deschide Widgeturi și alege Gentle Journal.</string>
     <string name="nav_new_entry">Intrare nouă</string>
     <string name="nav_edit_entry">Editează intrarea</string>
     <string name="nav_export">Export</string>

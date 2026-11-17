@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Momentos</string>
     <string name="nav_journal">Diario</string>
     <string name="nav_insights">Patrones</string>
     <string name="nav_settings">Ajustes</string>
@@ -116,7 +115,7 @@
     <string name="charts_empty">Aún no hay suficientes datos. ¡Sigue escribiendo!</string>
     <string name="settings_widget">Widget de la pantalla de inicio</string>
     <string name="settings_widget_desc">Muestra el ánimo de hoy en tu pantalla de inicio.</string>
-    <string name="settings_widget_hint">Mantén pulsada la pantalla de inicio, abre Widgets y elige Momentos.</string>
+    <string name="settings_widget_hint">Mantén pulsada la pantalla de inicio, abre Widgets y elige Gentle Journal.</string>
     <string name="timeline_yesterday">ayer</string>
     <string name="tag_label_taken">Ya existe una etiqueta con ese nombre.</string>
     <string name="tag_edit_title">Editar etiqueta</string>

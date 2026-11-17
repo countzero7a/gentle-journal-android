@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Øjeblikke</string>
     <string name="nav_journal">Dagbog</string>
     <string name="nav_insights">Indsigter</string>
     <string name="nav_settings">Indstillinger</string>
@@ -72,7 +71,7 @@
     <string name="charts_empty">Ikke nok data endnu. Bliv ved med at skrive!</string>
     <string name="settings_widget">Widget på startskærmen</string>
     <string name="settings_widget_desc">Vis dagens humør på din startskærm.</string>
-    <string name="settings_widget_hint">Tryk længe på startskærmen, åbn Widgets, og vælg Øjeblikke.</string>
+    <string name="settings_widget_hint">Tryk længe på startskærmen, åbn Widgets, og vælg Gentle Journal.</string>
     <string name="nav_new_entry">Nyt indlæg</string>
     <string name="nav_edit_entry">Rediger indlæg</string>
     <string name="nav_export">Eksportér</string>

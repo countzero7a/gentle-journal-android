@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Chwile</string>
     <string name="nav_journal">Dziennik</string>
     <string name="nav_insights">Spostrze\u017Cenia</string>
     <string name="nav_settings">Ustawienia</string>
@@ -72,7 +71,7 @@
     <string name="charts_empty">Za mało danych. Pisz dalej!</string>
     <string name="settings_widget">Widżet na ekranie głównym</string>
     <string name="settings_widget_desc">Pokaż dzisiejszy nastrój na ekranie głównym.</string>
-    <string name="settings_widget_hint">Przytrzymaj ekran główny, otwórz Widżety i wybierz Chwile.</string>
+    <string name="settings_widget_hint">Przytrzymaj ekran główny, otwórz Widżety i wybierz Gentle Journal.</string>
     <string name="nav_new_entry">Nowy wpis</string>
     <string name="nav_edit_entry">Edytuj wpis</string>
     <string name="nav_export">Eksport</string>

@@ -23,6 +23,8 @@ def load(path):
     strings = {}
     for el in root:
         name = el.get("name")
+        if el.get("translatable") == "false":
+            continue
         if el.tag == "string":
             strings[name] = [el.text or ""]
         elif el.tag == "plurals":

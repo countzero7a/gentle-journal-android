@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Moments</string>
+    <string name="app_name" translatable="false">Gentle Journal</string>
 
     <!-- Navigation -->
     <string name="nav_journal">Journal</string>
@@ -190,7 +190,7 @@
     <string name="settings_donate">Buy me a coffee</string>
     <string name="settings_widget">Home Screen Widget</string>
     <string name="settings_widget_desc">Show today\'s mood on your home screen.</string>
-    <string name="settings_widget_hint">To add it, long-press your home screen, open Widgets and choose Moments.</string>
+    <string name="settings_widget_hint">To add it, long-press your home screen, open Widgets and choose Gentle Journal.</string>
     <string name="settings_footer">v3.1 \u00B7 Made with care \u00B7 No data collected</string>
     <string name="settings_back">Back</string>
     <string name="settings_selected">Selected</string>
