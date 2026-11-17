@@ -56,12 +56,12 @@
 - Produces: `class AppLock(activity: FragmentActivity) { fun canLock(): Boolean; fun authenticate(title: String, onSuccess: () -> Unit, onFailure: () -> Unit) }` using `BIOMETRIC_WEAK or DEVICE_CREDENTIAL` (supported from API 28 by androidx.biometric; it falls back to the keyguard on 26–27).
 - Produces: `ThemePreferences.appLockEnabled: Flow<Boolean>`, `suspend fun setAppLockEnabled(enabled: Boolean)`.
 
-- [ ] Write `LockPolicyTest`: disabled never locks; enabled and not yet unlocked locks; unlocked and never backgrounded doesn't lock; backgrounded 59 s ago doesn't lock; 61 s ago locks.
-- [ ] Implement `LockPolicy` (pure).
-- [ ] Add biometric + fragment dependencies; `MainActivity` extends `FragmentActivity`; record `backgroundedAt` in `onStop`, re-check in `onStart`, show `LockScreen` (auto-starts the prompt, "Unlock" button to retry).
-- [ ] Settings Privacy section with the switch (authenticate before changing; disabled with explanation when `canLock()` is false).
-- [ ] Widget hides the mood when the lock is on.
-- [ ] Strings (+11 languages), CI green, merge, publish.
+- [x] Write `LockPolicyTest`: disabled never locks; enabled and not yet unlocked locks; unlocked and never backgrounded doesn't lock; backgrounded 59 s ago doesn't lock; 61 s ago locks.
+- [x] Implement `LockPolicy` (pure).
+- [x] Add biometric + fragment dependencies; `MainActivity` extends `FragmentActivity`; record `backgroundedAt` in `onStop`, re-check in `onStart`, show `LockScreen` (auto-starts the prompt, "Unlock" button to retry).
+- [x] Settings Privacy section with the switch (authenticate before changing; disabled with explanation when `canLock()` is false).
+- [x] Widget hides the mood when the lock is on.
+- [x] Strings (+11 languages), CI green, merge, publish.
 
 ### Task 2: Welcome, feeling-first entry, widget quick-log
 
@@ -79,11 +79,11 @@
 - Produces: `object Welcome { fun shouldShow(welcomeDone: Boolean, entryCount: Int): Boolean }`
 - Produces: `object QuickLog { const val EXTRA_EMOTION_ID = "com.gentlejournal.extra.EMOTION_ID"; val WIDGET_EMOTIONS: List<String> = listOf("e_happy", "e_calm", "e_tired", "e_anxious", "e_sad") }`
 
-- [ ] `WelcomeTest`: shows only when not done and no entries.
-- [ ] Welcome screen (HorizontalPager, Skip/Next/Start), preference, routing.
-- [ ] Reorder entry form sections.
-- [ ] Quick-log intent handling (cold start and `onNewIntent`), widget layout and PendingIntents (distinct request codes).
-- [ ] Strings, CI, merge, publish.
+- [x] `WelcomeTest`: shows only when not done and no entries.
+- [x] Welcome screen (HorizontalPager, Skip/Next/Start), preference, routing.
+- [x] Reorder entry form sections.
+- [x] Quick-log intent handling (cold start and `onNewIntent`), widget layout and PendingIntents (distinct request codes).
+- [x] Strings, CI, merge, publish.
 
 ### Task 3: Automatic backups
 
@@ -101,11 +101,11 @@
 - Produces: `object BackupSchedule { fun isDue(lastBackupAt: Long?, frequency: BackupFrequency, now: Long): Boolean; fun filesToDelete(names: List<String>, keep: Int = 5): List<String>; fun fileName(date: LocalDate, encrypted: Boolean): String; fun shouldSuggestBackup(autoBackupOn: Boolean, entryCount: Int, lastExportAt: Long?, dismissedAt: Long?, now: Long): Boolean }`
 - Produces: `object BackupCrypto { fun encrypt(plain: ByteArray, password: CharArray): ByteArray; fun decrypt(data: ByteArray, password: CharArray): ByteArray; fun isEncrypted(data: ByteArray): Boolean }` (PBKDF2-HMAC-SHA256, AES-256-GCM, magic header).
 
-- [ ] `BackupScheduleTest`: due/not due at the boundary; only the app's own files are deleted, newest 5 kept; suggestion rules.
-- [ ] `BackupCryptoTest`: round trip, wrong password fails, header detection, tampering detected.
-- [ ] Implement schedule (+ crypto), `BackupManager` (DocumentFile, persisted URI permission, handles a revoked folder by turning backup off and telling the user).
-- [ ] Settings UI, triggers (app start, after save), timeline reminder card, import of backup files.
-- [ ] Strings, CI, merge, publish.
+- [x] `BackupScheduleTest`: due/not due at the boundary; only the app's own files are deleted, newest 5 kept; suggestion rules.
+- [x] `BackupCryptoTest`: round trip, wrong password fails, header detection, tampering detected.
+- [x] Implement schedule (+ crypto), `BackupManager` (DocumentFile, persisted URI permission, handles a revoked folder by turning backup off and telling the user).
+- [x] Settings UI, triggers (app start, after save), timeline reminder card, import of backup files.
+- [x] Strings, CI, merge, publish.
 
 ### Task 4: Calendar view and search
 
@@ -120,10 +120,10 @@
 - Produces: `object CalendarMonth { fun cells(month: YearMonth, firstDayOfWeek: DayOfWeek): List<LocalDate?>; fun mainFeelingByDay(entries: List<EntryWithTags>, zone: ZoneId): Map<LocalDate, EmotionEntity> }`
 - Produces: `object EntrySearch { fun matches(entry: EntryWithTags, query: String, emotionLabel: (EmotionEntity) -> String, actionLabel: (ActionEntity) -> String): Boolean }`
 
-- [ ] `CalendarMonthTest`: Monday- and Sunday-first grids, month lengths incl. February in a leap year, leading blanks; main feeling ties broken by the earliest entry.
-- [ ] `EntrySearchTest`: text match ignoring `**`/`*`/list markers, label match via resolver, case-insensitive, blank query matches all.
-- [ ] Implement, wire UI.
-- [ ] Strings, CI, merge, publish.
+- [x] `CalendarMonthTest`: Monday- and Sunday-first grids, month lengths incl. February in a leap year, leading blanks; main feeling ties broken by the earliest entry.
+- [x] `EntrySearchTest`: text match ignoring `**`/`*`/list markers, label match via resolver, case-insensitive, blank query matches all.
+- [x] Implement, wire UI.
+- [x] Strings, CI, merge, publish.
 
 ### Task 5: Simpler navigation
 
@@ -133,9 +133,9 @@
 - Create: `ui/screens/patterns/PatternsScreen.kt`
 - Modify: `ui/Navigation.kt` (`Patterns` replaces `Insights`/`Charts` in the bar), `ui/JournalAppComposable.kt`, `ui/screens/settings/SettingsScreen.kt`, all `strings.xml`
 
-- [ ] Patterns screen with tabs; navigation and back stack.
-- [ ] Settings regrouping; export entry point.
-- [ ] Strings, CI, merge, publish.
+- [x] Patterns screen with tabs; navigation and back stack.
+- [x] Settings regrouping; export entry point.
+- [x] Strings, CI, merge, publish.
 
 ### Task 6: Name, adaptive icon, README
 
@@ -147,9 +147,9 @@
 - Create: `res/mipmap-anydpi-v26/ic_launcher.xml`, `res/mipmap-anydpi-v26/ic_launcher_round.xml`, `res/drawable/ic_launcher_foreground.xml`, `res/drawable/ic_launcher_monochrome.xml`, `res/values/ic_launcher_background.xml`
 - Modify: `res/values*/strings.xml` (`app_name`, widget hint), `README.md`
 
-- [ ] Icon resources; verify in CI (aapt) and on the phone.
-- [ ] Name and README.
-- [ ] CI, merge, publish.
+- [x] Icon resources; verify in CI (aapt) and on the phone (phone check: user).
+- [x] Name and README.
+- [x] CI, merge, publish.
 
 ---
 
